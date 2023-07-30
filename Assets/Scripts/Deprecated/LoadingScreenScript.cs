@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class LoadingScreenScript : MonoBehaviour
 {
+    [SerializeField] private bool isLoadingScreen = true;
     [SerializeField] private Image progressBar;
     [SerializeField] private Text loadingText;
     [SerializeField] private Text progressText;
@@ -24,9 +25,12 @@ public class LoadingScreenScript : MonoBehaviour
     {
         _sceneToLoad = PlayerPrefs.GetInt("selectedLevel");
 
-        levelText.text = levelNames[_sceneToLoad - 2];
-        descriptionText.text = levelDescriptions[_sceneToLoad - 2];
-        backgroundImage.sprite = backgrounds[_sceneToLoad - 2];
+        if (isLoadingScreen)
+        {
+            levelText.text = levelNames[_sceneToLoad - 2];
+            descriptionText.text = levelDescriptions[_sceneToLoad - 2];
+            backgroundImage.sprite = backgrounds[_sceneToLoad - 2];
+        }
 
         //start async operation
         StartCoroutine(LoadScene());

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayNight : MonoBehaviour
+namespace UserInterface.InGame
 {
-    [SerializeField] private Text nightUi;
-    
-    // Start is called before the first frame update
-    void Start()
+    public class DisplayNight : MonoBehaviour
     {
-        nightUi.text = "Night " + (PlayerPrefs.GetInt("selectedNight") + 1);
-    }
+        [SerializeField] private Text nightUi;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Start is called before the first frame update
+        void Start()
+        {
+            nightUi.text = "Night " + (PlayerPrefs.GetInt("selectedNight") + 1);
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }

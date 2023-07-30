@@ -1,25 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayVersion : MonoBehaviour
+namespace UserInterface
 {
-    [SerializeField] private Text versionText;
-    [SerializeField] private Text developerText;
-    
-    // Start is called before the first frame update
-    void Start()
+    public class DisplayVersion : MonoBehaviour
     {
-        if(versionText != null){
-        versionText.text = "Version: " + Application.version;
-        }
-        if(developerText != null){
-            developerText.text = "Developed by: " + Application.companyName;
-        }
-    }
+        [SerializeField] private Text versionText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Start is called before the first frame update
+        void Start()
+        {
+            if (versionText != null)
+            {
+                versionText.text = "Version: " + Application.version;
+            }
+        }
     }
 }

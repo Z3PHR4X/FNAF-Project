@@ -1,46 +1,55 @@
-﻿using System;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
-public class SettingsMenu : MonoBehaviour
+namespace UserInterface.Menus
 {
-    [SerializeField] private Slider sensitivitySlider;
-    [SerializeField] private Text sensitivityText;
-
-    private float mouseSensitivity;
-
-    // Start is called before the first frame update
-    void Start()
+    public class SettingsMenu : MonoBehaviour
     {
-        mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity" );
-        UpdateMenu();
-    }
+        [Header ("Script Dependencies")] 
+        [SerializeField] private Settings.DefaultSettings defaultSettings;
+        [SerializeField] private Settings.UpdateSettings updateSettings;
 
-    // Update is called once per frame
-    void Update()
-    {
-        UpdateMenu();
-    }
-    
-    void UpdateMenu()
-    {
-            sensitivityText.text = Convert.ToString(Math.Round(mouseSensitivity,2));
+        [Header("UI Elements")]
+        [SerializeField] private Slider sensitivitySlider, masterVolumeSlider, musicVolumeSlider, sfxVolumeSlider, interfaceVolumeSlider, voiceVolumeSlider;
+        [SerializeField] private Dropdown resolutionDropdown;
+        [SerializeField] private Text sensitivityText;
+
+        private float mouseSensitivity;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
+            UpdateMenu();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            UpdateMenu();
+        }
+
+        void UpdateMenu()
+        {
+
+        }
+
+        public void resetSettings()
+        {
+            defaultSettings.SetDefaultSettings();
+            UpdateMenu();
+        }
+
+        public void UpdateMouseSensitivty()
+        {
+            mouseSensitivity = sensitivitySlider.value;
+            updateSettings.UpdateMouseSensitivty(mouseSensitivity);
+            sensitivityText.text = Convert.ToString(Math.Round(mouseSensitivity, 2));
             sensitivitySlider.value = mouseSensitivity;
+        }
     }
 
-    public void resetSettings()
-    {
-        mouseSensitivity = 1;
-        PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
-        UpdateMenu();
-    }
-    
-    public void HandleInput()
-    {
-        mouseSensitivity = sensitivitySlider.value;
-        print("Mouse Sensitivity set to: " + mouseSensitivity);
-        UpdateMenu();
-        PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
-    }
 }

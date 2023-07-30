@@ -2,14 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+namespace Events
 {
-    public class AIValues : MonoBehaviour
+    public class MenuSoundEvent : MonoBehaviour
     {
-        public int[] activityValues = { 0, 0, 0, 0, 0, 0, 0, 0 };
-        public float actionInterval;
-        public GameObject[] wayPoints;
-
         // Start is called before the first frame update
         void Start()
         {
