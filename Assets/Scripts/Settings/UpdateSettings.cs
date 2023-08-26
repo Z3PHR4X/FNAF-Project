@@ -16,7 +16,7 @@ namespace Settings
         //Audio
         public void UpdateMasterVolume(float newValue)
         {
-            PlayerPrefs.SetFloat("mouseSensitivity", newValue);
+            PlayerPrefs.SetFloat("audioMasterVolume", newValue);
         }
         public void UpdateMusicVolume(float newValue)
         {
@@ -26,7 +26,10 @@ namespace Settings
         {
             PlayerPrefs.SetFloat("audioSfxVolume", newValue);
         }
-
+        public void UpdateInterfaceVolume(float newValue)
+        {
+            PlayerPrefs.SetFloat("audioInterfaceVolume", newValue);
+        }
         public void UpdateVoiceVolume(float newValue)
         {
             PlayerPrefs.SetFloat("audioVoiceVolume", newValue);

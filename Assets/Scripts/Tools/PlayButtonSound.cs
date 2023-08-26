@@ -14,6 +14,7 @@ namespace Tools
             menuSoundPlayer = FindObjectOfType<Audio.MenuSoundPlayer>();
         }
 
+
         public void PlayConfirmSound()
         {
             menuSoundPlayer.PlayConfirmSound();

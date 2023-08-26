@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+namespace Events
+{
+
     public class MenuCharacters : MonoBehaviour
     {
         //TODO Major rewrite
@@ -172,7 +175,7 @@ using Random = UnityEngine.Random;
             }
             else
             {
-                characterLight.intensity = 1;
+                characterLight.intensity = defaultLightBrightness;
                 flickerAmount = 0;
                 isFlickering = false;
                 ResetLightTimer();
@@ -209,3 +212,4 @@ using Random = UnityEngine.Random;
             timerLight = Time.time;
         }
     }
+}

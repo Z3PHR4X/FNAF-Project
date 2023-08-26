@@ -31,8 +31,8 @@ public class MainMenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _sceneToLoad = PlayerPrefs.GetInt("selectedLevel") - 2;
-        _chosenNight = PlayerPrefs.GetInt("selectedNight");
+        //_sceneToLoad = Singleton.Instance.selectedMap - 2;
+        _chosenNight = Singleton.Instance.selectedNight;
         Time.timeScale = 1.0f;
         levelSelection.value = _sceneToLoad;
         nightSelection.value = _chosenNight;
@@ -90,7 +90,7 @@ public class MainMenuScript : MonoBehaviour
 
     void CheckSettings()
     {
-        if (PlayerPrefs.GetFloat("mouseSensitivity") == null || PlayerPrefs.GetFloat("mouseSensitivity") == 0) ;
+        if (PlayerPrefs.GetFloat("mouseSensitivity") == null || PlayerPrefs.GetFloat("mouseSensitivity") >= 0)
         {
             PlayerPrefs.SetFloat("mouseSensitivity", 1f);
         }

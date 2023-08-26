@@ -5,6 +5,7 @@ namespace Settings
     public class InitializeFirstSetup : MonoBehaviour
     {
         [SerializeField] private DefaultSettings defaultSettings;
+        [SerializeField] private Level defaultLevel;
 
         void Start()
         {
@@ -14,7 +15,7 @@ namespace Settings
                 defaultSettings.SetDefaultSettings();
             }
 
-            PlayerPrefs.SetInt("selectedLevel", 1);
+            Singleton.Instance.selectedMap = defaultLevel;
         }
     }
 }

@@ -23,8 +23,8 @@ namespace Settings
             PlayerPrefs.SetFloat("audioSfxVolume", sfxVolume);
             PlayerPrefs.SetFloat("audioInterfaceVolume", interfaceVolume);
             PlayerPrefs.SetFloat("audioVoiceVolume", voiceVolume);
-            PlayerPrefs.SetInt("selectedNight", 0); //To be removed
-            PlayerPrefs.SetInt("selectedLevel", 0); //To be removed
+            PlayerPrefs.SetInt("completedNight", 0); 
+            PlayerPrefs.SetInt("completedLevel", 0); 
             PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
         }
     }
