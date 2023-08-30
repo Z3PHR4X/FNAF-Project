@@ -124,7 +124,7 @@ public class ChicaBehavior : MonoBehaviour
 
     private bool isActionValid() //Rolls 20 sided dice to determine if they can make a move
     {
-        int roll = Random.Range(0, 21);
+        int roll = Random.Range(1, 21);
         print("Roll is " + roll);
         if (AiLevel >= roll)
         {

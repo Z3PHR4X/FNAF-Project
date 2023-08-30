@@ -24,7 +24,7 @@ namespace Events
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    if (hit.collider != null && hit.collider.CompareTag("Freddy Nose"))
+                    if (hit.collider != null && hit.collider.CompareTag("Freddy Nose") && hit.collider.gameObject == this.gameObject)
                     {
                         noseAudio.Play();
                     }

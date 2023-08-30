@@ -4,22 +4,12 @@ using UnityEngine;
 
 namespace AI
 {
-    public class AIValues : MonoBehaviour
+    [System.Serializable]
+    public class AIValues
     {
-        public int[] activityValues = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        public bool hasRandomStart = false;
+        public Vector2 randomStartRange;
+        public List<int> activityValues = new List<int>(7);
         public float actionInterval;
-        public GameObject[] wayPoints;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }

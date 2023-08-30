@@ -16,17 +16,20 @@ public class MainMenuButtons : MonoBehaviour
     {
         completedNight = PlayerPrefs.GetInt("completedNight");
 
-        if(completedNight > 0) {
+        if(completedNight > 0 && completedNight < 7) {
             ContinueAvailable = true;
             ContinueButton.SetActive(true);
-            ContinueText.text = "Night " + Mathf.Clamp(completedNight + 1, 1, 6);
+            int nextNight = Mathf.Clamp(completedNight + 1, 1, 7);
+            ContinueText.text = "Start night " + nextNight;
+            if (nextNight == 6) ContinueText.color = Color.yellow;
+            if (nextNight == 7) ContinueText.color = Color.red;
         }
         else
         {
             ContinueButton.SetActive(false);
         }
 
-        if (completedNight > 5)
+        if (completedNight >= 5)
         {
             SetupAvailable = true;
             SetupButton.SetActive(true);
@@ -44,12 +47,13 @@ public class MainMenuButtons : MonoBehaviour
         completedNight = 0;
         PlayerPrefs.SetInt("completedNight", 0);
         Singleton.Instance.selectedNight = 1;
+        Singleton.Instance.completedNight = 0;
         Singleton.Instance.ChangeScene("LoadingScreen");
     }
 
     public void ContinueGame()
     {
-        Singleton.Instance.selectedNight = Mathf.Clamp(completedNight + 1, 1, 6);
+        Singleton.Instance.selectedNight = Mathf.Clamp(completedNight + 1, 1, 7);
         print("Continuing game on night " + Singleton.Instance.selectedNight); ;
         Singleton.Instance.ChangeScene("LoadingScreen");
     }

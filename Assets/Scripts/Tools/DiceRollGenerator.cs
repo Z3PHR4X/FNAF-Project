@@ -6,12 +6,10 @@ namespace Tools
 {
     public class DiceRollGenerator : MonoBehaviour
     {
-        private int diceSize = 20;
-
         //Rolls dice to determine if they can make a move
-        public bool hasSuccessfulRoll(int aggressionLevel)
+        static public bool hasSuccessfulRoll(int aggressionLevel)
         {
-            int roll = Random.Range(0, diceSize + 1);
+            int roll = Random.Range(1, 21);
 
             if (aggressionLevel >= roll) //if roll is below aggresionLevel, roll succeeds!
             {

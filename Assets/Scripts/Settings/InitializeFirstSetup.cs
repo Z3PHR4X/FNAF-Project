@@ -7,7 +7,7 @@ namespace Settings
         [SerializeField] private DefaultSettings defaultSettings;
         [SerializeField] private Level defaultLevel;
 
-        void Start()
+        void Awake()
         {
             if (PlayerPrefs.GetString("gameSettingsVersion") != defaultSettings.settingsVersion)
             {

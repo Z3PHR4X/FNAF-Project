@@ -7,6 +7,7 @@ public class EnemyBehavior : MonoBehaviour
     public GameManager gameManager;
     public NavMeshAgent agent;
     public AudioSource audio;
+    public bool isFreddy;
     public int[] levelProgression;
     [SerializeField] private int[] aggressionSetup = {0,0,0,0,0,0,0};
     [SerializeField] private GameObject[] waypoints;
@@ -36,9 +37,9 @@ public class EnemyBehavior : MonoBehaviour
         levelupInterval = GameManager.hourLength;
         phase = 0;
         levelupPhase = 0;
-        aggressiveness = aggressionSetup[PlayerPrefs.GetInt("selectedNight")];
+        aggressiveness = aggressionSetup[Singleton.Instance.selectedNight-1];
         AiLevel = aggressiveness;
-        lastActionTime = Time.time;
+        lastActionTime = Time.time+actionInterval;
         levelupTime = Time.time;
         Move(phase);
     }
@@ -48,7 +49,9 @@ public class EnemyBehavior : MonoBehaviour
     {
         IncreaseLevel();
         ActionRoutine();
+        if (phase != 0) {
         LookAtCamera();
+        }
         Debug();
     }
 
@@ -57,10 +60,10 @@ public class EnemyBehavior : MonoBehaviour
         if (!IsMoving())
         {
             if (IsReadyToMove())
-            {
-                MakeSound();
+            {                
                 if(isActionValid())
                 {
+                    MakeSound();
                     phase++; 
                     //print(agent.name + "'s current phase: " + phase);
                     if (phase > waypoints.Length-1)
@@ -124,16 +127,16 @@ public class EnemyBehavior : MonoBehaviour
 
     private bool isActionValid() //Rolls 20 sided dice to determine if they can make a move
     {
-        int roll = Random.Range(0, 21);
+        int roll = Random.Range(1, 21);
         //print("Roll is " + roll);
         if (AiLevel >= roll)
         {
-            //print(agent.name + "'s roll succeeded! Current AI Level: " + AiLevel);
+            print(agent.name + "'s roll succeeded! Current AI Level: " + AiLevel);
             return true;
         }
         else
         {
-            //print(agent.name + "'s roll failed! Current AI Level: " + AiLevel);
+            print(agent.name + "'s roll failed! Current AI Level: " + AiLevel);
             return false;
         }
     }
@@ -142,7 +145,11 @@ public class EnemyBehavior : MonoBehaviour
     {
         if (!audio.isPlaying)
         {
-            if (Random.Range(0, 21) < 1)
+            if (isFreddy)
+            {
+                audio.Play();
+            }
+            else if (Random.Range(0, 21) < 6)
             {
                 audio.Play();
             }
@@ -214,7 +221,7 @@ public class EnemyBehavior : MonoBehaviour
         else
         {
             //head.transform.rotation = Quaternion.Lerp(head.transform.rotation, new Quaternion(0,0,0, 0), Time.time * 0.01f);
-            head.transform.rotation = new Quaternion(0,0,0, 0);
+            head.transform.rotation = new Quaternion(0,0,0,0);
         }
         
     }

@@ -12,7 +12,30 @@ namespace UserInterface.InGame
         // Start is called before the first frame update
         void Start()
         {
-            nightUi.text = "Night " + (PlayerPrefs.GetInt("selectedNight") + 1);
+            int _Night = Singleton.Instance.selectedNight;
+            string nightText = "";
+            switch (_Night){
+                case 1:
+                    nightText = "1st Night";
+                    break;
+
+                case 2:
+                    nightText = "2nd Night";
+                    break;
+
+                case 3:
+                    nightText = "3rd Night";
+                    break;
+
+                default:
+                    nightText = _Night+"th Night";
+                    break;
+
+            }
+
+
+
+            nightUi.text = nightText;
         }
 
         // Update is called once per frame

@@ -41,8 +41,10 @@ namespace UserInterface.Menus
         void Start()
         {
             selectedMap  = Singleton.Instance.selectedMap;
-            UpdateInterface();
+            int index = Singleton.Instance.availableLevels.IndexOf(selectedMap);
+            selectionDropdown.value = index;
             selectionDropdown.RefreshShownValue();
+            UpdateInterface();
         }
 
         // Update is called once per frame

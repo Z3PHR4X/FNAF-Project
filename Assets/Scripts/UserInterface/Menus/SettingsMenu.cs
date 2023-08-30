@@ -46,7 +46,7 @@ namespace UserInterface.Menus
         public void UpdateMouseSensitivty()
         {
             mouseSensitivity = sensitivitySlider.value;
-            updateSettings.UpdateMouseSensitivty(mouseSensitivity);
+            //updateSettings.UpdateMouseSensitivty(mouseSensitivity);
             sensitivityText.text = Convert.ToString(Math.Round(mouseSensitivity, 2));
             sensitivitySlider.value = mouseSensitivity;
         }

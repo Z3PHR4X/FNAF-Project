@@ -11,14 +11,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject MusicBox;
     [SerializeField] private GameObject leftDoor;
     [SerializeField] private GameObject rightDoor;
+    [SerializeField] private GameObject leftLight;
+    [SerializeField] private GameObject rightLight;
     [SerializeField] private GameObject secCameras;
+    [SerializeField] private Camera playerCamera;
     [SerializeField] private GameObject lights;
     [SerializeField] private AudioSource camToggleSound, leftDoorAudio, rightDoorAudio;
     [SerializeField] private GameObject _toggleCameraButton;
     [SerializeField] private GameObject cameraUi;
+    [SerializeField] private GameObject doorLightUi;
     [SerializeField] private GameObject startNightScreen;
     [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private GameObject victoryScreen;
+    [SerializeField] private AudioSource scareAudio;
+    [SerializeField] private AudioSource clockAudio;
     [SerializeField] private Text clockUi;
     [SerializeField] private Text nightUi;
     [SerializeField] private Text powerUi;
@@ -32,12 +38,14 @@ public class GameManager : MonoBehaviour
     private float _powerUsage;
     private float _powerInterval;
     private float _powerTimer;
+    private float _lightTimer;
     private bool _isPowerDown;
 
     public static float hourLength = 89;
     private static int nightHours = 5;
     public bool _isLeftDoorClosed;
     public bool _isRightDoorClosed;
+    public bool _isEnemyAtLeftDoor, _isEnemyAtRightDoor;
     private float _timer;
     public int _hour;
     private int _night;
@@ -55,14 +63,14 @@ public class GameManager : MonoBehaviour
         MusicBox.SetActive(false);
 
         _hour = 0;
-        _night = PlayerPrefs.GetInt("selectedNight");
+        _night = Singleton.Instance.selectedNight;
+        print("Night " + _night);
         _powerReserve = 100;
         Time.timeScale = 1.0f;
         _timer = Time.time;
         _powerTimer = Time.time;
-        startNightScreen.SetActive(true);
-        
         DisplayNight();
+        startNightScreen.SetActive(true);       
     }
 
     // Update is called once per frame
@@ -77,6 +85,15 @@ public class GameManager : MonoBehaviour
                 UpdateDoor();
                 UpdateClock();
                 UpdateCameras();
+                if (_isLightOn)
+                {
+                    if (_lightTimer + 1  < Time.time)
+                    {
+                        _isLightOn = false;
+                        leftLight.SetActive(false);
+                        rightLight.SetActive(false);
+                    }
+                }
                 if (!_isPowerDown)
                 {
                     UpdatePower();
@@ -96,16 +113,24 @@ public class GameManager : MonoBehaviour
     
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A) && _powerReserve > 0)
+        if (Input.GetKeyDown(KeyCode.A) && !player.isInCamera && _powerReserve > 0)
         {
-            _isLeftDoorClosed = !_isLeftDoorClosed;
-            leftDoorAudio.Play();
+            CloseLeftDoor();
         }
 
-        if (Input.GetKeyDown(KeyCode.D) && _powerReserve > 0)
+        if (Input.GetKeyDown(KeyCode.D) && !player.isInCamera && _powerReserve > 0)
         {
-            _isRightDoorClosed = !_isRightDoorClosed;
-            rightDoorAudio.Play();
+            CloseRightDoor();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && !player.isInCamera && _powerReserve > 0)
+        {
+            TurnOnLeftLight();
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && !player.isInCamera && _powerReserve > 0)
+        {
+            TurnOnRightLight();
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -125,6 +150,11 @@ public class GameManager : MonoBehaviour
             //Time.timeScale = 0.0f; <- disables animations :/
             Enemies.SetActive(false);
             MusicBox.SetActive(false);
+            if (_night > Singleton.Instance.completedNight)
+            {
+                Singleton.Instance.completedNight = Mathf.Clamp(_night, 1, 7);
+                PlayerPrefs.SetInt("completedNight", Singleton.Instance.completedNight);
+            }
             victoryScreen.SetActive(true);
         }
         if (!isPlayerAlive)
@@ -152,6 +182,7 @@ public class GameManager : MonoBehaviour
             {
                 _timer = Time.time;
                 _hour += 1;
+                clockAudio.Play();
             }
             else //Display victory screen!
             {
@@ -284,12 +315,49 @@ public class GameManager : MonoBehaviour
     public void ToggleSecCameras()
     {
         player.isInCamera = !player.isInCamera;
+        doorLightUi.SetActive(!doorLightUi.activeSelf);
         camToggleSound.Play();
     }
-    
+
+    public void CloseLeftDoor()
+    {
+        _isLeftDoorClosed = !_isLeftDoorClosed;
+        leftDoorAudio.Play();
+    }
+
+    public void CloseRightDoor()
+    {
+        _isRightDoorClosed = !_isRightDoorClosed;
+        rightDoorAudio.Play();
+    }
+
+    public void TurnOnLeftLight()
+    {
+        _isLightOn = true;
+        leftLight.SetActive(true);
+        _lightTimer = Time.time;
+
+        if (_isEnemyAtLeftDoor && !_isLeftDoorClosed)
+        {
+            scareAudio.Play();
+        }
+    }
+
+    public void TurnOnRightLight()
+    {
+        _isLightOn = true;
+        rightLight.SetActive(true);
+        _lightTimer = Time.time;
+
+        if (_isEnemyAtRightDoor && !_isRightDoorClosed)
+        {
+            scareAudio.Play();
+        }
+    }
+
     void DisplayNight()
     {
-        nightUi.text = "Night " + (_night + 1);
+        nightUi.text = "Night " + _night;
     }
 
     void StartNight()

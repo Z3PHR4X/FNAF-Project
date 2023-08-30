@@ -8,7 +8,7 @@ public class FreddyBehavior : MonoBehaviour
     public NavMeshAgent agent;
     public AudioSource audio;
     public int[] levelProgression;
-    [SerializeField] private int[] aggressionSetup = {0,0,0,0,0,0,0};
+    [SerializeField] private int[] aggressionSetup = {0,0,1,2,3,4,20};
     [SerializeField] private GameObject[] waypoints;
     [SerializeField] private bool isGoingLeft;
     [SerializeField] private float actionInterval;
@@ -31,16 +31,19 @@ public class FreddyBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maskId = LayerMask.GetMask("PostProcessing");
+        //maskId = LayerMask.GetMask("PostProcessing");
+        int night = Singleton.Instance.selectedNight - 1;
         gameManager = FindObjectOfType<GameManager>();
         levelupInterval = GameManager.hourLength;
         phase = 0;
         levelupPhase = 0;
-        aggressiveness = aggressionSetup[PlayerPrefs.GetInt("selectedNight")];
+        aggressiveness = aggressionSetup[night];
         AiLevel = aggressiveness;
+        print("nook: " + AiLevel);
         lastActionTime = Time.time;
         levelupTime = Time.time;
         Move(phase);
+        
     }
 
     // Update is called once per frame
@@ -48,7 +51,7 @@ public class FreddyBehavior : MonoBehaviour
     {
         IncreaseLevel();
         ActionRoutine();
-        LookAtCamera();
+        //LookAtCamera();
         Debug();
     }
 
@@ -124,7 +127,7 @@ public class FreddyBehavior : MonoBehaviour
 
     private bool isActionValid() //Rolls 20 sided dice to determine if they can make a move
     {
-        int roll = Random.Range(0, 21);
+        int roll = Random.Range(1, 21);
         print("Roll is " + roll);
         if (AiLevel >= roll)
         {

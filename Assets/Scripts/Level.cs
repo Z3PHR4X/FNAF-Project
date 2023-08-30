@@ -10,6 +10,6 @@ public class Level : MonoBehaviour
     public string levelName, levelDescription;
     public Sprite levelThumbnail, levelLoadingBackground;
     public AudioClip selectionSound, selectionMusic;
+    public List<Character> characters = new List<Character>();
     public int levelNight;
-    
 }

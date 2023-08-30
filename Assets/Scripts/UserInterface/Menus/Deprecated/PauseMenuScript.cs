@@ -25,7 +25,7 @@ public class PauseMenuScript : MonoBehaviour
     
     public void ReturnToMenu()
     {
-        SceneManager.LoadScene(0);
+        Singleton.Instance.ChangeScene("MainMenu");
     }
 
     public void TogglePause()

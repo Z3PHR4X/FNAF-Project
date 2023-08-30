@@ -41,9 +41,9 @@ public class FoxyBehavior : MonoBehaviour
         levelupInterval = GameManager.hourLength;
         phase = 0;
         levelupPhase = 0;
-        aggressiveness = aggressionSetup[PlayerPrefs.GetInt("selectedNight")];
+        aggressiveness = aggressionSetup[Singleton.Instance.selectedNight-1];
         AiLevel = aggressiveness;
-        lastActionTime = Time.time;
+        lastActionTime = Time.time+actionInterval;
         levelupTime = Time.time;
         Move(phase);
     }
@@ -65,17 +65,21 @@ public class FoxyBehavior : MonoBehaviour
     {
         if (!IsMoving())
         {
-            if (IsReadyToMove())
+            if (IsReadyToMove() && !isSeen())
             {
-                MakeSound();
-                if (!isSeen())
+                if (phase == waypoints.Length - 1)
                 {
-                    if(isActionValid())
+                    Attack();
+                }
+                else if (!isSeen())
+                {
+                    if (isActionValid())
                     {
-                        phase++; 
+                        MakeSound();
+                        phase++;
                         print(agent.name + "'s current phase: " + phase);
-                        if (phase > waypoints.Length-1)
-                        { 
+                        if (phase > waypoints.Length - 1)
+                        {
                             Attack();
                         }
                         else
@@ -136,7 +140,7 @@ public class FoxyBehavior : MonoBehaviour
 
     private bool isActionValid() //Rolls 20 sided dice to determine if they can make a move
     {
-        int roll = Random.Range(0, 21);
+        int roll = Random.Range(1, 21);
         //print("Roll is " + roll);
         if (AiLevel >= roll)
         {
@@ -156,31 +160,24 @@ public class FoxyBehavior : MonoBehaviour
         {
             if (hidingTime + hidingDuration < Time.time)
             {
-                int count = Physics.OverlapSphereNonAlloc(transform.position, 10f, cameraBuffer, maskId);
-                if (count > 0)
+                if (gameManager.player.isInCamera)
                 {
-                    RaycastHit hit;
-                    if (Physics.Raycast(cameraBuffer[0].transform.position, transform.forward, out hit, Mathf.Infinity))
-                    {
-                        print(name + " has been seen by the player!");
-                        hidingDuration = Random.Range(1, 18);
-                        hidingTime = Time.time;
-                        print("Foxy has to wait: " + hidingDuration + " seconds");
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    print(name + " has been seen by the player!");
+                    hidingDuration = Random.Range(2, 18);
+                    hidingTime = Time.time;
+                    lastActionTime = hidingTime + hidingDuration;
+                    print("Foxy has to wait: " + hidingDuration + " seconds");
+                    return true;
                 }
                 else
                 {
                     return false;
                 }
+
             }
             else
             {
-                return true;
+                return false;
             }
         }
         else
