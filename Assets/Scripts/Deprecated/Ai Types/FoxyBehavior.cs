@@ -162,11 +162,11 @@ public class FoxyBehavior : MonoBehaviour
             {
                 if (gameManager.player.isInCamera)
                 {
-                    print(name + " has been seen by the player!");
+                    //print(name + " has been seen by the player!");
                     hidingDuration = Random.Range(2, 18);
                     hidingTime = Time.time;
                     lastActionTime = hidingTime + hidingDuration;
-                    print("Foxy has to wait: " + hidingDuration + " seconds");
+                    //print("Foxy has to wait: " + hidingDuration + " seconds");
                     return true;
                 }
                 else
@@ -207,7 +207,7 @@ public class FoxyBehavior : MonoBehaviour
             }
             else
             {
-                print(agent.name + "Tried to kill the player but the door was closed!");
+                //print(agent.name + "Tried to kill the player but the door was closed!");
                 bangingAudio.Play();
                 gameManager._powerReserve -= powerPenalty;
                 powerPenalty += 6;
@@ -222,7 +222,7 @@ public class FoxyBehavior : MonoBehaviour
             }
             else
             {
-                print(agent.name + "Tried to kill the player but the door was closed!");
+                //print(agent.name + "Tried to kill the player but the door was closed!");
                 ResetPosition();
             }
         }
@@ -232,7 +232,7 @@ public class FoxyBehavior : MonoBehaviour
     void Move(int inputPhase) //Moves the animatronic around
     {
         agent.SetDestination(waypoints[inputPhase].transform.position);
-        print(agent.name + " is moving to " + waypoints[inputPhase]);
+        //print(agent.name + " is moving to " + waypoints[inputPhase]);
     }
 
     void ResetPosition() //Return to starting position
@@ -245,7 +245,7 @@ public class FoxyBehavior : MonoBehaviour
     void KillPlayer() //kill
     {
         JumpScare();
-        print(agent.name + " killed the player!");
+        //print(agent.name + " killed the player!");
         gameManager.isPlayerAlive = false;
     }
 

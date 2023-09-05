@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class PauseMenuScript : MonoBehaviour
 {
     [SerializeField] private PlayerScript player;
     public GameObject pauseMenu;
-    public Camera camera;
     private bool paused;
 
     
@@ -25,6 +22,7 @@ public class PauseMenuScript : MonoBehaviour
     
     public void ReturnToMenu()
     {
+        print("Returning to menu");
         Singleton.Instance.ChangeScene("MainMenu");
     }
 
@@ -34,14 +32,12 @@ public class PauseMenuScript : MonoBehaviour
         {
             Time.timeScale = 1.0f;
             pauseMenu.SetActive(false);
-            //camera.audio.play();
             paused = false;
         }
         else
         {
             Time.timeScale = 0.0f;
             pauseMenu.SetActive(true);
-            //camera.audio.pause();
             paused = true;
         }
     }

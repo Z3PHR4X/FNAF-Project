@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class LoadingScreen : MonoBehaviour
 {
+    [SerializeField] private float delay = 0f;
     [SerializeField] private bool isLoadingScreen = true;
     [SerializeField] private bool waitForKeypress = true;
     [SerializeField] private Image backgroundImage, progressBar;
     [SerializeField] private Text loadingText, progressText, mapText, mapDescriptionText;
     [SerializeField] private AudioSource loadingMusic;
 
-    public string _sceneToLoad = "MainMenu";
+    public string _sceneToLoad;
 
     private void Awake()
     {
@@ -32,12 +33,17 @@ public class LoadingScreen : MonoBehaviour
             loadingMusic.Play();
         }
 
+        progressText.text = "0%";
+        progressBar.fillAmount = 0;
+
         //start async operation
         StartCoroutine(LoadScene(waitForKeypress));
     }
 
     IEnumerator LoadScene(bool waitForKey)
     {
+        yield return new WaitForSeconds(delay);
+
         //create async operation
         AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(_sceneToLoad);
 
@@ -48,7 +54,7 @@ public class LoadingScreen : MonoBehaviour
             while (!asyncOperation.isDone)
             {
                 //Output the current progress
-                loadingText.text = "Loading: ";
+                loadingText.text = "Loading . .";
                 progressText.text = (asyncOperation.progress * 100) + "%";
                 progressBar.fillAmount = asyncOperation.progress;
 
@@ -75,7 +81,7 @@ public class LoadingScreen : MonoBehaviour
                       
             while (!asyncOperation.isDone)
             {
-                loadingText.text = "Loading: ";
+                loadingText.text = "Initializing . .";
                 progressText.text = (asyncOperation.progress * 100) + "%";
                 progressBar.fillAmount = asyncOperation.progress;
                 yield return new WaitForEndOfFrame();

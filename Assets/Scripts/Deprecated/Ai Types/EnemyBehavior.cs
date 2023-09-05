@@ -131,12 +131,12 @@ public class EnemyBehavior : MonoBehaviour
         //print("Roll is " + roll);
         if (AiLevel >= roll)
         {
-            print(agent.name + "'s roll succeeded! Current AI Level: " + AiLevel);
+            //print(agent.name + "'s roll succeeded! Current AI Level: " + AiLevel);
             return true;
         }
         else
         {
-            print(agent.name + "'s roll failed! Current AI Level: " + AiLevel);
+            //print(agent.name + "'s roll failed! Current AI Level: " + AiLevel);
             return false;
         }
     }
@@ -166,7 +166,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             else
             {
-                print(agent.name + "Tried to kill the player but the left door was closed!");
+                //print(agent.name + "Tried to kill the player but the left door was closed!");
                 ResetPosition();
             }
         }
@@ -178,7 +178,7 @@ public class EnemyBehavior : MonoBehaviour
             }
             else
             {
-                print(agent.name + "Tried to kill the player but the right door was closed!");
+                //print(agent.name + "Tried to kill the player but the right door was closed!");
                 ResetPosition();
             }
         }
@@ -201,7 +201,7 @@ public class EnemyBehavior : MonoBehaviour
     private void KillPlayer() //kill
     {
         JumpScare();
-        print(agent.name + " killed the player!");
+        //print(agent.name + " killed the player!");
         gameManager.isPlayerAlive = false;
     }
 

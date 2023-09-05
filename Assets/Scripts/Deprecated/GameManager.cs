@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Button = UnityEngine.UIElements.Button;
 
 public class GameManager : MonoBehaviour
 {
@@ -155,12 +154,14 @@ public class GameManager : MonoBehaviour
                 Singleton.Instance.completedNight = Mathf.Clamp(_night, 1, 7);
                 PlayerPrefs.SetInt("completedNight", Singleton.Instance.completedNight);
             }
+            Singleton.Instance.canRetryNight = false;
             victoryScreen.SetActive(true);
         }
         if (!isPlayerAlive)
         {
             Enemies.SetActive(false);
             gameOverScreen.SetActive(true);
+            Singleton.Instance.canRetryNight = true;
             Time.timeScale = 0.0f;
         }
     }

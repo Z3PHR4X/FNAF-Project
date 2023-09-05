@@ -219,20 +219,20 @@ namespace Settings
         {
             Screen.SetResolution(currentResolution.width, currentResolution.height, currentScreenMode, currentRefresh);
             QualitySettings.SetQualityLevel(curQualityIndex);
-            QualitySettings.vSyncCount = vsync;
-            Application.targetFrameRate = currentRefresh;
+            //QualitySettings.vSyncCount = vsync;
+            //Application.targetFrameRate = currentRefresh;
             print("Applied new graphics settings.");
         }
 
         public void SaveGraphicsSettings()
         {
-                PlayerPrefs.SetInt("graphicsResolutionX", currentResolution.width);
-                PlayerPrefs.SetInt("graphicsResolutionY", currentResolution.height);
-                PlayerPrefs.SetInt("graphicsRefreshrate", currentResolution.refreshRate);
-                PlayerPrefs.SetInt("graphicsFullScreenMode", curScreenModeIndex);
-                PlayerPrefs.SetInt("graphicsQuality", curQualityIndex);
+            PlayerPrefs.SetInt("graphicsResolutionX", currentResolution.width);
+            PlayerPrefs.SetInt("graphicsResolutionY", currentResolution.height);
+            PlayerPrefs.SetInt("graphicsRefreshrate", currentResolution.refreshRate);
+            PlayerPrefs.SetInt("graphicsFullScreenMode", curScreenModeIndex);
+            PlayerPrefs.SetInt("graphicsQuality", curQualityIndex);
             PlayerPrefs.SetInt("graphicsVsync", vsync);
-                print("Saved graphics settings to save.");
+            print("Saved graphics settings to save.");
         }
 
         public void LoadGraphicsSettingsFromSave()
@@ -261,7 +261,7 @@ namespace Settings
 
             Screen.SetResolution(x, y, screenMode, refresh);
             QualitySettings.SetQualityLevel(quality);
-            QualitySettings.vSyncCount = v;
+            //QualitySettings.vSyncCount = v;
             print("Loaded graphics settings from save.");
         }
 

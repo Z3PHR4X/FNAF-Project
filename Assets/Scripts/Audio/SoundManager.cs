@@ -25,10 +25,11 @@ public class SoundManager : MonoBehaviour
             {
                 if(!audioSources[randomSource].isPlaying)
                 {
-                    print("Playing on " + randomSource);
+                    //print("Playing on " + randomSource);
                     audioSources[randomSource].Play();
                 }
             }
+            //else { print("audio roll failed");}
 
             timer = Time.time;
         }

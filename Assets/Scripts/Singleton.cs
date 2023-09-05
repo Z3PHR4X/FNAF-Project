@@ -9,7 +9,7 @@ public class Singleton : MonoBehaviour
 
     public string sceneToLoad = "";
     public int selectedNight, completedNight;
-    public bool overrideCompletedNight;
+    public bool overrideCompletedNight, canRetryNight;
     public List<Level> availableLevels = new List<Level>();
     public Level selectedMap;
     //[Header("Volume Settings")]
@@ -38,13 +38,15 @@ public class Singleton : MonoBehaviour
         sfxVolume = PlayerPrefs.GetFloat("audioSfxVolume");
         voiceVolume = PlayerPrefs.GetFloat("audioVoiceVolume");
         interfaceVolume = PlayerPrefs.GetFloat("audioInterfaceVolume");
+
+        print("Settings loaded from save to Singleton instance");
     }
 
     //Simple function to change scenes, no loading screens
     public void ChangeScene(string sceneName)
     {
         print("Changing scene to:" + sceneName);
-            SceneManager.LoadScene(sceneName);        
+        SceneManager.LoadScene(sceneName);        
     }
 
     //Exits the application.. wow..

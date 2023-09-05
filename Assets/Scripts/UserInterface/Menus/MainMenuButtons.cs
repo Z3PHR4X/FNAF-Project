@@ -5,19 +5,18 @@ using UnityEngine.UI;
 
 public class MainMenuButtons : MonoBehaviour
 {
-    [SerializeField] private Text ContinueText;
-    [SerializeField] private GameObject ContinueButton, SetupButton;
-    [SerializeField] private bool ContinueAvailable, SetupAvailable;
-
-    private int completedNight;
+    [SerializeField] private Text ContinueText, RetryText;
+    [SerializeField] private GameObject ContinueButton, RetryButton, SetupButton;
+    
+    private int completedNight, retryNight;
 
     // Start is called before the first frame update
     void Start()
     {
         completedNight = PlayerPrefs.GetInt("completedNight");
+        retryNight = Singleton.Instance.selectedNight;
 
         if(completedNight > 0 && completedNight < 7) {
-            ContinueAvailable = true;
             ContinueButton.SetActive(true);
             int nextNight = Mathf.Clamp(completedNight + 1, 1, 7);
             ContinueText.text = "Start night " + nextNight;
@@ -29,9 +28,18 @@ public class MainMenuButtons : MonoBehaviour
             ContinueButton.SetActive(false);
         }
 
+        if (Singleton.Instance.canRetryNight && completedNight >= 5 && completedNight+1 != retryNight)
+        {
+            RetryText.text = "Retry Night " + retryNight;
+            RetryButton.SetActive(true);
+        }
+        else
+        {
+            RetryButton.SetActive(false);
+        }
+
         if (completedNight >= 5)
         {
-            SetupAvailable = true;
             SetupButton.SetActive(true);
         }
         else
@@ -55,6 +63,13 @@ public class MainMenuButtons : MonoBehaviour
     {
         Singleton.Instance.selectedNight = Mathf.Clamp(completedNight + 1, 1, 7);
         print("Continuing game on night " + Singleton.Instance.selectedNight); ;
+        Singleton.Instance.ChangeScene("LoadingScreen");
+    }
+
+    public void RetryGame()
+    {
+        print("Retrying night: " + retryNight);
+        Singleton.Instance.selectedNight = retryNight;
         Singleton.Instance.ChangeScene("LoadingScreen");
     }
 }

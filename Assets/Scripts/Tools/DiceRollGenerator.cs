@@ -10,7 +10,7 @@ namespace Tools
         static public bool hasSuccessfulRoll(int aggressionLevel)
         {
             int roll = Random.Range(1, 21);
-
+            //print("roll: " + roll + " aggro: " + aggressionLevel);
             if (aggressionLevel >= roll) //if roll is below aggresionLevel, roll succeeds!
             {
                 return true;
