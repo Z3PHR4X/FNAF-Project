@@ -12,8 +12,7 @@ public class Singleton : MonoBehaviour
     public bool overrideCompletedNight, canRetryNight;
     public List<Level> availableLevels = new List<Level>();
     public Level selectedMap;
-    //[Header("Volume Settings")]
-    public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume;
+    public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
 
     private void Awake()
     {
@@ -25,7 +24,10 @@ public class Singleton : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        selectedMap = availableLevels[0];
+        if (selectedMap == null)
+        {
+            selectedMap = availableLevels[0];
+        }
         print("Singleton successfully initialized!");
 
         if (overrideCompletedNight)
@@ -33,11 +35,15 @@ public class Singleton : MonoBehaviour
             PlayerPrefs.SetInt("completedNight", completedNight);
         }
 
+        completedNight = PlayerPrefs.GetInt("completedNight");
+        //Audio
         masterVolume = PlayerPrefs.GetFloat("audioMasterVolume");
         musicVolume = PlayerPrefs.GetFloat("audioMusicVolume");
         sfxVolume = PlayerPrefs.GetFloat("audioSfxVolume");
         voiceVolume = PlayerPrefs.GetFloat("audioVoiceVolume");
         interfaceVolume = PlayerPrefs.GetFloat("audioInterfaceVolume");
+        //Controls
+        mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 
         print("Settings loaded from save to Singleton instance");
     }
@@ -49,7 +55,7 @@ public class Singleton : MonoBehaviour
         SceneManager.LoadScene(sceneName);        
     }
 
-    //Exits the application.. wow..
+    //Exits the application.. 
     public void ExitApplication()
     {
         print("Exitting application..");

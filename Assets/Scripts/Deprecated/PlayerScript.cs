@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    public bool isDeprecated = true;
     [SerializeField] private Camera playerCamera;
-    public GameObject freddyNose;
     [SerializeField] private float sensitivity;
     public bool isInCamera;
 
@@ -27,15 +27,10 @@ public class PlayerScript : MonoBehaviour
         {
             if (!isInCamera)
             {
-                freddyNose.SetActive(true);
                 cameraRotation.y += Input.GetAxis("Mouse X") * sensitivity;
                 cameraRotation.y = Mathf.Clamp(cameraRotation.y, lookLeftMax, lookRightMax);
             
                 playerCamera.transform.localRotation = Quaternion.Euler(cameraRotation.x, cameraRotation.y, cameraRotation.z);
-            }
-            else
-            {
-                freddyNose.SetActive(false);
             }
         }
     }

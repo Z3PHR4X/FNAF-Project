@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuScript : MonoBehaviour
 {
     //TODO Major rewrite
-
+    public bool isDeprecated = true;
     [SerializeField] private Dropdown levelSelection;
     [SerializeField] private Dropdown nightSelection;
     [SerializeField] private Slider[] aiSliders;

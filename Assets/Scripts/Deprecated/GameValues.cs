@@ -6,6 +6,7 @@ public class GameValues : MonoBehaviour
 {
     //TODO Major rewrite
 
+    public bool isDeprecated = true;
     private int _numberOfLevels = 2;
     private int _numberOfEnemies = 4;
     private string[] _enemyList = {"Tom Nook", "Isebella", "Zipper", "Timmy and Tommy", "Syntax Error", "Runtime Error", "Null Reference", "Logic Error"};

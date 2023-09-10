@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
  //TODO Major rewrite
 
+    public bool isDeprecated = true;
     public PlayerScript player;
     [SerializeField] private GameObject Enemies;
     [SerializeField] private GameObject MusicBox;
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     private float _powerTimer;
     private float _lightTimer;
     private bool _isPowerDown;
+    public bool isGamePaused;
 
     public static float hourLength = 89;
     private static int nightHours = 5;
@@ -112,33 +114,36 @@ public class GameManager : MonoBehaviour
     
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A) && !player.isInCamera && _powerReserve > 0)
+        if (!isGamePaused)
         {
-            CloseLeftDoor();
-        }
+            if (Input.GetKeyDown(KeyCode.A) && !player.isInCamera && _powerReserve > 0)
+            {
+                CloseLeftDoor();
+            }
 
-        if (Input.GetKeyDown(KeyCode.D) && !player.isInCamera && _powerReserve > 0)
-        {
-            CloseRightDoor();
-        }
+            if (Input.GetKeyDown(KeyCode.D) && !player.isInCamera && _powerReserve > 0)
+            {
+                CloseRightDoor();
+            }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !player.isInCamera && _powerReserve > 0)
-        {
-            TurnOnLeftLight();
-        }
+            if (Input.GetKeyDown(KeyCode.Q) && !player.isInCamera && _powerReserve > 0)
+            {
+                TurnOnLeftLight();
+            }
 
-        if (Input.GetKeyDown(KeyCode.E) && !player.isInCamera && _powerReserve > 0)
-        {
-            TurnOnRightLight();
-        }
+            if (Input.GetKeyDown(KeyCode.E) && !player.isInCamera && _powerReserve > 0)
+            {
+                TurnOnRightLight();
+            }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ToggleSecCameras();
-        }
-        else if (_powerReserve <= 0)
-        {
-            player.isInCamera = false;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ToggleSecCameras();
+            }
+            else if (_powerReserve <= 0)
+            {
+                player.isInCamera = false;
+            }
         }
     }
 

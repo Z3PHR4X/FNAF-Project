@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class LoadingScreenScript : MonoBehaviour
 {
+    public bool isDeprecated = true;
     [SerializeField] private bool isLoadingScreen = true;
     [SerializeField] private Image progressBar;
     [SerializeField] private Text loadingText;

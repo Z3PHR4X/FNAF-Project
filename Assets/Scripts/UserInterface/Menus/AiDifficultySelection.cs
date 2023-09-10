@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UserInterface.Menus
 {
     public class AiDifficultySelection : MonoBehaviour
     {
         public GameObject aiPanelPrefab;
+        public RectTransform aiSectionTransform;
         public List<AIPanel> aIPanels = new List<AIPanel>();
         public List<Character> characters = new List<Character>();
         private Transform myTransform;
+        private LayoutElement myLayoutElement;
 
         private void Awake()
         {
@@ -22,6 +25,9 @@ namespace UserInterface.Menus
         void Start()
         {
             myTransform = this.gameObject.transform;
+            myLayoutElement = GetComponent<LayoutElement>();
+            myLayoutElement.preferredWidth = aiSectionTransform.rect.width;
+            myLayoutElement.minWidth = aiSectionTransform.rect.width;
             UpdatePanels();
         }
 

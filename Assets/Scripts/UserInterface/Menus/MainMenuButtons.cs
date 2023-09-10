@@ -7,6 +7,7 @@ public class MainMenuButtons : MonoBehaviour
 {
     [SerializeField] private Text ContinueText, RetryText;
     [SerializeField] private GameObject ContinueButton, RetryButton, SetupButton;
+    [SerializeField] private int SetupButtonNightUnlock = 5;
     
     private int completedNight, retryNight;
 
@@ -28,7 +29,7 @@ public class MainMenuButtons : MonoBehaviour
             ContinueButton.SetActive(false);
         }
 
-        if (Singleton.Instance.canRetryNight && completedNight >= 5 && completedNight+1 != retryNight)
+        if (Singleton.Instance.canRetryNight && completedNight+1 != retryNight)
         {
             RetryText.text = "Retry Night " + retryNight;
             RetryButton.SetActive(true);
@@ -38,7 +39,7 @@ public class MainMenuButtons : MonoBehaviour
             RetryButton.SetActive(false);
         }
 
-        if (completedNight >= 5)
+        if (completedNight >= SetupButtonNightUnlock)
         {
             SetupButton.SetActive(true);
         }

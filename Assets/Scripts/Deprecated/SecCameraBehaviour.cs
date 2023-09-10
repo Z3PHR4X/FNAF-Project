@@ -2,6 +2,7 @@
 
 public class SecCameraBehaviour : MonoBehaviour
 {
+    public bool isDeprecated = true;
     [SerializeField]
     private int _rotationSpeed = 2;
     [SerializeField]

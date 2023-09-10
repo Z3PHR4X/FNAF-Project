@@ -5,9 +5,13 @@ using Eflatun.SceneReference;
 public class Level : MonoBehaviour
 {
     public SceneReference levelScene;
-    public string levelName, levelDescription;
-    public Sprite levelThumbnail, levelLoadingBackground;
+    public string levelName;
+    [TextAreaAttribute]
+    public string levelDescription;
+    public Sprite levelIcon, levelThumbnail, levelLoadingBackground;
     public AudioClip selectionSound, selectionMusic;
     public List<Character> characters = new List<Character>();
     public int numberOfNights = 7;
+    public int nightLength = 6;
+    public float hourLength = 89f;
 }

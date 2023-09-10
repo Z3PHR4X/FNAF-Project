@@ -10,7 +10,6 @@ namespace UserInterface.Menus
     {
         [Header ("Script Dependencies")] 
         [SerializeField] private Settings.DefaultSettings defaultSettings;
-        [SerializeField] private Settings.UpdateSettings updateSettings;
 
         [Header("UI Elements")]
         [SerializeField] private Slider sensitivitySlider, masterVolumeSlider, musicVolumeSlider, sfxVolumeSlider, interfaceVolumeSlider, voiceVolumeSlider;

@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 public class FreddyBehavior : MonoBehaviour
 {
+    public bool isDeprecated = true;
     public GameManager gameManager;
     public NavMeshAgent agent;
     public AudioSource audio;

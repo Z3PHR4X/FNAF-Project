@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AI;
 
 namespace AI
 {
@@ -18,19 +18,39 @@ namespace AI
          * I'm not sure if it's intended or not, but since the countdown time is set when any camera is looked at and it's impossible for Foxy to move from Pirate Cove while the countdown time is greater than 0, viewing any camera keeps Foxy from attacking.
          */
 
-        public AIValues aiValues;
-        public bool isBeingWatched;
+        [Header("Settings")]
+        [SerializeField] private Character characterData;
+        public List<AIValues> aiValues;
+        public bool isBeingWatched, watchingBlocksAction;
+        public ActionBehaviour actionBehaviour;
+        [Header("Setup")]
+        [SerializeField] private NavMeshAgent agent;
+        public DynamicWaypoints homeWaypoint;
+        [SerializeField] private AudioSource characterAudioSource;
+        [SerializeField] private AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
 
+        public DynamicWaypoints currentWaypoint;
         private int activityLevel; //keep track of how easily the AI can make a move
         private int activityPhase; //keeps track of which phase of the night the AI is in
-        private double timeSinceLastAction;
+        private double timeSinceLastAction, timeSinceLastSeen;
         private GameObject inCamerasView; //store camera that is viewing AI so it can be scrambled later
+        private AIValues nightValues = new AIValues();
 
+        private void Awake()
+        {
+            agent = GetComponent<NavMeshAgent>();
+            characterAudioSource = GetComponent<AudioSource>();
+            characterAudioSource.volume = Singleton.Instance.sfxVolume;
+        }
 
         // Start is called before the first frame update
         void Start()
         {
+            aiValues = characterData.aggressionProgression;
+            nightValues = aiValues[Singleton.Instance.selectedNight-1];
 
+            currentWaypoint = homeWaypoint;
+            currentWaypoint.isOccupied = true;
         }
 
         // Update is called once per frame
@@ -49,6 +69,13 @@ namespace AI
 
             //check if able to increase aggression level
             //increase aggressionlevel
+        }
+
+        private DynamicWaypoints SetNextWayPoint(DynamicWaypoints curWayPoint)
+        {
+            DynamicWaypoints nextWayPoint;
+            nextWayPoint = curWayPoint;
+            return nextWayPoint;
         }
 
         private void Move(GameObject wayPoint)
@@ -71,6 +98,32 @@ namespace AI
         private void ReturnToStart()
         {
             //return to starting position
+        }
+
+        private void PlayAudio(string audioType)
+        {
+            switch (audioType)
+            {
+                case "attack":
+                    characterAudioSource.clip = attackAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                case "attackFail":
+                    characterAudioSource.clip = attackFailAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                case "movement":
+                    characterAudioSource.clip = movementAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                default:
+                    characterAudioSource.clip = defaultAudio;
+                    characterAudioSource.Play();
+                    break;
+            }
         }
 
     }

@@ -9,6 +9,7 @@ namespace UserInterface.Menus
     {
         private int selectedNight, completedNight;
         private Dropdown selectionDropdown;
+        private Level selectedLevel;
 
         private void Awake()
         {
@@ -19,18 +20,9 @@ namespace UserInterface.Menus
         void Start()
         {
             completedNight = PlayerPrefs.GetInt("completedNight");
+            selectedLevel = Singleton.Instance.selectedMap;
             selectedNight = Singleton.Instance.selectedNight;
-            List<string> _availableNights = new List<string>();
-
-            selectionDropdown.ClearOptions();
-            for (int x = 1; x <= completedNight; x++)
-            {
-                _availableNights.Add("Night " + x);
-            }
-            selectionDropdown.AddOptions(_availableNights);
-            selectionDropdown.value = completedNight;
-            selectedNight = completedNight;
-            selectionDropdown.RefreshShownValue();
+            PopulateNightOptions();
         }
 
         // Update is called once per frame
@@ -44,6 +36,32 @@ namespace UserInterface.Menus
             selectedNight = selectionDropdown.value + 1;
             Singleton.Instance.selectedNight = selectedNight;
             print("Selected night: " + selectedNight);
+        }
+
+        public void PopulateNightOptions()
+        {
+            List<string> _availableNights = new List<string>();
+
+            selectionDropdown.ClearOptions();
+            if (completedNight < selectedLevel.numberOfNights)
+            {
+                for (int x = 1; x <= completedNight; x++)
+                {
+                    _availableNights.Add("Night " + x);
+                }
+            }
+            else
+            {
+                for (int x = 1; x <= selectedLevel.numberOfNights; x++)
+                {
+                    _availableNights.Add("Night " + x);
+                }
+                _availableNights.Add("Night " + (selectedLevel.numberOfNights + 1) + " (Custom Night)");
+            }
+            selectionDropdown.AddOptions(_availableNights);
+            selectionDropdown.value = selectedNight - 1;
+
+            selectionDropdown.RefreshShownValue();
         }
     }
 }

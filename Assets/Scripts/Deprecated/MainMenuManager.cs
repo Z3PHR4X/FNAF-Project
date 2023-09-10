@@ -6,9 +6,9 @@ using Random = UnityEngine.Random;
 
     public class MenuCharacters : MonoBehaviour
     {
-        //TODO Major rewrite
-
-        [SerializeField] private Light characterLight;
+    //TODO Major rewrite
+    public bool isDeprecated = true;
+    [SerializeField] private Light characterLight;
         [SerializeField] private float defaultLightBrightness = 0.5f;
         [SerializeField] private GameObject[] characters;
         [SerializeField] private bool GlitchEnabled;

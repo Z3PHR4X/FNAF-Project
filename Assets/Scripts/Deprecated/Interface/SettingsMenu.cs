@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class SettingsMenu : MonoBehaviour
 {
+    public bool isDeprecated = true;
     [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private Text sensitivityText;
 

@@ -17,6 +17,7 @@ namespace Settings
 
         public void SetDefaultSettings()
         {
+            PlayerPrefs.SetString("lockMouseToWindow", "true");
             PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
             PlayerPrefs.SetFloat("audioMasterVolume", masterVolume);
             PlayerPrefs.SetFloat("audioMusicVolume", musicVolume);
@@ -27,7 +28,7 @@ namespace Settings
             PlayerPrefs.SetInt("graphicsResolutionY", 720);
             PlayerPrefs.SetInt("graphicsRefreshrate", 60);
             PlayerPrefs.SetInt("graphicsFullScreenMode", 0);
-            PlayerPrefs.SetInt("graphicsQuality", 0);
+            PlayerPrefs.SetInt("graphicsQuality", 5);
             PlayerPrefs.SetInt("graphicsVsync", 0);
             //PlayerPrefs.SetInt("completedNight", 0); 
             //PlayerPrefs.SetInt("completedLevel", 0); 

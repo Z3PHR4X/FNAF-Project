@@ -6,20 +6,13 @@ namespace Events
 {
     public class FreddyNose : MonoBehaviour
     {
-        private GameManager gameManager;
         [SerializeField] private AudioSource noseAudio;
         [SerializeField] private Camera camera;
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            gameManager = FindAnyObjectByType<GameManager>();
-        }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0) && !gameManager.player.isInCamera)
+            if (Input.GetMouseButtonDown(0) && !Player.Instance.isInCamera)
             { // if left button pressed...
 
                 Ray ray = camera.ScreenPointToRay(Input.mousePosition);
