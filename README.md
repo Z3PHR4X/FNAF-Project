@@ -18,8 +18,8 @@ I cannot give an estimate when this project will be completed, this is all done 
 - [X] Fix main gameplay issues and bugs
 - [X] Redo user interfaces with proper scaling
 - [X] Create a launcher to distribute updates to testers
-- [ ] Rewrite gameplay scripting
-- [ ] Use new data architecture to dynamically populate levels
+- [ ] Rewrite gameplay scripts from scratch (In-Progress)
+- [ ] Use new data architecture to dynamically populate levels (In-Progress)
 - [ ] Improve AI with modular behavior
 - [ ] Legacy code cleanup
 - [ ] Add new gameplay mechanics
