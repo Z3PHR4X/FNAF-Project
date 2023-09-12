@@ -20,10 +20,12 @@ I cannot give an estimate when this project will be completed, this is all done 
 - [X] Create a launcher to distribute updates to testers
 - [ ] Rewrite gameplay scripts from scratch (In-Progress)
 - [ ] Use new data architecture to dynamically populate levels (In-Progress)
-- [ ] Improve AI with modular behavior
+- [ ] Improve AI with modular behavior (In-Progress)
 - [ ] Legacy code cleanup
-- [ ] Add new gameplay mechanics
+- [ ] Create new gameplay mechanics
+- [ ] Create new original map
 - [ ] Create new assets (audio, models, sprites, textures)
+- [ ] Remove all placeholder assets
 - [ ] Pre-release code cleanup
 - [ ] Release (v1.0)
 
