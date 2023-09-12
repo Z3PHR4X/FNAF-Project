@@ -6,25 +6,27 @@ namespace AI
 {
     public class DynamicWaypoints : MonoBehaviour
     {
+        public WaypointType waypointType;
         public List<DynamicWaypoints> connectedWaypoints = new List<DynamicWaypoints>();
-        public AIValues waypointFlowValues;
+        public List<AIValues> waypointFlowValues = new List<AIValues>(1);
         public int flowWeight = 1;
         public bool isStartingPoint = false;
         public bool isCrawling = false;
         public bool isOccupied = false;
         public bool isAttackingPosition = false;
 
-        // Start is called before the first frame update
-        void Start()
+        public enum WaypointType
         {
-
+            Default,
+            Rusher,
+            Crawler
         }
 
-        // Update is called once per frame
-        void Update()
+        public void UpdateFlowWeight(int hour, int night)
         {
-
-        }
-
+            int newFlowWeight = 0;
+            AIValues nightFlowValues = waypointFlowValues[night-1];
+            newFlowWeight = nightFlowValues.activityValues[hour];
+    }
     }
 }

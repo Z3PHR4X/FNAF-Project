@@ -6,22 +6,26 @@ namespace Events
 {
     public class ActivateWhenTriggered : MonoBehaviour
     {
+        private void Start()
+        {
+            objectToActivate.SetActive(false);
+        }
 
         public GameObject objectToActivate;
-        public string _tag;
+        public string tag;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.tag == _tag)
+            if (other.CompareTag(tag) && !other.isTrigger)
             {
-                //print(other.name + "has entered");
+                print(other.name + "has entered");
                 objectToActivate.SetActive(true);
             }
         }
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.tag == _tag)
+            if (other.CompareTag(tag) && !other.isTrigger)
             {
                 objectToActivate.SetActive(true);
             }
@@ -29,7 +33,7 @@ namespace Events
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.tag == _tag)
+            if (other.CompareTag(tag)&& !other.isTrigger)
             {
                 objectToActivate.SetActive(false);
             }

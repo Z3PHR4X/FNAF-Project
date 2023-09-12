@@ -17,7 +17,7 @@ namespace Settings
 
         public void SetDefaultSettings()
         {
-            PlayerPrefs.SetString("lockMouseToWindow", "true");
+            PlayerPrefs.SetInt("lockMouseToWindow", 1);
             PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
             PlayerPrefs.SetFloat("audioMasterVolume", masterVolume);
             PlayerPrefs.SetFloat("audioMusicVolume", musicVolume);

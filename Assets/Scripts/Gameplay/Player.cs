@@ -1,10 +1,12 @@
 using UnityEngine;
+using Gameplay;
 
 public class Player : MonoBehaviour
 {
     public static Player Instance;
-    public bool isInCamera, isAlive, hasPower;
+    public bool isInCamera, isAlive;
     public PowerManager powerManager;
+    public DoorManager doorManager;
 
     private Camera playerCamera;
     private Quaternion cameraRotation;
@@ -28,6 +30,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isAlive = true;
         isInCamera = false;
         cameraRotation = playerCamera.transform.localRotation;
     }
@@ -35,6 +38,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateCamera();
+    }
+
+    void UpdateCamera()
+    {
+        //when not paused
         if (Time.timeScale > 0)
         {
             if (!isInCamera)

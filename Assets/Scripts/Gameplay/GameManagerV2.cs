@@ -6,10 +6,24 @@ public class GameManagerV2 : MonoBehaviour
 {
     public static GameManagerV2 Instance;
 
-    public GameObject startNightScreen, endNightScreen, gameOverScreen;
-    public bool hasGameStarted, isPaused, isGameOver, hasPlayerWon;
-    public int night, nightLength, nightTime;
-    public float hourLength, hourTimer;
+    [Header("Setup")]
+    [SerializeField] private GameObject startNightScreen;
+    [SerializeField] private GameObject endNightScreen;
+    [SerializeField] private GameObject gameOverScreen;
+    [SerializeField] private Events.MusicBox musicBox;
+    [Header("In-game values")]
+    public bool hasGameStarted;
+    public bool isPaused;
+    public bool isGameOver;
+    public bool hasPlayerWon;
+    public int night;
+    public int nightLength;
+    public int hour;
+    public float hourLength;
+    public float hourTimer;
+    [Header("Enable/Disable under circumstances")]
+    [SerializeField] private List<GameObject> gameplayObjects;
+    [SerializeField] private List<GameObject> powerObjects;
 
     private void Awake()
     {
@@ -27,60 +41,142 @@ public class GameManagerV2 : MonoBehaviour
         night = Singleton.Instance.selectedNight;
         nightLength = Singleton.Instance.selectedMap.nightLength;
         hourLength = Singleton.Instance.selectedMap.hourLength;
-        nightTime = 0;
+        hour = 0;
         hasGameStarted = false;
         isPaused = false;
         isGameOver = false;
         hasPlayerWon = false;
+        hourTimer = Time.time;
+        //Singleton.Instance.canRetryNight = false;
 
-        PreGameSequence();
+        foreach (GameObject obj in gameplayObjects)
+        {
+            obj.SetActive(false);
+        }
+        foreach (GameObject obj in powerObjects)
+        {
+            obj.SetActive(false);
+        }
     }
 
     private void Update()
     {
-        if (hasGameStarted && !isGameOver && !hasPlayerWon)
+        if (hasGameStarted)
         {
-            if (hourTimer + hourLength > Time.time)
+            if(hasPlayerWon)
             {
-                AdvanceNight();
+                PlayerWin();
             }
+            else if (isGameOver) 
+            { 
+                GameOver();
+            }
+            else
+            {
+                if(!Player.Instance.isAlive)
+                {
+                    isGameOver = true;
+                }
+                if(!Player.Instance.powerManager.hasPower)
+                {
+                    PowerDown();
+                }
+                if (hourTimer + hourLength < Time.time)
+                {
+                    AdvanceNight();
+                }
+            }
+        }
+        else
+        {
+            StartGame();
         }
     }
 
-    public void PreGameSequence()
+    public void PreGameSequence(float length)
     {
-        //show start night screen
-
+        startNightScreen.SetActive(true);
+        if (hourTimer + length < Time.time)
+        {
+            foreach (GameObject obj in gameplayObjects)
+            {
+                obj.SetActive(true);
+            }
+            foreach (GameObject obj in powerObjects)
+            {
+                obj.SetActive(true);
+            }
+            startNightScreen.SetActive(false);
+            print("Game has started!");
+            hourTimer = Time.time;
+            hasGameStarted = true;
+        }
     }
 
     public void StartGame()
     {
-        //
+        PreGameSequence(4);
     }
 
     public void GameOver()
     {
-
+        print("Player has lost!");
+        Singleton.Instance.canRetryNight = true;
+        Singleton.Instance.ChangeScene("GameOver");
     }
 
     public void PlayerWin()
     {
-
+        if (!endNightScreen.active)
+        {
+            endNightScreen.SetActive(true);
+            foreach (GameObject obj in gameplayObjects)
+            {
+                obj.SetActive(false);
+            }
+            foreach (GameObject obj in powerObjects)
+            {
+                obj.SetActive(false);
+            }
+            if (night > Singleton.Instance.completedNight)
+            {
+                Singleton.Instance.completedNight = Mathf.Clamp(night, 1, 8);
+                PlayerPrefs.SetInt("completedNight", Singleton.Instance.completedNight);
+            }
+            Singleton.Instance.canRetryNight = false;
+            print("Player has won!");
+        }
     }
 
     public void AdvanceNight()
     {
         if(!isGameOver ||  !hasPlayerWon)
         {
-            if(isNightOver(nightTime + 1, nightLength))
+            if(isNightOver(hour + 1, nightLength))
             {
                 hasPlayerWon = true;
             }
             else
             {
-                nightTime++;
+                hour++;
                 hourTimer = Time.time;
             }
+        }
+    }
+
+    public void PowerDown()
+    {
+        if (!musicBox.isActiveAndEnabled)
+        {
+            foreach (GameObject obj in gameplayObjects)
+            {
+                obj.SetActive(false);
+            }
+            foreach (GameObject obj in powerObjects)
+            {
+                obj.SetActive(false);
+            }
+            musicBox.gameObject.SetActive(true);
         }
     }
 

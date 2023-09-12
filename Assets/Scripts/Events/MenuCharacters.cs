@@ -100,7 +100,7 @@ namespace Events
                             ResetCharTimer();
                         }
                     }
-                    else if (roll < switchChance)
+                    else if (roll > switchChance)
                     {
                         isSwitching = true;
                     }

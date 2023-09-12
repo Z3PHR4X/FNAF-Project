@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class Power : MonoBehaviour
+    public class SecurityCameraManager : MonoBehaviour
     {
-        public float powerUsage;
-
         // Start is called before the first frame update
         void Start()
         {

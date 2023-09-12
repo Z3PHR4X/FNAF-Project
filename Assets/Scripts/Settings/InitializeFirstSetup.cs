@@ -24,7 +24,7 @@ namespace Settings
             {
                 Cursor.lockState = CursorLockMode.None;
             }
-            Singleton.Instance.selectedMap = defaultLevel;
+            //Singleton.Instance.selectedMap = defaultLevel;
         }
     }
 }

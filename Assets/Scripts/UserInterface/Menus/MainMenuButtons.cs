@@ -57,12 +57,14 @@ public class MainMenuButtons : MonoBehaviour
         PlayerPrefs.SetInt("completedNight", 0);
         Singleton.Instance.selectedNight = 1;
         Singleton.Instance.completedNight = 0;
+        Singleton.Instance.selectedMap = Singleton.Instance.availableLevels[0];
         Singleton.Instance.ChangeScene("LoadingScreen");
     }
 
     public void ContinueGame()
     {
         Singleton.Instance.selectedNight = Mathf.Clamp(completedNight + 1, 1, 7);
+        Singleton.Instance.selectedMap = Singleton.Instance.availableLevels[0];
         print("Continuing game on night " + Singleton.Instance.selectedNight); ;
         Singleton.Instance.ChangeScene("LoadingScreen");
     }

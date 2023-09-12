@@ -23,9 +23,9 @@ namespace AI
         // Update is called once per frame
         void Update()
         {
-            if (GameManagerV2.Instance.nightTime != currentTime)
+            if (GameManagerV2.Instance.hour != currentTime)
             {
-                RecalculateWaypointFlow(GameManagerV2.Instance.nightTime, GameManagerV2.Instance.nightLength);
+                RecalculateWaypointFlow(GameManagerV2.Instance.hour, GameManagerV2.Instance.nightLength);
             }
         }
 

@@ -13,6 +13,7 @@ public class Singleton : MonoBehaviour
     public List<Level> availableLevels = new List<Level>();
     public Level selectedMap;
     public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
+    private Animator transitionAnimator;
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class Singleton : MonoBehaviour
         {
             selectedMap = availableLevels[0];
         }
+        transitionAnimator = GetComponent<Animator>();
         print("Singleton successfully initialized!");
 
         if (overrideCompletedNight)
@@ -51,14 +53,42 @@ public class Singleton : MonoBehaviour
     //Simple function to change scenes, no loading screens
     public void ChangeScene(string sceneName)
     {
-        print("Changing scene to:" + sceneName);
+        print("Changing scene to: " + sceneName);
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(sceneName);        
+    }
+
+    public void ChangeScene(string sceneName, bool fade)
+    {
+        transitionAnimator = GameObject.FindWithTag("SceneTransition").GetComponent<Animator>();
+        float transitionTime = 1f;
+        print($"Changing scene to: {sceneName} with fade of {transitionTime}s");
+        Time.timeScale = 1.0f;
+        StartCoroutine(LoadSceneFade(sceneName, transitionTime));
     }
 
     //Exits the application.. 
     public void ExitApplication()
     {
         print("Exitting application..");
+        Application.Quit();
+        //StartCoroutine(ExitSequence(1f));
+    }
+
+    IEnumerator LoadSceneFade(string sceneName, float transitionTime)
+    {
+        transitionAnimator.SetTrigger("FadeOut");
+        yield return new WaitForSeconds(transitionTime);
+
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        yield return new WaitForEndOfFrame();
+
+    }
+
+    IEnumerator ExitSequence(float transitionTime)
+    {
+        transitionAnimator.SetTrigger("FadeOut");
+        yield return new WaitForSeconds(transitionTime);
         Application.Quit();
     }
 }

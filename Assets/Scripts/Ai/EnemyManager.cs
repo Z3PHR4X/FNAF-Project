@@ -17,6 +17,14 @@ namespace AI
             //Spawn AI at the start of the game from characterlist in SelectedLevel
             characterList = Singleton.Instance.selectedMap.characters;
 
+            //Make sure the amount of characters is within the levels limitations
+            if(characterList.Count > spawnWaypoints.Count)
+            {
+                while(characterList.Count > spawnWaypoints.Count) { 
+                characterList.RemoveAt(characterList.Count-1);
+                }
+            }
+
             for(int x = 0; x < characterList.Count; x++)
             {
                 GameObject character = characterList[x].ingamePrefab;

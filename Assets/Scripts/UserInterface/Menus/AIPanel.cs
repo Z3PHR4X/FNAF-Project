@@ -23,7 +23,7 @@ public class AIPanel : MonoBehaviour
             int night = Mathf.Clamp(Singleton.Instance.selectedNight - 1, 0, 6);
             int aggro = character.aggressionProgression[night].activityValues[0];
             thumbnail.sprite = character.thumbnail;
-            name.text = character.name;
+            name.text = character.characterName;
             description.text = character.description;
             aggressionLevel.text = aggro.ToString();
             aggressionSlider.value = aggro;
