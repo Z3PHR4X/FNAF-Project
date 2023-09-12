@@ -14,6 +14,7 @@ public class Door : MonoBehaviour
     [SerializeField] private GameObject lightObj;
     [SerializeField] private AudioSource doorCloseAudio;
     [SerializeField] private AudioSource doorOpenAudio;
+    [SerializeField] private AudioSource doorBangingAudio;
     [SerializeField] private AudioSource enemySpottedAudio;
     private PowerManager powerManager;
 
@@ -32,8 +33,13 @@ public class Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OpenDoor();
+        OpenDoor(true);
         TurnOffLight();
+    }
+
+    public void BangOnDoor()
+    {
+        doorBangingAudio.Play();
     }
 
     public void ToggleDoor()
@@ -68,17 +74,22 @@ public class Door : MonoBehaviour
         doorOpenAudio.Play();
     }
 
+    public void OpenDoor(bool quietly)
+    {
+        isClosed = false;
+        doorObj.SetActive(false);
+        powerManager.powerConsumers.Remove(1);
+    }
+
     public void ToggleLight()
     {
-        lightOn = !lightOn;
-        lightObj.SetActive(lightOn);
         if (lightOn)
         {
-            powerManager.powerConsumers.Add(1);
+            TurnOffLight();
         }
         else
         {
-            powerManager.powerConsumers.Remove(1);
+            TurnOnLight();
         }
 
         if(lightOn && !isClosed && enemyAtDoor)
@@ -89,16 +100,19 @@ public class Door : MonoBehaviour
 
     public void TurnOnLight()
     {
-        lightOn = true;
-        lightObj.SetActive(true);
-        powerManager.powerConsumers.Add(1);
-
-        if(enemyAtDoor && !isClosed)
+        if (!lightOn)
         {
-            enemySpottedAudio.Play();
-        }
+            lightOn = true;
+            lightObj.SetActive(true);
+            powerManager.powerConsumers.Add(1);
 
-        StartCoroutine(TurnOffLightAfter(1f));
+            if (enemyAtDoor && !isClosed)
+            {
+                enemySpottedAudio.Play();
+            }
+
+            StartCoroutine(TurnOffLightAfter(1f));
+        }
     }
 
     public void TurnOffLight()

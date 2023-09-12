@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tools
 {
-    public class DiceRollGenerator : MonoBehaviour
+    public static class DiceRollGenerator
     {
         //Rolls dice to determine if they can make a move
         static public bool hasSuccessfulRoll(int aggressionLevel)

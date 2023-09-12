@@ -49,6 +49,43 @@ public class DoorManager : MonoBehaviour
         }
         isPoweredDown=true;
     }
+
+    public void ToggleDoor(string door)
+    {
+        switch (door)
+        {
+            case "left":
+                leftDoor.ToggleDoor();
+                break;
+
+            case "center":
+                centerDoor.ToggleDoor();
+                break;
+
+            case "right":
+                rightDoor.ToggleDoor();
+                break;
+        }
+    }
+
+    public void TurnOnLight(string light)
+    {
+        switch (light)
+        {
+            case "left":
+                leftDoor.TurnOnLight();
+                break;
+
+            case "center":
+                centerDoor.TurnOnLight();
+                break;
+
+            case "right":
+                rightDoor.TurnOnLight();
+                break;
+        }
+    }
+
     void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.A))

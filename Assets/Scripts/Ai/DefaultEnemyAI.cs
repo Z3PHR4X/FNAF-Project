@@ -24,12 +24,12 @@ namespace AI
         public AIState state;
         [SerializeField] private Character characterData;
         public List<AIValues> aiValues;
-        [SerializeField] private float waypointDetectionRange = 15f;
-        public bool isBeingWatched, watchingBlocksAction;
-        public ActionBehaviour actionBehaviour;
+        [SerializeField] private float triggerDetectionRange = 5f;
+        public bool isBeingWatched;
+        [SerializeField] private bool attacksWhenDistracted = false;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
-        public List<DynamicWaypoints> waypointsInRange;
+        //public List<DynamicWaypoints> waypointsInRange;
         [SerializeField] private AudioSource characterAudioSource;
         [SerializeField] private AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
 
@@ -40,8 +40,9 @@ namespace AI
         private double timeSinceLastAction, timeSinceLastSeen;
         private GameObject inCamerasView; //store camera that is viewing AI so it can be scrambled later
         private AIValues nightValues = new AIValues();
-        private SphereCollider waypointDetector;
+        private SphereCollider sphereCollider;
         private DynamicWaypoints nextWaypoint;
+        private Door door;
 
         public enum AnimatronicType
         {
@@ -53,6 +54,7 @@ namespace AI
         public enum AIState
         {
             Inactive,
+            Hiding,
             Waiting,
             Searching,
             Moving,
@@ -64,9 +66,9 @@ namespace AI
         {
             characterAudioSource = GetComponent<AudioSource>();
             characterAudioSource.volume = Singleton.Instance.sfxVolume;
-            waypointDetector = gameObject.AddComponent<SphereCollider>();
-            waypointDetector.isTrigger = true;
-            waypointDetector.radius = waypointDetectionRange;
+            sphereCollider = gameObject.AddComponent<SphereCollider>();
+            sphereCollider.isTrigger = true;
+            sphereCollider.radius = triggerDetectionRange;
         }
 
         // Start is called before the first frame update
@@ -87,54 +89,243 @@ namespace AI
         // Update is called once per frame
         void Update()
         {
+            //check if able to increase aggression level
+            //increase aggressionlevel
             UpdateActivityValues(GameManagerV2.Instance.hour);
 
+            //Main AI loop
+            if (currentWaypoint.isAttackingPosition)
+            {
+                AttackState();
+            }
             //every x seconds
-            if (timeSinceLastAction + nightValues.actionInterval < Time.time)
+            else if (timeSinceLastAction + activityInterval < Time.time && !currentWaypoint.isAttackingPosition)
             {
                 //if roll succeeds
                 if (DiceRollGenerator.hasSuccessfulRoll(activityLevel) && !isBeingWatched)
                 {
-                    //perform action
-
-                    if (currentWaypoint.isAttackingPosition)
+                    PlayAudio("default");
+                    //decide where to move next
+                    nextWaypoint = SetNextWayPoint(currentWaypoint.connectedWaypoints);
+                    //move to next waypoint
+                    if (nextWaypoint != null)
                     {
-                        AttackPlayer();
-                        //attempt to attack player
-                        //if fails
-                        //return to starting position
-                    }
-                    else
-                    {
-                        //decide where to move next
-                        nextWaypoint = SetNextWayPoint(waypointsInRange);
-                        //move to next waypoint
-                        if (nextWaypoint != null)
-                        {
-                            nextWaypoint.isOccupied = true;
-                            print($"{characterData.characterName} has decided to move to: {nextWaypoint}");
-                            Move(nextWaypoint);
-                        }
+                        nextWaypoint.isOccupied = true;
+                        Move(nextWaypoint);
                     }
                 }
-                else
-                {
-
-                }
-
+                //else if(DiceRollGenerator.hasSuccessfulRoll(8))
+                //{
+                //    PlayAudio("default");
+                //}
                 timeSinceLastAction = Time.time;
+
             }
             else
             {
                 state = AIState.Waiting;
             }
-
-
-            //check if able to increase aggression level
-            //increase aggressionlevel
         }
 
-        private DynamicWaypoints SetNextWayPoint(List<DynamicWaypoints> potentialWaypoints)
+        public virtual DynamicWaypoints SetNextWayPoint(List<DynamicWaypoints> potentialWaypoints)
+        {
+            state = AIState.Searching;
+            nextWaypoint = null;
+            int counter = 0;
+
+            if(potentialWaypoints.Count > 0)
+            {
+                foreach (var waypoint in potentialWaypoints)
+                {
+                    if(currentWaypoint.flowWeight < waypoint.flowWeight)
+                    {
+                        nextWaypoint = waypoint;
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+                }
+
+                if (counter == potentialWaypoints.Count  || DiceRollGenerator.hasSuccessfulRoll(2))
+                {
+                    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
+                }
+            }
+
+            print($"{characterData.characterName} has decided to move to: {nextWaypoint}");
+
+            return nextWaypoint;
+        }
+
+        public virtual void Move(DynamicWaypoints wayPoint)
+        {
+            state = AIState.Moving;
+            //waypointsInRange.Clear();
+            //move to waypoint location
+            PlayAudio("movement");
+            gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2,2),0,Random.Range(-2,2));
+            gameObject.transform.rotation = wayPoint.transform.rotation;
+
+            currentWaypoint.isOccupied = false;
+            currentWaypoint = wayPoint;
+            currentWaypoint.isOccupied = true;
+            //scramble camera
+        }
+
+        public virtual void AttackState()
+        {
+            state = AIState.Attacking;
+
+            if (timeSinceLastAction + nightValues.actionInterval < Time.time)
+            {
+                if (attacksWhenDistracted && Player.Instance.isInCamera && DiceRollGenerator.hasSuccessfulRoll(activityLevel))
+                {
+                    AttackPlayer();
+                }
+                else if (DiceRollGenerator.hasSuccessfulRoll(activityLevel))
+                {
+                    AttackPlayer();
+                }
+                timeSinceLastAction = Time.time;
+            }
+
+        }
+
+        public virtual void AttackPlayer()
+        {
+            state = AIState.Attacking;
+            //attempt to attack the player
+            //if door is closed
+            if (door != null)
+            {
+                if (door.isClosed)
+                {
+                    //Play audio and return home
+                    door.BangOnDoor();
+                    Move(homeWaypoint);
+                    //lower power? 
+                }
+                else
+                {
+                    PlayAudio("attack");
+                    //play attack/jumpscare animation
+
+                    //once finished, player died
+                    Player.Instance.isAlive = false;
+                }
+            }
+            else
+            {
+                Move(homeWaypoint);
+                print($"{characterData.characterName} tried to attack the player, but got confused as there was no door!");
+            }
+
+            timeSinceLastAction = Time.time;
+        }
+
+        public virtual void PlayAudio(string audioType)
+        {
+            switch (audioType)
+            {
+                case "attack":
+                    characterAudioSource.clip = attackAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                case "attackFail":
+                    characterAudioSource.clip = attackFailAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                case "movement":
+                    characterAudioSource.clip = movementAudio;
+                    characterAudioSource.Play();
+                    break;
+
+                default:
+                    characterAudioSource.clip = defaultAudio;
+                    characterAudioSource.Play();
+                    break;
+            }
+        }
+
+        public virtual void UpdateActivityValues(int hour)
+        {
+            if (activityPhase != hour)
+            {
+                activityPhase = hour;
+                activityLevel += nightValues.activityValues[activityPhase];
+                activityInterval = nightValues.actionInterval;
+            }
+        }
+
+        public virtual void OnTriggerEnter(Collider other)
+        {
+
+            /*if (other.gameObject.CompareTag("Waypoint"))
+            {
+                //print(other);
+                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
+                if (waypoint.waypointType.ToString() == animatronicType.ToString())
+                {
+                    if (!waypointsInRange.Contains(waypoint))
+                    {
+                        waypointsInRange.Add(waypoint);
+                    }
+                }
+            }*/
+            if (other.gameObject.CompareTag("Door")){
+                door = other.gameObject.GetComponent<Door>();
+            }
+        }
+
+        public virtual void OnTriggerStay(Collider other)
+        {
+            /*if (other.gameObject.CompareTag("Waypoint"))
+            {
+                //print(other);
+                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
+                if (waypoint.waypointType.ToString() == animatronicType.ToString())
+                {
+                    if (!waypointsInRange.Contains(waypoint))
+                    {
+                        waypointsInRange.Add(waypoint);
+                    }
+                }
+            }*/
+
+            if (other.gameObject.CompareTag("Door"))
+            {
+                door = other.gameObject.GetComponent<Door>();
+            }
+        }
+
+        public virtual void OnTriggerExit(Collider other)
+        {
+            /*if (other.gameObject.CompareTag("Waypoint"))
+            {
+                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
+                if (waypoint.waypointType.ToString() == animatronicType.ToString())
+                {
+                    waypointsInRange.Remove(waypoint);
+                }
+            }*/
+            if (other.gameObject.CompareTag("Door"))
+            {
+                door = null;
+            }
+        }
+
+        /* Spherecollider based waypoint detection 
+         * 
+         * Issues:
+         * - More waypoints needed
+         * - More waypoints in 1 area cause AI to get stuck in areas
+         * - AI can teleport through walls 
+         * 
+
+        public virtual DynamicWaypoints SetNextWayPoint(List<DynamicWaypoints> potentialWaypoints)
         {
             state = AIState.Searching;
 
@@ -187,121 +378,6 @@ namespace AI
             return nextWaypoint;
         }
 
-        private void Move(DynamicWaypoints wayPoint)
-        {
-            state = AIState.Moving;
-            //waypointsInRange.Clear();
-            //move to waypoint location
-            PlayAudio("movement");
-            gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2,2),0,Random.Range(-2,2));
-            gameObject.transform.rotation = wayPoint.transform.rotation;
-
-            currentWaypoint.isOccupied = false;
-            currentWaypoint = wayPoint;
-            currentWaypoint.isOccupied = true;
-            //scramble camera
-        }
-
-        private void AttackPlayer()
-        {
-            state = AIState.Attacking;
-            //attempt to attack the player
-            //if door is closed
-            //return to start
-            Move(homeWaypoint);
-            //play banging sound
-            PlayAudio("attackFail");
-            //lower power
-            //else
-            //kill player
-            PlayAudio("attack");
-        }
-
-        private void ReturnToStart()
-        {
-            state = AIState.Returning;
-            //return to starting position
-        }
-
-        private void PlayAudio(string audioType)
-        {
-            switch (audioType)
-            {
-                case "attack":
-                    characterAudioSource.clip = attackAudio;
-                    characterAudioSource.Play();
-                    break;
-
-                case "attackFail":
-                    characterAudioSource.clip = attackFailAudio;
-                    characterAudioSource.Play();
-                    break;
-
-                case "movement":
-                    characterAudioSource.clip = movementAudio;
-                    characterAudioSource.Play();
-                    break;
-
-                default:
-                    characterAudioSource.clip = defaultAudio;
-                    characterAudioSource.Play();
-                    break;
-            }
-        }
-
-        private void UpdateActivityValues(int hour)
-        {
-            if (activityPhase != hour)
-            {
-                activityPhase = hour;
-                activityLevel += nightValues.activityValues[activityPhase];
-                activityInterval = nightValues.actionInterval;
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            
-            if (other.gameObject.CompareTag("Waypoint"))
-            {
-                //print(other);
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if(waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    if(!waypointsInRange.Contains(waypoint))
-                    {
-                        waypointsInRange.Add(waypoint);
-                    }
-                }
-            }
-        }
-
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.gameObject.CompareTag("Waypoint"))
-            {
-                //print(other);
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if (waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    if (!waypointsInRange.Contains(waypoint))
-                    {
-                        waypointsInRange.Add(waypoint);
-                    }
-                }
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.gameObject.CompareTag("Waypoint"))
-            {
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if (waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    waypointsInRange.Remove(waypoint);
-                }
-            }
-        }
+        */
     }
 }

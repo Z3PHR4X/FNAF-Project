@@ -12,11 +12,12 @@ namespace Events
         }
 
         public GameObject objectToActivate;
-        public string tag;
+        public string activateOnTag;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(tag) && !other.isTrigger)
+
+            if (other.CompareTag(activateOnTag) && !other.isTrigger)
             {
                 print(other.name + "has entered");
                 objectToActivate.SetActive(true);
@@ -25,7 +26,8 @@ namespace Events
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag(tag) && !other.isTrigger)
+
+            if (other.CompareTag(activateOnTag) && !other.isTrigger)
             {
                 objectToActivate.SetActive(true);
             }
@@ -33,7 +35,7 @@ namespace Events
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag(tag)&& !other.isTrigger)
+            if (other.CompareTag(activateOnTag) && !other.isTrigger)
             {
                 objectToActivate.SetActive(false);
             }
