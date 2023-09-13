@@ -4,6 +4,7 @@ namespace Gameplay
 {
     public class SecurityCamera : MonoBehaviour
     {
+        public SecurityCameraManager manager;
         public Camera cameraComponent;
         public AudioListener audioListener;
         public Light cameraLight;
@@ -18,6 +19,7 @@ namespace Gameplay
 
         private void Awake()
         {
+            manager = FindAnyObjectByType<SecurityCameraManager>();
             cameraComponent = GetComponent<Camera>();
             audioListener = GetComponent<AudioListener>();
             cameraLight = GetComponentInChildren<Light>();
@@ -71,6 +73,11 @@ namespace Gameplay
             {
                 enableWithCamera.SetActive(isOn);
             }
+        }
+
+        public void ScrambleCamera()
+        {
+            
         }
 
         private void UpdateRotation()

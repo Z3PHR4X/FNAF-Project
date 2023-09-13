@@ -27,11 +27,14 @@ namespace AI
 
             for(int x = 0; x < characterList.Count; x++)
             {
-                GameObject character = characterList[x].ingamePrefab;
-                Transform spawnPoint = spawnWaypoints[x].GetComponent<Transform>();
-                GameObject spawnedChar = Instantiate(character, spawnPoint);
-                spawnedChar.transform.SetParent(this.gameObject.transform);
-                spawnedChar.GetComponent<DefaultEnemyAI>().homeWaypoint = spawnWaypoints[x].GetComponent<DynamicWaypoints>();
+                if (characterList[x].aggressionProgression[Singleton.Instance.selectedNight-1].isEnabled)
+                {
+                    GameObject character = characterList[x].ingamePrefab;
+                    Transform spawnPoint = spawnWaypoints[x].GetComponent<Transform>();
+                    GameObject spawnedChar = Instantiate(character, spawnPoint);
+                    spawnedChar.transform.SetParent(this.gameObject.transform);
+                    spawnedChar.GetComponent<DefaultEnemyAI>().homeWaypoint = spawnWaypoints[x].GetComponent<DynamicWaypoints>();
+                }
             }
         }
     }

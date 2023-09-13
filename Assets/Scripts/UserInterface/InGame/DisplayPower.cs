@@ -8,7 +8,7 @@ namespace UserInterface.InGame
     public class DisplayPower : MonoBehaviour
     {
         [SerializeField] private Text powerText;
-        float powerReserve;
+        int powerReserve;
 
         // Start is called before the first frame update
         void Start()
@@ -27,9 +27,9 @@ namespace UserInterface.InGame
             }
         }
 
-        void UpdatePowerDisplay(float power)
+        void UpdatePowerDisplay(int power)
         {
-            int displayPower = Mathf.RoundToInt(power);
+            float displayPower = (((float)(power))*10)/100;
             powerText.text = $"Power reserve: {displayPower}%";
         }
     }

@@ -7,6 +7,7 @@ namespace AI
     [System.Serializable]
     public class AIValues
     {
+        public bool isEnabled = true;
         public bool hasRandomStart = false;
         public Vector2 randomStartRange;
         public List<int> activityValues = new List<int>(7);

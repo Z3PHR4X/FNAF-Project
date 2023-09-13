@@ -55,6 +55,7 @@ namespace AI
             Inactive,
             Hiding,
             Waiting,
+            Watched,
             Searching,
             Moving,
             Attacking,
@@ -91,6 +92,7 @@ namespace AI
             //check if able to increase aggression level
             //increase aggressionlevel
             UpdateActivityValues(GameManagerV2.Instance.hour);
+            CheckIfBeingWatched();
 
             //Main AI loop
             if (currentWaypoint.isAttackingPosition)
@@ -103,7 +105,7 @@ namespace AI
                 //if roll succeeds
                 if (DiceRollGenerator.hasSuccessfulRoll(activityLevel) && !isBeingWatched)
                 {
-                    PlayAudio("default");
+                    //PlayAudio("default");
                     //decide where to move next
                     nextWaypoint = SetNextWayPoint(currentWaypoint.connectedWaypoints);
                     //move to next waypoint
@@ -112,13 +114,15 @@ namespace AI
                         nextWaypoint.isOccupied = true;
                         Move(nextWaypoint);
                     }
+                    timeSinceLastAction = Time.time;
                 }
-                //else if(DiceRollGenerator.hasSuccessfulRoll(8))
-                //{
-                //    PlayAudio("default");
-                //}
-                timeSinceLastAction = Time.time;
-
+                else if (isBeingWatched) {
+                    timeSinceLastAction = Time.time + Random.Range(1, 17.5f);
+                }
+                else
+                {
+                    timeSinceLastAction = Time.time;
+                }
             }
             else
             {
@@ -257,6 +261,11 @@ namespace AI
                 activityLevel += nightValues.activityValues[activityPhase];
                 activityInterval = nightValues.actionInterval;
             }
+        }
+
+        public virtual void CheckIfBeingWatched()
+        {
+            //add code in case character doesnt want to be watched
         }
 
         public virtual void OnTriggerEnter(Collider other)

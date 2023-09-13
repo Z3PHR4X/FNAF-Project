@@ -35,6 +35,12 @@ namespace AI
 
         }
 
+        public override void CheckIfBeingWatched()
+        {
+            base.CheckIfBeingWatched();
+            isBeingWatched = Player.Instance.isInCamera;
+        }
+
         IEnumerator RunTowardsPlayer(float duration)
         {
             yield return new WaitForSeconds(duration);

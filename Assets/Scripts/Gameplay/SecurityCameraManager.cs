@@ -10,7 +10,7 @@ namespace Gameplay
         public List<SecurityCamera> securityCameras = new List<SecurityCamera>();
         public Canvas securityCameraInterface;
 
-        [SerializeField] private Animator cameraNoiseController;
+        [SerializeField] private GameObject transitionNoise;
         [SerializeField] private AudioSource switchAudio;
         [SerializeField] private AudioSource turnOnAudio;
         [SerializeField] private AudioSource turnOffAudio;
@@ -60,18 +60,22 @@ namespace Gameplay
 
         public void ToggleSecurityCamera()
         {
-            if(isWatchingCameras)
+            if (!isPoweredDown)
             {
-                ExitSecurityCamera();
-            }
-            else
-            {
-                EnterSecurityCamera();
+                if (isWatchingCameras)
+                {
+                    ExitSecurityCamera();
+                }
+                else
+                {
+                    EnterSecurityCamera();
+                }
             }
         }
 
         public void EnterSecurityCamera()
         {
+            StartCoroutine(CameraTransition());
             toggleWithCameras.SetActive(false);
             isWatchingCameras = true;
             mainCamera.enabled = false;
@@ -104,6 +108,7 @@ namespace Gameplay
         //Called from SecurityCamera button on UI
         public void SwitchCamera(SecurityCamera nextCamera)
         {
+            StartCoroutine(CameraTransition());
             currentCamera.ToggleCamera(false);
             currentCamera = nextCamera;
             currentCamera.ToggleCamera(true);
@@ -115,6 +120,14 @@ namespace Gameplay
             if(Input.GetKeyDown(KeyCode.Space)) {
             ToggleSecurityCamera();
             }
+        }
+
+        IEnumerator CameraTransition()
+        {
+            transitionNoise.SetActive(true);
+            yield return new WaitForSeconds(0.2f);
+            transitionNoise.SetActive(false);
+
         }
     }
 }

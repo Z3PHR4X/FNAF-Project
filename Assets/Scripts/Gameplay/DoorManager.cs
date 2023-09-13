@@ -55,37 +55,43 @@ public class DoorManager : MonoBehaviour
 
     public void ToggleDoor(string door)
     {
-        switch (door)
+        if (!isPoweredDown)
         {
-            case "left":
-                leftDoor.ToggleDoor();
-                break;
+            switch (door)
+            {
+                case "left":
+                    leftDoor.ToggleDoor();
+                    break;
 
-            case "center":
-                centerDoor.ToggleDoor();
-                break;
+                case "center":
+                    centerDoor.ToggleDoor();
+                    break;
 
-            case "right":
-                rightDoor.ToggleDoor();
-                break;
+                case "right":
+                    rightDoor.ToggleDoor();
+                    break;
+            }
         }
     }
 
     public void TurnOnLight(string light)
     {
-        switch (light)
+        if (!isPoweredDown)
         {
-            case "left":
-                leftDoor.TurnOnLight();
-                break;
+            switch (light)
+            {
+                case "left":
+                    leftDoor.TurnOnLight();
+                    break;
 
-            case "center":
-                centerDoor.TurnOnLight();
-                break;
+                case "center":
+                    centerDoor.TurnOnLight();
+                    break;
 
-            case "right":
-                rightDoor.TurnOnLight();
-                break;
+                case "right":
+                    rightDoor.TurnOnLight();
+                    break;
+            }
         }
     }
 

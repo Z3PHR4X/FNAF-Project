@@ -4,8 +4,14 @@ namespace Events
 {
     public class FreddyNose : MonoBehaviour
     {
-        [SerializeField] private AudioSource noseAudio;
-        [SerializeField] private Camera cam;
+        private AudioSource noseAudio;
+        private Camera cam;
+
+        private void Awake()
+        {
+            cam = Camera.main;
+            noseAudio = GetComponentInChildren<AudioSource>();
+        }
 
         // Update is called once per frame
         void Update()
