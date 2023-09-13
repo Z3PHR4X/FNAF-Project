@@ -30,13 +30,16 @@ public class DoorManager : MonoBehaviour
 
     private void Update()
     {
-        if (powerManager.hasPower)
+        if (GameManagerV2.Instance.hasGameStarted && !GameManagerV2.Instance.hasPlayerWon)
         {
-            HandleInput();
-        }
-        else if(!isPoweredDown) 
-        {
-            PowerDown();
+            if (powerManager.hasPower)
+            {
+                HandleInput();
+            }
+            else if (!isPoweredDown)
+            {
+                PowerDown();
+            }
         }
     }
 

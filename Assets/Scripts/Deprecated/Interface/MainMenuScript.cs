@@ -90,7 +90,7 @@ public class MainMenuScript : MonoBehaviour
 
     void CheckSettings()
     {
-        if (PlayerPrefs.GetFloat("mouseSensitivity") == null || PlayerPrefs.GetFloat("mouseSensitivity") >= 0)
+        if (PlayerPrefs.GetFloat("mouseSensitivity") == 0f)
         {
             PlayerPrefs.SetFloat("mouseSensitivity", 1f);
         }

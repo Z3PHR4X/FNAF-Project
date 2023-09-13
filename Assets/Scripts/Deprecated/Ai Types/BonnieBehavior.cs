@@ -7,7 +7,7 @@ public class BonnieBehavior : MonoBehaviour
     public bool isDeprecated = true;
     public GameManager gameManager;
     public NavMeshAgent agent;
-    public AudioSource audio;
+    public AudioSource charAudio;
     public int[] levelProgression;
     [SerializeField] private int[] aggressionSetup = {0,0,0,0,0,0,0};
     [SerializeField] private GameObject[] waypoints;
@@ -141,11 +141,11 @@ public class BonnieBehavior : MonoBehaviour
 
     void MakeSound()
     {
-        if (!audio.isPlaying)
+        if (!charAudio.isPlaying)
         {
             if (Random.Range(0, 21) < 1)
             {
-                audio.Play();
+                charAudio.Play();
             }
         }
     }

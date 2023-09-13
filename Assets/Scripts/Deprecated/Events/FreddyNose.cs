@@ -7,7 +7,7 @@ public class FreddyNose : MonoBehaviour
     public bool isDeprecated = true;
     private GameManager gameManager;
     [SerializeField] private AudioSource noseAudio;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cam;
 
     // Start is called before the first frame update
     void Start()
@@ -21,7 +21,7 @@ public class FreddyNose : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !gameManager.player.isInCamera)
         { // if left button pressed...
 
-            Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {

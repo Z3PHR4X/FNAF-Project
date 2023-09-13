@@ -132,7 +132,7 @@ namespace Events
             {
                 characterLight.intensity = 0.5f;
                 int glitch = characters.Length - 1;
-                if (characters[glitch].active)
+                if (characters[glitch].activeSelf)
                 {
                     characters[glitch].SetActive(false);
                     characters[current].SetActive(true);

@@ -127,7 +127,7 @@ public class GameManagerV2 : MonoBehaviour
 
     public void PlayerWin()
     {
-        if (!endNightScreen.active)
+        if (!endNightScreen.activeSelf)
         {
             endNightScreen.SetActive(true);
             foreach (GameObject obj in gameplayObjects)

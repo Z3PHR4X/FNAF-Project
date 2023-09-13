@@ -7,7 +7,7 @@ public class FoxyBehavior : MonoBehaviour
     public bool isDeprecated = true;
     public GameManager gameManager;
     public NavMeshAgent agent;
-    public AudioSource audio;
+    public AudioSource charAudio;
     public AudioSource bangingAudio;
     public AudioSource runningAudio;
     public int[] levelProgression;
@@ -189,11 +189,11 @@ public class FoxyBehavior : MonoBehaviour
 
     void MakeSound()
     {
-        if (!audio.isPlaying)
+        if (!charAudio.isPlaying)
         {
             if (Random.Range(0, 21) < 1)
             {
-                audio.Play();
+                charAudio.Play();
             }
         }
     }

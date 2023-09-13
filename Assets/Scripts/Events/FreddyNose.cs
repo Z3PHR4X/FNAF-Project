@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Events
 {
     public class FreddyNose : MonoBehaviour
     {
         [SerializeField] private AudioSource noseAudio;
-        [SerializeField] private Camera camera;
+        [SerializeField] private Camera cam;
 
         // Update is called once per frame
         void Update()
@@ -15,7 +13,7 @@ namespace Events
             if (Input.GetMouseButtonDown(0) && !Player.Instance.isInCamera)
             { // if left button pressed...
 
-                Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {

@@ -7,7 +7,7 @@ public class AIPanel : MonoBehaviour
 {
     public Character character;
     public Image thumbnail;
-    public Text name, description, aggressionLevel;
+    public Text charName, description, aggressionLevel;
     public Slider aggressionSlider;
 
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class AIPanel : MonoBehaviour
             int night = Mathf.Clamp(Singleton.Instance.selectedNight - 1, 0, 6);
             int aggro = character.aggressionProgression[night].activityValues[0];
             thumbnail.sprite = character.thumbnail;
-            name.text = character.characterName;
+            charName.text = character.characterName;
             description.text = character.description;
             aggressionLevel.text = aggro.ToString();
             aggressionSlider.value = aggro;

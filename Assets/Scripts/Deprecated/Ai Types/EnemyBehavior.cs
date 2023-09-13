@@ -7,7 +7,7 @@ public class EnemyBehavior : MonoBehaviour
     public bool isDeprecated = true;
     public GameManager gameManager;
     public NavMeshAgent agent;
-    public AudioSource audio;
+    public AudioSource charAudio;
     public bool isFreddy;
     public int[] levelProgression;
     [SerializeField] private int[] aggressionSetup = {0,0,0,0,0,0,0};
@@ -144,15 +144,15 @@ public class EnemyBehavior : MonoBehaviour
 
     private void MakeSound()
     {
-        if (!audio.isPlaying)
+        if (!charAudio.isPlaying)
         {
             if (isFreddy)
             {
-                audio.Play();
+                charAudio.Play();
             }
             else if (Random.Range(0, 21) < 6)
             {
-                audio.Play();
+                charAudio.Play();
             }
         }
     }

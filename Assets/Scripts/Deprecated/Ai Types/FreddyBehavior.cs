@@ -7,7 +7,7 @@ public class FreddyBehavior : MonoBehaviour
     public bool isDeprecated = true;
     public GameManager gameManager;
     public NavMeshAgent agent;
-    public AudioSource audio;
+    public AudioSource charAudio;
     public int[] levelProgression;
     [SerializeField] private int[] aggressionSetup = {0,0,1,2,3,4,20};
     [SerializeField] private GameObject[] waypoints;
@@ -144,11 +144,11 @@ public class FreddyBehavior : MonoBehaviour
 
     void MakeSound()
     {
-        if (!audio.isPlaying)
+        if (!charAudio.isPlaying)
         {
             if (Random.Range(0, 21) < 1)
             {
-                audio.Play();
+                charAudio.Play();
             }
         }
     }

@@ -29,14 +29,18 @@ namespace Gameplay
         // Update is called once per frame
         void Update()
         {
-            if (powerReserve > 0)
+            if (GameManagerV2.Instance.hasGameStarted && !GameManagerV2.Instance.hasPlayerWon)
             {
-                UpdatePower();
-            } else
-            {
-                hasPower = false;
-                powerReserve = 0;
-                powerUsage = 0;
+                if (powerReserve > 0)
+                {
+                    UpdatePower();
+                }
+                else
+                {
+                    hasPower = false;
+                    powerReserve = 0;
+                    powerUsage = 0;
+                }
             }
         }
 
