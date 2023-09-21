@@ -7,6 +7,7 @@ public class CheatMenu : MonoBehaviour
 {
     [SerializeField] private GameObject cheatIndicator;
     [SerializeField] private Text cheatStatus;
+    public bool cheatsAvailable = true;
     public bool cheatsEnabled;
     public bool isIngame;
     // Update is called once per frame
@@ -25,50 +26,71 @@ public class CheatMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.F12))
-        {
-            cheatsEnabled = true;
-            cheatIndicator.SetActive(true);
-        }
 
-        MenuCheats();
-        InGameCheats();
+        if (cheatsAvailable){
+            if (Input.GetKey(KeyCode.F12))
+            {
+                cheatsEnabled = true;
+                cheatIndicator.SetActive(true);
+            }
+
+            MenuCheats();
+            InGameCheats();
+        }
+        
     }
 
     private void InGameCheats()
     {
-        if (Input.GetKey(KeyCode.F1) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F1) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
+        {
+            //Gamespeed to 1f
+            cheatStatus.text = "Regular Game Speed";
+        }
+        if (Input.GetKey(KeyCode.F2) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
+        {
+            //Gamespeed to 2f
+            cheatStatus.text = "Double Game Speed";
+        }
+        if (Input.GetKey(KeyCode.F3) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
+        {
+            cheatStatus.text = "";
+        }
+        if (Input.GetKey(KeyCode.F4) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
             //DevMode
+            //Enable dev UI showing all AI values, power values, time counters
+            cheatStatus.text = "Developer Mode activated";
         }
-        if (Input.GetKey(KeyCode.F2) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F5) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-
+            cheatStatus.text = "";
         }
-        if (Input.GetKey(KeyCode.F3) && isIngame && cheatsEnabled)
-        {
+        if (Input.GetKey(KeyCode.F6) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled) {
 
+            //Lose
+            cheatStatus.text = "You lose :(";
         }
-        if (Input.GetKey(KeyCode.F4) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F7) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-
+            //Win
+            cheatStatus.text = "You win :)";
         }
-        if (Input.GetKey(KeyCode.F5) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F8) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-
+            cheatStatus.text = "";
         }
-        if (Input.GetKey(KeyCode.F6) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F9) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-
+            cheatStatus.text = "";
         }
-        if (Input.GetKey(KeyCode.F7) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F10) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-
+            cheatStatus.text = "";
         }
-
-        if (Input.GetKey(KeyCode.F11) && isIngame && cheatsEnabled)
+        if (Input.GetKey(KeyCode.F11) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-            Singleton.Instance.ChangeScene("MainMenu");
+            cheatStatus.text = "";
         }
     }
 

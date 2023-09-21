@@ -26,6 +26,7 @@ namespace AI
         [SerializeField] private float triggerDetectionRange = 5f;
         public bool isBeingWatched;
         [SerializeField] private bool attacksWhenDistracted = false;
+        [SerializeField] private bool hasMovementOffset = true;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
         //public List<DynamicWaypoints> waypointsInRange;
@@ -112,7 +113,7 @@ namespace AI
                     if (nextWaypoint != null)
                     {
                         nextWaypoint.isOccupied = true;
-                        Move(nextWaypoint);
+                        Move(nextWaypoint, hasMovementOffset);
                     }
                     timeSinceLastAction = Time.time;
                 }
@@ -161,13 +162,20 @@ namespace AI
             return nextWaypoint;
         }
 
-        public virtual void Move(DynamicWaypoints wayPoint)
+        public virtual void Move(DynamicWaypoints wayPoint, bool applyOffset)
         {
             state = AIState.Moving;
             //waypointsInRange.Clear();
             //move to waypoint location
             PlayAudio("movement");
-            gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2,2),0,Random.Range(-2,2));
+            if (applyOffset)
+            {
+                gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
+            }
+            else
+            {
+                gameObject.transform.position = wayPoint.transform.position;
+            }
             gameObject.transform.rotation = wayPoint.transform.rotation;
 
             currentWaypoint.isOccupied = false;
@@ -206,7 +214,7 @@ namespace AI
                 {
                     //Play audio and return home
                     door.BangOnDoor();
-                    Move(homeWaypoint);
+                    Move(homeWaypoint, false);
                     //lower power? 
                 }
                 else
@@ -220,7 +228,7 @@ namespace AI
             }
             else
             {
-                Move(homeWaypoint);
+                Move(homeWaypoint, false);
                 print($"{characterData.characterName} tried to attack the player, but got confused as there was no door!");
             }
 

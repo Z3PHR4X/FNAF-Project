@@ -30,8 +30,7 @@ namespace Settings
             PlayerPrefs.SetInt("graphicsFullScreenMode", 0);
             PlayerPrefs.SetInt("graphicsQuality", 5);
             PlayerPrefs.SetInt("graphicsVsync", 0);
-            //PlayerPrefs.SetInt("completedNight", 0); 
-            //PlayerPrefs.SetInt("completedLevel", 0); 
+            PlayerPrefs.SetInt("completedNight", 0); 
             PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
             print("Default settings set!");
         }

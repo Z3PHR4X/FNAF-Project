@@ -8,6 +8,11 @@ namespace Tools
         {
             Singleton.Instance.ChangeScene("MainMenu");
         }
+
+        public void LoadNewScene(string sceneName)
+        {
+            Singleton.Instance.ChangeScene(sceneName);
+        }
     }
 
 }

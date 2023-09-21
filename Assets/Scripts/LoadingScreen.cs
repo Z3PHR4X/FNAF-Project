@@ -33,7 +33,14 @@ public class LoadingScreen : MonoBehaviour
             _sceneToLoad = Singleton.Instance.selectedMap.levelScene.Name;
             mapText.text = Singleton.Instance.selectedMap.levelName;
             mapDescriptionText.text = Singleton.Instance.selectedMap.levelDescription;
-            backgroundImage.sprite = Singleton.Instance.selectedMap.levelLoadingBackground;
+            if (Singleton.Instance.selectedMap.levelLoadingBackground.Length > 1)
+            {
+                backgroundImage.sprite = Singleton.Instance.selectedMap.levelLoadingBackground[Singleton.Instance.selectedNight - 1];
+            }
+            else
+            {
+                backgroundImage.sprite = Singleton.Instance.selectedMap.levelLoadingBackground[0];
+            }
             loadingMusic.clip = Singleton.Instance.selectedMap.selectionMusic;
             loadingMusic.Play();
         }

@@ -14,6 +14,8 @@ namespace Gameplay
         private int _rotationSpeed = 2;
         [SerializeField]
         private int _maxRotation = 60;
+        [SerializeField] 
+        private int downwardAngle = 28;
 
         private float rotationOffset;
 
@@ -82,7 +84,7 @@ namespace Gameplay
 
         private void UpdateRotation()
         {
-            transform.rotation = Quaternion.Euler(28, rotationOffset + Mathf.PingPong(Time.time * _rotationSpeed, _maxRotation), 0);
+            transform.rotation = Quaternion.Euler(downwardAngle, rotationOffset + Mathf.PingPong(Time.time * _rotationSpeed, _maxRotation), 0);
         }
     }
 }

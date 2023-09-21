@@ -8,7 +8,8 @@ public class Level : MonoBehaviour
     public string levelName;
     [TextAreaAttribute]
     public string levelDescription;
-    public Sprite levelIcon, levelThumbnail, levelLoadingBackground;
+    public Sprite levelIcon, levelThumbnail;
+    public Sprite[] levelLoadingBackground;
     public AudioClip selectionSound, selectionMusic;
     public List<Character> characters = new List<Character>();
     public int numberOfNights = 7;

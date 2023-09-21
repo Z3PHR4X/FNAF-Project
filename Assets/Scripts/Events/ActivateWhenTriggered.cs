@@ -16,7 +16,6 @@ namespace Events
 
         private void OnTriggerEnter(Collider other)
         {
-
             if (other.CompareTag(activateOnTag) && !other.isTrigger)
             {
                 print(other.name + "has entered");
@@ -26,7 +25,6 @@ namespace Events
 
         private void OnTriggerStay(Collider other)
         {
-
             if (other.CompareTag(activateOnTag) && !other.isTrigger)
             {
                 objectToActivate.SetActive(true);
