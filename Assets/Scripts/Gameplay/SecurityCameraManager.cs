@@ -54,7 +54,11 @@ namespace Gameplay
 
         public void PowerDown()
         {
-            ExitSecurityCamera();
+            if(Player.Instance.isInCamera)
+            {
+                ExitSecurityCamera();
+            }
+            
             isPoweredDown=true;
         }
 

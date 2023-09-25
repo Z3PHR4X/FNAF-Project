@@ -108,7 +108,7 @@ namespace AI
                 {
                     //PlayAudio("default");
                     //decide where to move next
-                    nextWaypoint = SetNextWayPoint(currentWaypoint.connectedWaypoints);
+                    nextWaypoint = SetNextWaypoint(currentWaypoint.connectedWaypoints);
                     //move to next waypoint
                     if (nextWaypoint != null)
                     {
@@ -131,7 +131,7 @@ namespace AI
             }
         }
 
-        public virtual DynamicWaypoints SetNextWayPoint(List<DynamicWaypoints> potentialWaypoints)
+        public virtual DynamicWaypoints SetNextWaypoint(List<DynamicWaypoints> potentialWaypoints)
         {
             state = AIState.Searching;
             nextWaypoint = null;
@@ -139,10 +139,13 @@ namespace AI
 
             if(potentialWaypoints.Count > 0)
             {
+                bool chooseRandom = true;
+
                 foreach (var waypoint in potentialWaypoints)
                 {
-                    if(currentWaypoint.flowWeight < waypoint.flowWeight)
+                    if(currentWaypoint.flowWeight < waypoint.flowWeight && !waypoint.isOccupied)
                     {
+                        chooseRandom = false;
                         nextWaypoint = waypoint;
                     }
                     else
@@ -152,6 +155,11 @@ namespace AI
                 }
 
                 if (counter == potentialWaypoints.Count  || DiceRollGenerator.hasSuccessfulRoll(2))
+                {
+                    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
+                }
+
+                if (chooseRandom)
                 {
                     nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
                 }
@@ -168,7 +176,7 @@ namespace AI
             //waypointsInRange.Clear();
             //move to waypoint location
             PlayAudio("movement");
-            if (applyOffset)
+            if (applyOffset && !wayPoint.forceNoOffset)
             {
                 gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
             }
@@ -214,6 +222,7 @@ namespace AI
                 {
                     //Play audio and return home
                     door.BangOnDoor();
+                    print($"{characterData.characterName} with level {activityLevel} failed to attack player from {door.name} with state {door.isClosed}");
                     Move(homeWaypoint, false);
                     //lower power? 
                 }
@@ -221,7 +230,7 @@ namespace AI
                 {
                     PlayAudio("attack");
                     //play attack/jumpscare animation
-
+                    print($"{characterData.characterName} with level {activityLevel} attacked player from {door.name} with state {door.isClosed}");
                     //once finished, player died
                     Player.Instance.isAlive = false;
                 }
@@ -341,7 +350,7 @@ namespace AI
          * - AI can teleport through walls 
          * 
 
-        public virtual DynamicWaypoints SetNextWayPoint(List<DynamicWaypoints> potentialWaypoints)
+        public virtual DynamicWaypoints SetNextWaypoint(List<DynamicWaypoints> potentialWaypoints)
         {
             state = AIState.Searching;
 

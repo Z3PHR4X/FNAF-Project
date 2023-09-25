@@ -11,6 +11,7 @@ namespace AI
         public List<AIValues> waypointFlowValues = new List<AIValues>(1);
         public int flowWeight = 1;
         public bool isStartingPoint = false;
+        public bool forceNoOffset = false;
         public bool isCrawling = false;
         public bool isOccupied = false;
         public bool isAttackingPosition = false;
