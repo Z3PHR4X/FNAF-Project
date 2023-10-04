@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 using UnityEngine.UI;
 
 public class GameplaySettings : MonoBehaviour
@@ -33,6 +30,7 @@ public class GameplaySettings : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             //print("Cursor is no longer locked to screen");
         }
+        PlayerPrefs.Save();
     }
 
     public void SetMouseSensitivity()
@@ -47,6 +45,7 @@ public class GameplaySettings : MonoBehaviour
     {
         Singleton.Instance.mouseSensitivity = mouseSensitivity;
         PlayerPrefs.SetFloat("mouseSensitivity", Singleton.Instance.mouseSensitivity);
+        PlayerPrefs.Save();
     }
 
     public void LoadSettings()

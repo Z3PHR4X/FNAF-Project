@@ -93,6 +93,7 @@ public class MainMenuScript : MonoBehaviour
         if (PlayerPrefs.GetFloat("mouseSensitivity") == 0f)
         {
             PlayerPrefs.SetFloat("mouseSensitivity", 1f);
+            PlayerPrefs.Save();
         }
     }
     
@@ -102,6 +103,7 @@ public class MainMenuScript : MonoBehaviour
         print("Level chosen: " + _sceneToLoad);
         UpdateMenu();
         PlayerPrefs.SetInt("selectedLevel", (_sceneToLoad+2));
+        PlayerPrefs.Save();
     }
 
     public void HandleInputNight()
@@ -110,6 +112,7 @@ public class MainMenuScript : MonoBehaviour
         print("Night chosen: " + _chosenNight);
         PlayerPrefs.SetInt("selectedNight", _chosenNight);
         UpdateMenu();
+        PlayerPrefs.Save();
     }
 
     public void ExitApplication()

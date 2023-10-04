@@ -158,6 +158,7 @@ public class GameManager : MonoBehaviour
             {
                 Singleton.Instance.completedNight = Mathf.Clamp(_night, 1, 7);
                 PlayerPrefs.SetInt("completedNight", Singleton.Instance.completedNight);
+                PlayerPrefs.Save();
             }
             Singleton.Instance.canRetryNight = false;
             victoryScreen.SetActive(true);

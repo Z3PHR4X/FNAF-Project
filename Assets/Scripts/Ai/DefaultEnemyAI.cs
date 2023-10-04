@@ -134,8 +134,8 @@ namespace AI
         public virtual DynamicWaypoints SetNextWaypoint(List<DynamicWaypoints> potentialWaypoints)
         {
             state = AIState.Searching;
-            nextWaypoint = null;
-            int counter = 0;
+            nextWaypoint = currentWaypoint;
+            //int counter = 0;
 
             if(potentialWaypoints.Count > 0)
             {
@@ -143,24 +143,27 @@ namespace AI
 
                 foreach (var waypoint in potentialWaypoints)
                 {
-                    if(currentWaypoint.flowWeight < waypoint.flowWeight && !waypoint.isOccupied)
+                    if(nextWaypoint.flowWeight < waypoint.flowWeight && !waypoint.isOccupied)
                     {
+                        print($"{characterData.characterName} decided to move to a waypoint with higher flowWeight");
                         chooseRandom = false;
                         nextWaypoint = waypoint;
                     }
-                    else
-                    {
-                        counter++;
-                    }
+                    //else
+                    //{
+                    //    counter++;
+                    //}
                 }
 
-                if (counter == potentialWaypoints.Count  || DiceRollGenerator.hasSuccessfulRoll(2))
-                {
-                    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
-                }
+                //if (counter == potentialWaypoints.Count  || DiceRollGenerator.hasSuccessfulRoll(2))
+                //{
+                //    print($"{characterData.characterName} decided to move to a waypoint with higher flowWeight");
+                //    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
+                //}
 
                 if (chooseRandom)
                 {
+                    print($"{characterData.characterName} decided to move to a random waypoint");
                     nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
                 }
             }

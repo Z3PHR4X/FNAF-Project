@@ -72,6 +72,7 @@ public class AudioSettings : MonoBehaviour
         PlayerPrefs.SetFloat("audioVoiceVolume", voice);
         PlayerPrefs.SetFloat("audioSfxVolume",sfx);
         PlayerPrefs.SetFloat("audioInterfaceVolume", interfac);
+        PlayerPrefs.Save();
     }
 
     public void Cancel()

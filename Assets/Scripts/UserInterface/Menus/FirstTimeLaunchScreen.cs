@@ -3,18 +3,19 @@ using UnityEngine;
 public class FirstTimeLaunchScreen : MonoBehaviour
 {
 
-    private bool hasAcknowledged;
+    private bool returningPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        hasAcknowledged = (PlayerPrefs.GetString("hasAcknowledgedFirstTimeSetupNotice") == "true");
-        gameObject.SetActive(!hasAcknowledged);
+        returningPlayer = (PlayerPrefs.GetString("returningPlayer") == "true");
+        gameObject.SetActive(!returningPlayer);
     }
 
     public void Acknowledge()
     {
-        PlayerPrefs.SetString("hasAcknowledgedFirstTimeSetupNotice", "true");
+        PlayerPrefs.SetString("returningPlayer", "true");
         gameObject.SetActive(false);
+        PlayerPrefs.Save();
     }
 }

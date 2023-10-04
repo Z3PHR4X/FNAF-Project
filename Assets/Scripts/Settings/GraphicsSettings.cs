@@ -232,6 +232,7 @@ namespace Settings
             PlayerPrefs.SetInt("graphicsFullScreenMode", curScreenModeIndex);
             PlayerPrefs.SetInt("graphicsQuality", curQualityIndex);
             PlayerPrefs.SetInt("graphicsVsync", vsync);
+            PlayerPrefs.Save();
             print("Saved graphics settings to save.");
         }
 

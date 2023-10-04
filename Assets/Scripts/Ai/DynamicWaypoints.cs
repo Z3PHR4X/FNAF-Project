@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,11 +22,33 @@ namespace AI
             Crawler
         }
 
+        private void Start()
+        {
+            flowWeight = 0;
+        }
+
         public void UpdateFlowWeight(int hour, int night)
         {
             int newFlowWeight = 0;
-            AIValues nightFlowValues = waypointFlowValues[night-1];
-            newFlowWeight = nightFlowValues.activityValues[hour];
-    }
+            AIValues nightFlowValues;
+            if (waypointFlowValues.Count > night - 1)
+            {
+                nightFlowValues = waypointFlowValues[0];
+            }
+            else
+            {
+                nightFlowValues = waypointFlowValues[waypointFlowValues.Count - 1];
+            }
+            if (nightFlowValues.activityValues.Count > hour)
+            {
+                newFlowWeight = nightFlowValues.activityValues[hour];
+            }
+            else
+            {
+                newFlowWeight = 0;
+            }
+
+            flowWeight += newFlowWeight;
+        }
     }
 }

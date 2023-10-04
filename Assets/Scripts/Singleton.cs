@@ -35,6 +35,7 @@ public class Singleton : MonoBehaviour
         if (overrideCompletedNight)
         {
             PlayerPrefs.SetInt("completedNight", completedNight);
+            PlayerPrefs.Save();
         }
 
         completedNight = PlayerPrefs.GetInt("completedNight");

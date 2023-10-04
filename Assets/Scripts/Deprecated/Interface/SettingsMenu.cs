@@ -34,6 +34,7 @@ public class SettingsMenu : MonoBehaviour
     {
         mouseSensitivity = 1;
         PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
+        PlayerPrefs.Save();
         UpdateMenu();
     }
     
@@ -43,5 +44,6 @@ public class SettingsMenu : MonoBehaviour
         print("Mouse Sensitivity set to: " + mouseSensitivity);
         UpdateMenu();
         PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
+        PlayerPrefs.Save();
     }
 }

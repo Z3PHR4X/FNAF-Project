@@ -55,6 +55,7 @@ public class MainMenuButtons : MonoBehaviour
         print("Starting new game..");
         completedNight = 0;
         PlayerPrefs.SetInt("completedNight", 0);
+        PlayerPrefs.Save();
         Singleton.Instance.selectedNight = 1;
         Singleton.Instance.completedNight = 0;
         Singleton.Instance.selectedMap = Singleton.Instance.availableLevels[0];

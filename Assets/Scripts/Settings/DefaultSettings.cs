@@ -7,6 +7,7 @@ namespace Settings
         public float mouseSensitivity = 1f, masterVolume = 1f, musicVolume = 0.6f, sfxVolume = 0.8f, interfaceVolume = 0.8f, voiceVolume = 0.85f;
         public string settingsVersion = "Version1";
         public bool addApplicationVersion = false;
+        public bool unlockTesterAward = false;
 
         private void Awake()
         {
@@ -32,6 +33,12 @@ namespace Settings
             PlayerPrefs.SetInt("graphicsVsync", 0);
             PlayerPrefs.SetInt("completedNight", 0); 
             PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
+
+            if (unlockTesterAward)
+            {
+                PlayerPrefs.SetInt("TesterAwardUnlocked", 1);
+            }
+            PlayerPrefs.Save();
             print("Default settings set!");
         }
     }
