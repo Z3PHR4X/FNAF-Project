@@ -6,8 +6,7 @@ namespace AI
     public class WaypointsManager : MonoBehaviour
     {
         public List<DynamicWaypoints> waypoints;
-        private int currentTime;
-        private GameManagerV2 gameManager;
+        private int currentTime, currentNight;
 
         private void Awake()
         {
@@ -17,8 +16,9 @@ namespace AI
         // Start is called before the first frame update
         void Start()
         {
-            gameManager = GameManagerV2.Instance;
-            RecalculateWaypointFlow(gameManager.hour,gameManager.night);
+            currentTime = 0;
+            currentNight = Singleton.Instance.selectedNight;
+            RecalculateWaypointFlow(currentTime, currentNight);
         }
 
         // Update is called once per frame
@@ -26,8 +26,9 @@ namespace AI
         {
             if (GameManagerV2.Instance.hour != currentTime)
             {
-                RecalculateWaypointFlow(gameManager.hour, gameManager.night);
-                currentTime = gameManager.hour;
+                currentTime = GameManagerV2.Instance.hour;
+                RecalculateWaypointFlow(currentTime, currentNight);
+                
             }
         }
 

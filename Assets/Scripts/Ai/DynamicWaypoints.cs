@@ -30,15 +30,24 @@ namespace AI
         public void UpdateFlowWeight(int hour, int night)
         {
             int newFlowWeight = 0;
+            int nightIndex = night - 1;
+
             AIValues nightFlowValues;
-            if (waypointFlowValues.Count > night - 1)
+            //print($"{name} with hour {hour} nightIndex {nightIndex}");
+            if (waypointFlowValues.Count > nightIndex)
+            {
+                nightFlowValues = waypointFlowValues[nightIndex];
+            }
+            else if(waypointFlowValues.Count > 0)
             {
                 nightFlowValues = waypointFlowValues[0];
             }
             else
             {
-                nightFlowValues = waypointFlowValues[waypointFlowValues.Count - 1];
+                print("No Waypoint Flow Values found!");
+                nightFlowValues = null;
             }
+
             if (nightFlowValues.activityValues.Count > hour)
             {
                 newFlowWeight = nightFlowValues.activityValues[hour];

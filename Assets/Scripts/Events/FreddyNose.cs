@@ -16,7 +16,7 @@ namespace Events
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0) && !Player.Instance.isInCamera)
+            if (Input.GetMouseButtonDown(0) && !Player.Instance.isInCamera && !GameManagerV2.Instance.isPaused)
             { // if left button pressed...
 
                 Ray ray = cam.ScreenPointToRay(Input.mousePosition);

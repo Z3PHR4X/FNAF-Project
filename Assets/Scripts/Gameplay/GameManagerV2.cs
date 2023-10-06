@@ -38,6 +38,7 @@ public class GameManagerV2 : MonoBehaviour
 
     private void Start()
     {
+        //Load night data
         night = Singleton.Instance.selectedNight;
         nightLength = Singleton.Instance.selectedMap.nightLength;
         hourLength = Singleton.Instance.selectedMap.hourLength;
@@ -162,6 +163,15 @@ public class GameManagerV2 : MonoBehaviour
                 hour++;
                 hourTimer = Time.time;
             }
+        }
+    }
+
+    public void RetroNight()
+    {
+        if (!isGameOver || !hasPlayerWon)
+        {
+            hour--;
+            hourTimer = Time.time;
         }
     }
 

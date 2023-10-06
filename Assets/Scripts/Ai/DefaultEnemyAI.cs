@@ -29,10 +29,10 @@ namespace AI
         [SerializeField] private bool hasMovementOffset = true;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
-        //public List<DynamicWaypoints> waypointsInRange;
         [SerializeField] private AudioSource characterAudioSource;
         [SerializeField] private AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
 
+        private DynamicWaypoints dummyWaypoint;
         public DynamicWaypoints currentWaypoint;
         private int activityLevel;
         private float activityInterval; //keep track of how easily the AI can make a move
@@ -70,6 +70,7 @@ namespace AI
             sphereCollider = gameObject.AddComponent<SphereCollider>();
             sphereCollider.isTrigger = true;
             sphereCollider.radius = triggerDetectionRange;
+            dummyWaypoint = GameObject.Find("DummyWaypoint").GetComponent<DynamicWaypoints>();
         }
 
         // Start is called before the first frame update
@@ -134,38 +135,49 @@ namespace AI
         public virtual DynamicWaypoints SetNextWaypoint(List<DynamicWaypoints> potentialWaypoints)
         {
             state = AIState.Searching;
-            nextWaypoint = currentWaypoint;
-            //int counter = 0;
+            nextWaypoint = dummyWaypoint;
+            int counter = 0;
 
-            if(potentialWaypoints.Count > 0)
+            for(int i = potentialWaypoints.Count-1; i >= 0; i--)
             {
-                bool chooseRandom = true;
-
-                foreach (var waypoint in potentialWaypoints)
+                if (potentialWaypoints[i].isOccupied)
                 {
-                    if(nextWaypoint.flowWeight < waypoint.flowWeight && !waypoint.isOccupied)
-                    {
-                        print($"{characterData.characterName} decided to move to a waypoint with higher flowWeight");
-                        chooseRandom = false;
-                        nextWaypoint = waypoint;
-                    }
-                    //else
-                    //{
-                    //    counter++;
-                    //}
+                    potentialWaypoints.Remove(potentialWaypoints[i]);
                 }
+            }
 
-                //if (counter == potentialWaypoints.Count  || DiceRollGenerator.hasSuccessfulRoll(2))
-                //{
-                //    print($"{characterData.characterName} decided to move to a waypoint with higher flowWeight");
-                //    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
-                //}
+            foreach (var evalWaypoint in potentialWaypoints)
+            {
+                if(evalWaypoint.isOccupied)
+                {
+                    potentialWaypoints.Remove(evalWaypoint);
+                }
+            }
 
-                if (chooseRandom)
+            if (potentialWaypoints.Count > 0)
+            {
+                //bool chooseRandom = true;
+
+                nextWaypoint = potentialWaypoints.GetMaxObject(item => item.flowWeight);
+
+                foreach (var evalWaypoint in potentialWaypoints)
+                {
+                    print($"nextwaypoint {nextWaypoint} ({nextWaypoint.flowWeight}) evalWaypoint {evalWaypoint} ({evalWaypoint.flowWeight})");
+                    if (evalWaypoint.flowWeight == nextWaypoint.flowWeight)
+                    {
+                        counter++;
+                    }
+                }
+                if(counter == potentialWaypoints.Count)
                 {
                     print($"{characterData.characterName} decided to move to a random waypoint");
                     nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
                 }
+                else
+                {
+                    print($"{characterData.characterName} decided to move to a {nextWaypoint} with higher flowWeight {nextWaypoint.flowWeight}");
+                }
+               
             }
 
             print($"{characterData.characterName} has decided to move to: {nextWaypoint}");
@@ -176,7 +188,6 @@ namespace AI
         public virtual void Move(DynamicWaypoints wayPoint, bool applyOffset)
         {
             state = AIState.Moving;
-            //waypointsInRange.Clear();
             //move to waypoint location
             PlayAudio("movement");
             if (applyOffset && !wayPoint.forceNoOffset)
@@ -192,6 +203,7 @@ namespace AI
             currentWaypoint.isOccupied = false;
             currentWaypoint = wayPoint;
             currentWaypoint.isOccupied = true;
+            Player.Instance.securityCameraManager.ScrambleCamera();
             //scramble camera
         }
 
@@ -290,19 +302,6 @@ namespace AI
 
         public virtual void OnTriggerEnter(Collider other)
         {
-
-            /*if (other.gameObject.CompareTag("Waypoint"))
-            {
-                //print(other);
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if (waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    if (!waypointsInRange.Contains(waypoint))
-                    {
-                        waypointsInRange.Add(waypoint);
-                    }
-                }
-            }*/
             if (other.gameObject.CompareTag("Door")){
                 door = other.gameObject.GetComponent<Door>();
             }
@@ -310,19 +309,6 @@ namespace AI
 
         public virtual void OnTriggerStay(Collider other)
         {
-            /*if (other.gameObject.CompareTag("Waypoint"))
-            {
-                //print(other);
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if (waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    if (!waypointsInRange.Contains(waypoint))
-                    {
-                        waypointsInRange.Add(waypoint);
-                    }
-                }
-            }*/
-
             if (other.gameObject.CompareTag("Door"))
             {
                 door = other.gameObject.GetComponent<Door>();
@@ -331,81 +317,13 @@ namespace AI
 
         public virtual void OnTriggerExit(Collider other)
         {
-            /*if (other.gameObject.CompareTag("Waypoint"))
-            {
-                DynamicWaypoints waypoint = other.gameObject.GetComponent<DynamicWaypoints>();
-                if (waypoint.waypointType.ToString() == animatronicType.ToString())
-                {
-                    waypointsInRange.Remove(waypoint);
-                }
-            }*/
             if (other.gameObject.CompareTag("Door"))
             {
-                door = null;
+                if (door == other.gameObject.GetComponent<Door>())
+                {
+                    door = null;
+                }
             }
         }
-
-        /* Spherecollider based waypoint detection 
-         * 
-         * Issues:
-         * - More waypoints needed
-         * - More waypoints in 1 area cause AI to get stuck in areas
-         * - AI can teleport through walls 
-         * 
-
-        public virtual DynamicWaypoints SetNextWaypoint(List<DynamicWaypoints> potentialWaypoints)
-        {
-            state = AIState.Searching;
-
-            //Remove current waypoint from list, so we wont remain stuck
-            List<DynamicWaypoints> cleanup = new List<DynamicWaypoints>();
-            foreach (var waypoint in potentialWaypoints)
-            {
-                if (waypoint == currentWaypoint || waypoint.isOccupied || waypoint.isAttackingPosition)
-                {
-                    cleanup.Add(waypoint);
-                }
-            }
-            for(int x = 0; x < cleanup.Count; x++)
-            {
-                potentialWaypoints.Remove(cleanup[x]);
-            }
-
-            DynamicWaypoints nextWaypoint = null;
-            if (potentialWaypoints.Count == 0)
-            {
-                waypointDetector.radius += 3;
-            }
-
-            if (potentialWaypoints.Count > 0)
-            {
-                int iteration = 0;
-                nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
-                while(nextWaypoint.isOccupied)
-                {
-                    if (iteration > 5) break;
-                    waypointDetector.radius += 3;
-                    nextWaypoint = potentialWaypoints[Random.Range(0, potentialWaypoints.Count)];
-                    iteration++;
-                }
-                float nextWaypointDistance = 200;
-                foreach (DynamicWaypoints waypoint in potentialWaypoints)
-                {
-                    if (!waypoint.isOccupied && !waypoint.isStartingPoint)
-                    {
-                        float waypointDistance = Vector3.Distance(currentWaypoint.transform.position, waypoint.transform.position);
-                        if (nextWaypoint.flowWeight < waypoint.flowWeight)
-                        {
-                            nextWaypoint = waypoint;
-                            nextWaypointDistance = waypointDistance;
-                        }
-                    }
-                }
-                waypointDetector.radius = waypointDetectionRange;
-            }
-            return nextWaypoint;
-        }
-
-        */
     }
 }

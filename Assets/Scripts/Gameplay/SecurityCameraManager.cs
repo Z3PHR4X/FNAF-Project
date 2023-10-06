@@ -79,7 +79,7 @@ namespace Gameplay
 
         public void EnterSecurityCamera()
         {
-            StartCoroutine(CameraTransition());
+            StartCoroutine(CameraTransition(0.2f));
             toggleWithCameras.SetActive(false);
             isWatchingCameras = true;
             mainCamera.enabled = false;
@@ -112,7 +112,7 @@ namespace Gameplay
         //Called from SecurityCamera button on UI
         public void SwitchCamera(SecurityCamera nextCamera)
         {
-            StartCoroutine(CameraTransition());
+            StartCoroutine(CameraTransition(0.2f));
             currentCamera.ToggleCamera(false);
             currentCamera = nextCamera;
             currentCamera.ToggleCamera(true);
@@ -126,10 +126,15 @@ namespace Gameplay
             }
         }
 
-        IEnumerator CameraTransition()
+        public void ScrambleCamera()
+        {
+            StartCoroutine(CameraTransition(0.5f));
+        }
+
+        IEnumerator CameraTransition(float duration)
         {
             transitionNoise.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(duration);
             transitionNoise.SetActive(false);
 
         }

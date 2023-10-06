@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     public static Player Instance;
     public bool isInCamera, isAlive;
     public PowerManager powerManager;
+    public SecurityCameraManager securityCameraManager;
     public DoorManager doorManager;
 
     private Camera playerCamera;
@@ -25,6 +26,7 @@ public class Player : MonoBehaviour
         Instance = this;
 
         playerCamera = GetComponentInChildren<Camera>();
+        securityCameraManager = GetComponent<SecurityCameraManager>();
     }
 
     // Start is called before the first frame update

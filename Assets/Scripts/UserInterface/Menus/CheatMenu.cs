@@ -44,11 +44,13 @@ public class CheatMenu : MonoBehaviour
         {
             //Gamespeed to 1f
             cheatStatus.text = "Regular Game Speed";
+            Time.timeScale = 1f;
         }
         if (Input.GetKey(KeyCode.F2) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
             //Gamespeed to 2f
             cheatStatus.text = "Double Game Speed";
+            Time.timeScale = 2f;
         }
         if (Input.GetKey(KeyCode.F3) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
@@ -58,7 +60,8 @@ public class CheatMenu : MonoBehaviour
         {
             //DevMode
             //Enable dev UI showing all AI values, power values, time counters
-            cheatStatus.text = "Developer Mode activated";
+            cheatStatus.text = "";
+            //cheatStatus.text = "Developer Mode activated";
         }
         if (Input.GetKey(KeyCode.F5) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
@@ -68,11 +71,13 @@ public class CheatMenu : MonoBehaviour
 
             //Lose
             cheatStatus.text = "You lose :(";
+            Player.Instance.isAlive = false;
         }
         if (Input.GetKey(KeyCode.F7) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
             //Win
             cheatStatus.text = "You win :)";
+            GameManagerV2.Instance.hasPlayerWon = true;
         }
         if (Input.GetKey(KeyCode.F8) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
@@ -80,11 +85,13 @@ public class CheatMenu : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.F9) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-            cheatStatus.text = "";
+            cheatStatus.text = "Skipped an hour!";
+            GameManagerV2.Instance.AdvanceNight();
         }
         if (Input.GetKey(KeyCode.F10) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
-            cheatStatus.text = "";
+            cheatStatus.text = "Went back an hour!";
+            GameManagerV2.Instance.RetroNight();
         }
         if (Input.GetKey(KeyCode.F11) && isIngame && !GameManagerV2.Instance.isPaused && cheatsEnabled)
         {
