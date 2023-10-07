@@ -18,13 +18,14 @@ I cannot give an estimate when this project will be completed, this is all done 
 - [X] Fix main gameplay issues and bugs
 - [X] Redo user interfaces with proper scaling
 - [X] Create a launcher to distribute updates to testers
-- [ ] Rewrite gameplay scripts from scratch (In-Progress)
-- [ ] Use new data architecture to dynamically populate levels (In-Progress)
+- [X] Rewrite gameplay scripts from scratch 
+- [X] Use new data architecture to dynamically populate levels 
 - [ ] Improve AI with modular behavior (In-Progress)
+- [ ] Add attack/death animations
 - [ ] Legacy code cleanup
 - [ ] Create new gameplay mechanics
 - [ ] Create new original map
-- [ ] Create new assets (audio, models, sprites, textures)
+- [ ] Create all new original assets (audio, models, sprites, textures)
 - [ ] Remove all placeholder assets
 - [ ] Pre-release code cleanup
 - [ ] Release (v1.0)
@@ -34,4 +35,4 @@ I cannot give an estimate when this project will be completed, this is all done 
  <li><a href="https://github.com/starikcetin/Eflatun.SceneReference/">Eflatun.SceneReference by starikcetin</li>
 </ul>
 
-*Not definitive, will probably change
+*Not definitive, subject to change
