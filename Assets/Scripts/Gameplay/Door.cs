@@ -5,6 +5,7 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     public DoorType type;
+    public AnimatronicType animatronicType;
     public bool isClosed;
     public bool lightOn;
     public bool enemyAtDoor;
@@ -22,6 +23,13 @@ public class Door : MonoBehaviour
         Left,
         Center,
         Right
+    }
+
+    public enum AnimatronicType
+    {
+        Default,
+        Rusher,
+        Crawler
     }
 
     private void Awake()

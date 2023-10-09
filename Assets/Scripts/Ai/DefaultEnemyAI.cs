@@ -23,24 +23,27 @@ namespace AI
         public AIState state;
         [SerializeField] private Character characterData;
         public List<AIValues> aiValues;
-        [SerializeField] private float triggerDetectionRange = 5f;
+        //[SerializeField] private float triggerDetectionRange = 5f;
+        [Range(0,20)] [SerializeField] private int randomAudioChance;
+        [SerializeField] private float randomAudioInterval;
         public bool isBeingWatched;
         [SerializeField] private bool attacksWhenDistracted = false;
         [SerializeField] private bool hasMovementOffset = true;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
-        [SerializeField] private AudioSource characterAudioSource;
-        [SerializeField] private AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
+        public AudioSource characterAudioSource;
+        public AudioSource characterRandomAudioSource;
+        public AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
 
         private DynamicWaypoints dummyWaypoint;
         public DynamicWaypoints currentWaypoint;
         private int activityLevel;
         private float activityInterval; //keep track of how easily the AI can make a move
         private int activityPhase; //keeps track of which phase of the night the AI is in
-        private double timeSinceLastAction, timeSinceLastSeen;
+        private double timeSinceLastAction, timeSinceLastSeen, timeSinceLastRandomAudio;
         private GameObject inCamerasView; //store camera that is viewing AI so it can be scrambled later
         private AIValues nightValues = new AIValues();
-        private SphereCollider sphereCollider;
+        //private SphereCollider sphereCollider;
         private DynamicWaypoints nextWaypoint;
         private Door door;
 
@@ -67,9 +70,9 @@ namespace AI
         {
             characterAudioSource = GetComponent<AudioSource>();
             characterAudioSource.volume = Singleton.Instance.sfxVolume;
-            sphereCollider = gameObject.AddComponent<SphereCollider>();
-            sphereCollider.isTrigger = true;
-            sphereCollider.radius = triggerDetectionRange;
+            //sphereCollider = gameObject.AddComponent<SphereCollider>();
+            //sphereCollider.isTrigger = true;
+            //sphereCollider.radius = triggerDetectionRange;
             dummyWaypoint = GameObject.Find("DummyWaypoint").GetComponent<DynamicWaypoints>();
         }
 
@@ -86,6 +89,7 @@ namespace AI
             currentWaypoint.isOccupied = true;
             timeSinceLastAction = Time.time;
             timeSinceLastSeen = Time.time;
+            timeSinceLastRandomAudio = Time.time;
         }
 
         // Update is called once per frame
@@ -95,6 +99,7 @@ namespace AI
             //increase aggressionlevel
             UpdateActivityValues(GameManagerV2.Instance.hour);
             CheckIfBeingWatched();
+            PlayRandomAudio();
 
             //Main AI loop
             if (currentWaypoint.isAttackingPosition)
@@ -189,7 +194,7 @@ namespace AI
         {
             state = AIState.Moving;
             //move to waypoint location
-            PlayAudio("movement");
+            PlayAudio("movement", false);
             if (applyOffset && !wayPoint.forceNoOffset)
             {
                 gameObject.transform.position = wayPoint.transform.position + new Vector3(Random.Range(-2, 2), 0, Random.Range(-2, 2));
@@ -237,15 +242,16 @@ namespace AI
                 {
                     //Play audio and return home
                     door.BangOnDoor();
-                    print($"{characterData.characterName} with level {activityLevel} failed to attack player from {door.name} with state {door.isClosed}");
+                    print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} failed to attack player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
                     Move(homeWaypoint, false);
                     //lower power? 
                 }
                 else
                 {
-                    PlayAudio("attack");
+                    PlayAudio("attack", false);
                     //play attack/jumpscare animation
-                    print($"{characterData.characterName} with level {activityLevel} attacked player from {door.name} with state {door.isClosed}");
+                    print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
+                    Singleton.Instance.SetDeathMessage(characterData.characterName, door.name);
                     //once finished, player died
                     Player.Instance.isAlive = false;
                 }
@@ -259,7 +265,7 @@ namespace AI
             timeSinceLastAction = Time.time;
         }
 
-        public virtual void PlayAudio(string audioType)
+        public virtual void PlayAudio(string audioType, bool isRandom)
         {
             switch (audioType)
             {
@@ -279,9 +285,29 @@ namespace AI
                     break;
 
                 default:
-                    characterAudioSource.clip = defaultAudio;
-                    characterAudioSource.Play();
+                    
+                    if (isRandom)
+                    {
+                        characterRandomAudioSource.clip = defaultAudio;
+                        characterRandomAudioSource.Play();
+                    }
+                    else
+                    {
+                        characterAudioSource.clip = defaultAudio;
+                        characterAudioSource.Play();
+                    }
                     break;
+            }
+        }
+
+        public virtual void PlayRandomAudio()
+        {if (timeSinceLastRandomAudio + randomAudioInterval < Time.time)
+            {
+                if (DiceRollGenerator.hasSuccessfulRoll(randomAudioChance))
+                {
+                    PlayAudio(default, true);
+                }
+                timeSinceLastRandomAudio = Time.time;
             }
         }
 
@@ -303,7 +329,14 @@ namespace AI
         public virtual void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Door")){
-                door = other.gameObject.GetComponent<Door>();
+                Door newDoor = other.GetComponent<Door>();
+                if (door == null)
+                {
+                    if (newDoor.animatronicType.ToString() == animatronicType.ToString())
+                    {
+                        door = other.gameObject.GetComponent<Door>();
+                    }
+                }
             }
         }
 
@@ -311,7 +344,14 @@ namespace AI
         {
             if (other.gameObject.CompareTag("Door"))
             {
-                door = other.gameObject.GetComponent<Door>();
+                Door newDoor = other.GetComponent<Door>();
+                if (door == null)
+                {
+                    if (newDoor.animatronicType.ToString() == animatronicType.ToString())
+                    {
+                        door = other.gameObject.GetComponent<Door>();
+                    }
+                }
             }
         }
 

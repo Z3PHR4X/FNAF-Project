@@ -26,7 +26,10 @@ namespace Events
         // Update is called once per frame
         void Update()
         {
-            MusicBoxSequence();
+            if (!GameManagerV2.Instance.hasPlayerWon)
+            {
+                MusicBoxSequence();
+            }
         }
 
 
@@ -39,6 +42,7 @@ namespace Events
                 {
                     if (Random.Range(0, 5) == 0)
                     {
+                        Singleton.Instance.SetDeathMessage("You ran out of power! Tom Nook will come for your mortgage when it's dark..");
                         Player.Instance.isAlive = false;
                         Time.timeScale = 0f;
                     }

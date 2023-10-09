@@ -16,6 +16,7 @@ namespace Gameplay
         [SerializeField] private AudioSource turnOffAudio;
         [SerializeField] private GameObject toggleWithCameras;
 
+        private bool watchingVents;
         private Camera mainCamera;
         private AudioListener mainAudioListener;
         private SecurityCamera currentCamera;
@@ -121,6 +122,7 @@ namespace Gameplay
 
         private void HandleInput()
         {
+            //Add Shift? key to swap to vent cams
             if(Input.GetKeyDown(KeyCode.Space)) {
             ToggleSecurityCamera();
             }

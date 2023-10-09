@@ -10,6 +10,7 @@ public class Singleton : MonoBehaviour
     public string sceneToLoad = "";
     public int selectedNight, completedNight;
     public bool overrideCompletedNight, canRetryNight;
+    public string deathReason;
     public List<Level> availableLevels = new List<Level>();
     public Level selectedMap;
     public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
@@ -49,6 +50,31 @@ public class Singleton : MonoBehaviour
         mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 
         print("Settings loaded from save to Singleton instance");
+    }
+
+    public void SetDeathMessage(string characterName, string doorName)
+    {
+        string door;
+        switch(doorName){
+            case "LeftDoor":
+                door = "left door";
+                break;
+            case "VentDoor":
+                door = "vent";
+                break;
+            case "RightDoor":
+                door = "right door";
+                break;
+            default:
+                door = "unknown";
+                break;
+        }
+        deathReason = $"{characterName} attacked you from the {door}..";
+    }
+
+    public void SetDeathMessage(string message)
+    {
+        deathReason = message;
     }
 
     //Simple function to change scenes, no loading screens
