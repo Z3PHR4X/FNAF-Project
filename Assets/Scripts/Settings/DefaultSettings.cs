@@ -33,6 +33,7 @@ namespace Settings
             PlayerPrefs.SetInt("graphicsVsync", 0);
             //PlayerPrefs.SetInt("completedNight", 0);
             PlayerPrefs.SetInt("enableSpecialMusic", 1);
+            PlayerPrefs.SetString("returningPlayer", "false");
             PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
 
             if (unlockTesterAward)

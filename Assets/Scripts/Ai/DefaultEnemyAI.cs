@@ -381,7 +381,7 @@ namespace AI
             string[] debugValues = new string[8];
             debugValues[0] = characterData.characterName;
             debugValues[1] = activityLevel.ToString();
-            float lastAction = (Mathf.Round(((float)timeSinceLastAction)*100f)/100f);
+            float lastAction = (Mathf.Round((float)timeSinceLastAction * 100f) / 100f); ;
 
             debugValues[2] = lastAction.ToString();
             debugValues[3] = state.ToString();

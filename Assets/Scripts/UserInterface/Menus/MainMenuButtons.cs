@@ -5,17 +5,19 @@ using UnityEngine.UI;
 
 public class MainMenuButtons : MonoBehaviour
 {
-    [SerializeField] private Text ContinueText, RetryText;
+    [SerializeField] private Text ContinueText, RetryText, SettingsText;
     [SerializeField] private GameObject ContinueButton, RetryButton, SetupButton;
     [SerializeField] private int SetupButtonNightUnlock = 5;
-    
+
     private int completedNight, retryNight;
+    private bool firstTime;
 
     // Start is called before the first frame update
     void Start()
     {
         completedNight = PlayerPrefs.GetInt("completedNight");
         retryNight = Singleton.Instance.selectedNight;
+        firstTime = (PlayerPrefs.GetString("returningPlayer") == "false");
 
         if(completedNight > 0 && completedNight < 7) {
             ContinueButton.SetActive(true);
@@ -46,6 +48,12 @@ public class MainMenuButtons : MonoBehaviour
         else
         {
             SetupButton.SetActive(false);
+        }
+
+        if (firstTime)
+        {
+            SettingsText.text = "> Settings <";
+            SettingsText.color = Color.green;
         }
 
     }
