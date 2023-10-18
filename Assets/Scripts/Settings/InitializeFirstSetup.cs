@@ -11,7 +11,7 @@ namespace Settings
         {
             if (PlayerPrefs.GetString("gameSettingsVersion") != defaultSettings.settingsVersion)
             {
-                Debug.Log("Upgraded to new settings from version " + defaultSettings.settingsVersion);
+                print("Upgraded to new settings version: " + defaultSettings.settingsVersion);
                 PlayerPrefs.SetString("hasAcknowledgedFirstTimeSetupNotice", "false");
                 defaultSettings.SetDefaultSettings();
             }

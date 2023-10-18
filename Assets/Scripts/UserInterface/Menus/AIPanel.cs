@@ -9,12 +9,13 @@ public class AIPanel : MonoBehaviour
     public Slider aggressionSlider;
     public Toggle characterToggle;
     public GameObject disabledOverlay;
-    public AudioSource characterAudio;
+    public AudioSource characterAudio, interfaceAudio;
+    private bool canPlayAudio, prevCharacterToggleValue;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        //canPlayAudio = false;
     }
 
     public void UpdateInterface()
@@ -29,11 +30,20 @@ public class AIPanel : MonoBehaviour
                 charName.text = character.characterName;
                 description.text = character.description;
                 characterAudio.clip = character.soundEffect;
+                characterAudio.pitch = character.soundEffectPitch;
+                //characterAudio.volume = Singleton.Instance.voiceVolume;
                 aggressionLevel.text = aggro.ToString();
                 aggressionSlider.value = aggro;
                 aggressionSlider.interactable = false;
                 characterToggle.gameObject.SetActive(false);
-                disabledOverlay.gameObject.SetActive(!character.aggressionProgression[night].isEnabled);
+                if (Singleton.Instance.selectedMap.supportsCustomNight)
+                {
+                    disabledOverlay.gameObject.SetActive(!character.aggressionProgression[night].isEnabled);
+                }
+                else
+                {
+                    disabledOverlay.gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -43,6 +53,8 @@ public class AIPanel : MonoBehaviour
                 charName.text = character.characterName;
                 description.text = character.description;
                 characterAudio.clip = character.soundEffect;
+                characterAudio.pitch = character.soundEffectPitch; 
+                //characterAudio.volume = Singleton.Instance.voiceVolume;
                 aggressionLevel.text = aggro.ToString();
                 aggressionSlider.value = aggro;
                 aggressionSlider.interactable = true;
@@ -50,6 +62,10 @@ public class AIPanel : MonoBehaviour
                 disabledOverlay.gameObject.SetActive(!characterToggle.isOn);
             }
         }
+        canPlayAudio = true;
+        prevCharacterToggleValue = characterToggle.isOn;
+        //print("amogus");
+        //print("audio: "+canPlayAudio);
     }
 
     public void SetCharacterValues()
@@ -61,7 +77,19 @@ public class AIPanel : MonoBehaviour
             character.aggressionProgression[7].activityValues[0] = newAggressionValue;
             character.aggressionProgression[7].isEnabled = characterToggle.isOn;
             disabledOverlay.gameObject.SetActive(!characterToggle.isOn);
-            //if(characterToggle.isOn) characterAudio.Play();
+            //print(canPlayAudio);
+            if (canPlayAudio)
+            {
+                //interfaceAudio.Play();
+                if (characterToggle.isOn != prevCharacterToggleValue)
+                {
+                    if (characterToggle.isOn)
+                    {
+                        characterAudio.Play();
+                    }
+                    prevCharacterToggleValue = characterToggle.isOn;
+                }
+            }
         }
     }
 }

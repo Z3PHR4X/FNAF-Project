@@ -12,4 +12,5 @@ public class Character : MonoBehaviour
     public List<AIValues> aggressionProgression;
     public float actionInterval;
     public AudioClip soundEffect;
+    [RangeAttribute(-3,3)]public float soundEffectPitch = 1;
 }

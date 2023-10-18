@@ -23,17 +23,18 @@ namespace AI
         public AIState state;
         [SerializeField] private Character characterData;
         public List<AIValues> aiValues;
-        //[SerializeField] private float triggerDetectionRange = 5f;
         [Range(0,20)] [SerializeField] private int randomAudioChance;
         [SerializeField] private float randomAudioInterval;
         public bool isBeingWatched;
         [SerializeField] private bool attacksWhenDistracted = false;
         [SerializeField] private bool hasMovementOffset = true;
+        [SerializeField][Range(0, 20)] int lookChance;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
         public AudioSource characterAudioSource;
         public AudioSource characterRandomAudioSource;
         public AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
+        private LookAtCurrentCamera lookAtCurrentCamera;
 
         private DynamicWaypoints dummyWaypoint;
         public DynamicWaypoints currentWaypoint;
@@ -43,9 +44,9 @@ namespace AI
         private double timeSinceLastAction, timeSinceLastSeen, timeSinceLastRandomAudio;
         private GameObject inCamerasView; //store camera that is viewing AI so it can be scrambled later
         private AIValues nightValues = new AIValues();
-        //private SphereCollider sphereCollider;
         private DynamicWaypoints nextWaypoint;
         private Door door;
+        private bool isLookingAtCamera;
 
         public enum AnimatronicType
         {
@@ -70,9 +71,7 @@ namespace AI
         {
             characterAudioSource = GetComponent<AudioSource>();
             characterAudioSource.volume = Singleton.Instance.sfxVolume;
-            //sphereCollider = gameObject.AddComponent<SphereCollider>();
-            //sphereCollider.isTrigger = true;
-            //sphereCollider.radius = triggerDetectionRange;
+            lookAtCurrentCamera = GetComponentInChildren<LookAtCurrentCamera>();
             dummyWaypoint = GameObject.Find("DummyWaypoint").GetComponent<DynamicWaypoints>();
         }
 
@@ -100,6 +99,10 @@ namespace AI
             UpdateActivityValues(GameManagerV2.Instance.hour);
             CheckIfBeingWatched();
             PlayRandomAudio();
+            if (lookAtCurrentCamera != null)
+            {
+                lookAtCurrentCamera.lookAtCamera = isLookingAtCamera;
+            }
 
             //Main AI loop
             if (currentWaypoint.isAttackingPosition)
@@ -209,7 +212,14 @@ namespace AI
             currentWaypoint = wayPoint;
             currentWaypoint.isOccupied = true;
             Player.Instance.securityCameraManager.ScrambleCamera();
-            //scramble camera
+
+            if (currentWaypoint.isStartingPoint || currentWaypoint.isCrawling)
+            {
+                isLookingAtCamera = false;
+            }
+            else { 
+                isLookingAtCamera = DiceRollGenerator.hasSuccessfulRoll(lookChance);
+            }
         }
 
         public virtual void AttackState()
@@ -364,6 +374,31 @@ namespace AI
                     door = null;
                 }
             }
+        }
+
+        public string[] GetDebugValues()
+        {
+            string[] debugValues = new string[8];
+            debugValues[0] = characterData.characterName;
+            debugValues[1] = activityLevel.ToString();
+            float lastAction = (Mathf.Round(((float)timeSinceLastAction)*100f)/100f);
+
+            debugValues[2] = lastAction.ToString();
+            debugValues[3] = state.ToString();
+            if (currentWaypoint.name != null) debugValues[4] = currentWaypoint.name.ToString();
+            else debugValues[4] = "None";
+            debugValues[5] = currentWaypoint.connectedWaypoints.Count.ToString();
+            debugValues[6] = currentWaypoint.flowWeight.ToString();
+            if (door != null) debugValues[7] = door.name.ToString();
+            else debugValues[7] = "None";
+
+            return debugValues;
+        }
+
+        public Sprite GetCharacterSprite()
+        {
+            Sprite characterSprite = characterData.thumbnail;
+            return characterSprite;
         }
     }
 }

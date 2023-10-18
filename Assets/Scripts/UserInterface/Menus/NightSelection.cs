@@ -41,7 +41,7 @@ namespace UserInterface.Menus
         public void PopulateNightOptions()
         {
             List<string> _availableNights = new List<string>();
-
+            selectedLevel = Singleton.Instance.selectedMap;
             selectionDropdown.ClearOptions();
             if (completedNight < selectedLevel.numberOfNights)
             {
@@ -56,7 +56,10 @@ namespace UserInterface.Menus
                 {
                     _availableNights.Add("Night " + x);
                 }
-                _availableNights.Add("Night " + (selectedLevel.numberOfNights + 1) + " (Custom Night)");
+                if (selectedLevel.supportsCustomNight)
+                {
+                    _availableNights.Add("Night " + (selectedLevel.numberOfNights + 1) + " (Custom Night)");
+                }
             }
             selectionDropdown.AddOptions(_availableNights);
             selectionDropdown.value = selectedNight - 1;

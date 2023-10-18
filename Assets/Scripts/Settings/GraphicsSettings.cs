@@ -254,16 +254,20 @@ namespace Settings
 
             int x = PlayerPrefs.GetInt("graphicsResolutionX");
             int y = PlayerPrefs.GetInt("graphicsResolutionY");
+            print($"Resolution: {x}x{y}");
             int refresh = PlayerPrefs.GetInt("graphicsRefreshrate");
+            print($"Refresh rate: {refresh}Hz");
             FullScreenMode screenMode = screenModes[PlayerPrefs.GetInt("graphicsFullScreenMode")];
-            print(screenMode);
+            print($"Screen mode: {screenMode}");
             int quality = PlayerPrefs.GetInt("graphicsQuality");
+            print($"Graphics quality: {quality}");
             int v = PlayerPrefs.GetInt("graphicsVsync");
+            print($"VSync: {v}");
 
             Screen.SetResolution(x, y, screenMode, refresh);
             QualitySettings.SetQualityLevel(quality);
             //QualitySettings.vSyncCount = v;
-            print("Loaded graphics settings from save.");
+            print("Succesfully loaded graphics settings from save");
         }
 
         public void RevertSettingsDialog(int length)

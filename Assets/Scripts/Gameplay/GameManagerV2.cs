@@ -24,6 +24,8 @@ public class GameManagerV2 : MonoBehaviour
     [Header("Enable/Disable under circumstances")]
     [SerializeField] private List<GameObject> gameplayObjects;
     [SerializeField] private List<GameObject> powerObjects;
+    //[Header("Other")]
+    //public Camera currentCam;
 
     private void Awake()
     {

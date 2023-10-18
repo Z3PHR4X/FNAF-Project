@@ -14,6 +14,7 @@ namespace UserInterface.Menus
         [SerializeField] private Text levelDescriptionText;
         [SerializeField] private Image levelThumbnailImage;
         [SerializeField] private AudioSource audioSource;
+        private NightSelection nightSelection;
 
         private void Awake()
         {
@@ -23,6 +24,8 @@ namespace UserInterface.Menus
             {
                 selectionDropdown = GetComponent<Dropdown>();
             }
+
+            nightSelection = FindObjectOfType<NightSelection>();
 
             availableLevels = Singleton.Instance.availableLevels;
             List<string> _availableLevelOptions = new List<string>();
@@ -62,6 +65,7 @@ namespace UserInterface.Menus
             audioSource.Play();
             Singleton.Instance.selectedMap = selectedMap;
             print("Selected map: " + selectedMap.levelName);
+            nightSelection.PopulateNightOptions();
         }
 
         public void UpdateInterface()

@@ -75,6 +75,7 @@ namespace Gameplay
             {
                 enableWithCamera.SetActive(isOn);
             }
+            //GameManagerV2.Instance.currentCam = cameraComponent;
         }
 
         public void ScrambleCamera()

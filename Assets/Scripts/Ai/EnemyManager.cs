@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using DebugCustom;
 
 namespace AI
 {
     public class EnemyManager : MonoBehaviour
     {
-        private List<Character> characterList = new List<Character>();
+        public DebugManager debugManager;
+        public List<Character> characterList = new List<Character>();
         [SerializeField] private List<DynamicWaypoints> spawnWaypoints = new List<DynamicWaypoints>();
 
 
         // Start is called before the first frame update
         void Start()
         {
+            debugManager = FindObjectOfType<DebugManager>();
+
             //Spawn AI at the start of the game from characterlist in SelectedLevel
             characterList = Singleton.Instance.selectedMap.characters;
 
@@ -33,6 +36,10 @@ namespace AI
                     GameObject spawnedChar = Instantiate(character, spawnPoint);
                     spawnedChar.transform.SetParent(this.gameObject.transform);
                     spawnedChar.GetComponent<DefaultEnemyAI>().homeWaypoint = spawnWaypoints[x].GetComponent<DynamicWaypoints>();
+                    if (debugManager.debugAvailable)
+                    {
+                        debugManager.CreateDebugPanel(spawnedChar.GetComponent<DefaultEnemyAI>());
+                    }
                 }
             }
         }

@@ -8,7 +8,7 @@ public class LoadingScreen : MonoBehaviour
     [SerializeField] private float delay = 0f;
     [SerializeField] private bool isLoadingScreen = true;
     [SerializeField] private bool waitForKeypress = true;
-    [SerializeField] private Image backgroundImage, progressBar;
+    [SerializeField] private Image backgroundImage, controlSchemeImage, controlSchemeBackground, progressBar;
     [SerializeField] private Text loadingText, progressText, mapText, mapDescriptionText;
     [SerializeField] private AudioSource loadingMusic;
 
@@ -29,9 +29,22 @@ public class LoadingScreen : MonoBehaviour
         //fadeAnimator = GameObject.FindWithTag("SceneTransition").GetComponent<Animator>();
         if (isLoadingScreen)
         {
+            //Level details
             _sceneToLoad = Singleton.Instance.selectedMap.levelScene.Name;
-            mapText.text = Singleton.Instance.selectedMap.levelName;
+            mapText.text = $"{Singleton.Instance.selectedMap.levelName} - Night {Singleton.Instance.selectedNight}";
             mapDescriptionText.text = Singleton.Instance.selectedMap.levelDescription;
+            
+            //ControlScheme
+            if (Singleton.Instance.selectedMap.controlScheme != null)
+            {
+                controlSchemeImage.sprite = Singleton.Instance.selectedMap.controlScheme;
+            }
+            else
+            {
+                controlSchemeImage.enabled = false;
+                controlSchemeBackground.enabled = false;
+            }
+            //Level background
             if (Singleton.Instance.selectedMap.levelLoadingBackground.Length > 1)
             {
                 backgroundImage.sprite = Singleton.Instance.selectedMap.levelLoadingBackground[Singleton.Instance.selectedNight - 1];
@@ -40,6 +53,7 @@ public class LoadingScreen : MonoBehaviour
             {
                 backgroundImage.sprite = Singleton.Instance.selectedMap.levelLoadingBackground[0];
             }
+            //Music
             loadingMusic.clip = Singleton.Instance.selectedMap.selectionMusic;
             loadingMusic.Play();
         }

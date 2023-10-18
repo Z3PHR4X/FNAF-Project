@@ -108,6 +108,7 @@ namespace Gameplay
             turnOffAudio.Play();
             Player.Instance.isInCamera = false;
             Player.Instance.powerManager.powerConsumers.Remove(1);
+            //GameManagerV2.Instance.currentCam = Player.Instance.playerCamera;
         }
 
         //Called from SecurityCamera button on UI
