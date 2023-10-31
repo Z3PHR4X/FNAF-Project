@@ -9,7 +9,7 @@ public class Singleton : MonoBehaviour
 
     public string sceneToLoad = "";
     public int selectedNight, completedNight;
-    public bool overrideCompletedNight, canRetryNight;
+    public bool overrideCompletedNight, canRetryNight, debugMode;
     public string deathReason;
     public List<Level> availableLevels = new List<Level>();
     public Level selectedMap;
@@ -38,7 +38,7 @@ public class Singleton : MonoBehaviour
             PlayerPrefs.SetInt("completedNight", completedNight);
             PlayerPrefs.Save();
         }
-
+        debugMode = false;
         completedNight = PlayerPrefs.GetInt("completedNight");
         //Audio
         masterVolume = PlayerPrefs.GetFloat("audioMasterVolume");

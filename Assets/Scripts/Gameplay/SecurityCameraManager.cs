@@ -51,6 +51,10 @@ namespace Gameplay
                     PowerDown();
                 }
             }
+            else if(GameManagerV2.Instance.hasGameStarted && GameManagerV2.Instance.hasPlayerWon)
+            {
+                ExitSecurityCamera();
+            }
         }
 
         public void PowerDown()

@@ -124,6 +124,7 @@ namespace AI
                         nextWaypoint.isOccupied = true;
                         Move(nextWaypoint, hasMovementOffset);
                     }
+                    else print($"{characterData.characterName} couldn't find a valid waypoint to move to!");
                     timeSinceLastAction = Time.time;
                 }
                 else if (isBeingWatched) {
@@ -154,14 +155,6 @@ namespace AI
                 }
             }
 
-            foreach (var evalWaypoint in potentialWaypoints)
-            {
-                if(evalWaypoint.isOccupied)
-                {
-                    potentialWaypoints.Remove(evalWaypoint);
-                }
-            }
-
             if (potentialWaypoints.Count > 0)
             {
                 //bool chooseRandom = true;
@@ -170,7 +163,7 @@ namespace AI
 
                 foreach (var evalWaypoint in potentialWaypoints)
                 {
-                    print($"nextwaypoint {nextWaypoint} ({nextWaypoint.flowWeight}) evalWaypoint {evalWaypoint} ({evalWaypoint.flowWeight})");
+                    //print($"nextwaypoint {nextWaypoint} ({nextWaypoint.flowWeight}) evalWaypoint {evalWaypoint} ({evalWaypoint.flowWeight})");
                     if (evalWaypoint.flowWeight == nextWaypoint.flowWeight)
                     {
                         counter++;
@@ -186,6 +179,10 @@ namespace AI
                     print($"{characterData.characterName} decided to move to a {nextWaypoint} with higher flowWeight {nextWaypoint.flowWeight}");
                 }
                
+            }
+            else
+            {
+                return null;
             }
 
             print($"{characterData.characterName} has decided to move to: {nextWaypoint}");
@@ -258,8 +255,11 @@ namespace AI
                 }
                 else
                 {
+
+                //TODO: Add state where AI is inside the player's office, player can delay the attack by not using camera. AI will be triggered to attack after a certain random interval
+
                     PlayAudio("attack", false);
-                    //play attack/jumpscare animation
+                    //TODO: play attack/jumpscare animation with Jumpscare()
                     print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
                     Singleton.Instance.SetDeathMessage(characterData.characterName, door.name);
                     //once finished, player died
@@ -273,6 +273,23 @@ namespace AI
             }
 
             timeSinceLastAction = Time.time;
+        }
+
+        public virtual void Jumpscare()
+        {
+            bool animationFinished = false; //Set true once animation is finished, after which the player is actually killed.
+
+            /* Design #1
+             * Door has "jumpscare characters" that will be enabled once a specific character attacks the player.
+             * 
+             * Design #2 
+             * AI will be teleported in front of player, freezing their camera controls 
+             * Plays animation after which the player dies.
+             * 
+             * Design #3
+             * AI will move towards the player (how does it move? -> one size fits all animation?)
+             * 
+             */
         }
 
         public virtual void PlayAudio(string audioType, bool isRandom)
@@ -381,7 +398,7 @@ namespace AI
             string[] debugValues = new string[8];
             debugValues[0] = characterData.characterName;
             debugValues[1] = activityLevel.ToString();
-            float lastAction = (Mathf.Round((float)timeSinceLastAction * 100f) / 100f); ;
+            float lastAction = (Mathf.Round((Time.time - (float)timeSinceLastAction) * 100f) / 100f); ;
 
             debugValues[2] = lastAction.ToString();
             debugValues[3] = state.ToString();

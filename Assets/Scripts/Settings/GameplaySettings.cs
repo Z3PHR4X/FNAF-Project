@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class GameplaySettings : MonoBehaviour
 {
-    [SerializeField] private Toggle lockCursorToggle;
+    [SerializeField] private Toggle debugModeToggle, lockCursorToggle;
     [SerializeField] private Slider mouseSensitivitySlider;
     [SerializeField] private Text mouseSensitivityValueText;
     [SerializeField] private Vector2 mouseSensitivityRange = new Vector2(0.1f, 3f);
@@ -14,6 +14,12 @@ public class GameplaySettings : MonoBehaviour
     void Start()
     {
         LoadSettings();
+    }
+
+    public void SetDebugMode()
+    {
+        Singleton.Instance.debugMode = debugModeToggle.isOn;
+        print($"Debug mode: {Singleton.Instance.debugMode}");
     }
 
     public void SetLockCursor()
@@ -57,6 +63,17 @@ public class GameplaySettings : MonoBehaviour
         else
         {
             lockCursorToggle.isOn = false;
+        }
+        
+        debugModeToggle.isOn = Singleton.Instance.debugMode;
+
+        if(GameManagerV2.Instance == null)
+        {
+            debugModeToggle.interactable = true;
+        }
+        else
+        {
+            debugModeToggle.interactable = false;
         }
 
         mouseSensitivitySlider.minValue = mouseSensitivityRange.x;

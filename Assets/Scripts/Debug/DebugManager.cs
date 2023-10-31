@@ -18,6 +18,8 @@ namespace DebugCustom
         void Start()
         {
             //enemyManager = FindObjectOfType<EnemyManager>().GetComponent<EnemyManager>();
+            debugAvailable = Singleton.Instance.debugMode;
+            debugEnabled = debugAvailable;
             canvas = GetComponent<Canvas>();
             canvas.enabled = debugEnabled;
             content.gameObject.SetActive(false);
