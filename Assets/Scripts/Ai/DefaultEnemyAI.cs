@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Tools;
+using UnityEngine.Video;
 
 namespace AI
 {
@@ -35,6 +36,7 @@ namespace AI
         public AudioSource characterRandomAudioSource;
         public AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
         private LookAtCurrentCamera lookAtCurrentCamera;
+        [SerializeField] private VideoPlayer jumpscareVideo;
 
         private DynamicWaypoints dummyWaypoint;
         public DynamicWaypoints currentWaypoint;
@@ -258,12 +260,12 @@ namespace AI
 
                 //TODO: Add state where AI is inside the player's office, player can delay the attack by not using camera. AI will be triggered to attack after a certain random interval
 
-                    PlayAudio("attack", false);
-                    //TODO: play attack/jumpscare animation with Jumpscare()
+                    //PlayAudio("attack", false);
                     print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
                     Singleton.Instance.SetDeathMessage(characterData.characterName, door.name);
+                    StartCoroutine(Jumpscare());
                     //once finished, player died
-                    Player.Instance.isAlive = false;
+                    //Player.Instance.isAlive = false; //called from jumpscare instead
                 }
             }
             else
@@ -275,9 +277,13 @@ namespace AI
             timeSinceLastAction = Time.time;
         }
 
-        public virtual void Jumpscare()
+        public virtual IEnumerator Jumpscare()
         {
-            bool animationFinished = false; //Set true once animation is finished, after which the player is actually killed.
+            jumpscareVideo.targetCamera = Camera.main;
+            jumpscareVideo.Play();
+            yield return new WaitForSeconds((float)jumpscareVideo.clip.length);
+            Player.Instance.isAlive = false;
+            yield return new WaitForEndOfFrame();
 
             /* Design #1
              * Door has "jumpscare characters" that will be enabled once a specific character attacks the player.

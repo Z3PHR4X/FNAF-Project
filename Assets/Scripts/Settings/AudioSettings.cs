@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AudioSettings : MonoBehaviour
 {
+    [SerializeField] private TMP_Dropdown musicSelection;
+    [SerializeField] private Toggle musicOverride;
+    [SerializeField] private MainMenuMusic mainMenuMusic;
     [SerializeField] private Slider masterSlider, musicSlider, voiceSlider, sfxSlider, interfaceSlider;
     [SerializeField] private Text masterText, musicText, voiceText, sfxText, interfaceText;
     private float master, music, voice, sfx, interfac;
+    private int musicSel;
+    private bool settingsLoaded;
 
     // Start is called before the first frame update
     void Start()
     {
+        settingsLoaded = false;
+        mainMenuMusic = FindFirstObjectByType<MainMenuMusic>();
         LoadSettings();   
     }
 
@@ -32,6 +40,50 @@ public class AudioSettings : MonoBehaviour
         interfac = PlayerPrefs.GetFloat("audioInterfaceVolume");
         interfaceSlider.value = interfac;
         interfaceText.text = interfac.ToString();
+
+        bool musOverride = PlayerPrefs.GetInt("menuMusicOverride") == 1;
+        musicOverride.isOn = musOverride;
+        musicOverride.interactable = (Singleton.Instance.completedNight >= 7 && mainMenuMusic != null);
+
+        musicSel = PlayerPrefs.GetInt("menuMusicSelection");
+        musicSelection.value = musicSel;
+        musicSelection.RefreshShownValue();
+        musicSelection.interactable = (Singleton.Instance.completedNight >= 7 && mainMenuMusic != null);
+
+        settingsLoaded = true;
+    }
+
+    public void SetMusicOverride()
+    {
+        if (musicOverride.isOn)
+        {
+            PlayerPrefs.SetInt("menuMusicOverride", 1);
+            if (musicOverride.interactable)
+            {
+                musicSelection.interactable = true;
+            }
+        }
+        else { PlayerPrefs.SetInt("menuMusicOverride", 0);
+            if (musicOverride.interactable)
+            {
+                musicSelection.interactable = false;
+            }
+
+        }
+        if (settingsLoaded && mainMenuMusic != null)
+        {
+            mainMenuMusic.SetupMusicSetting(musicOverride.isOn, musicSel);
+        }
+    }
+
+    public void SetMusicSelection()
+    {
+        musicSel = musicSelection.value;
+        PlayerPrefs.SetInt("menuMusicSelection", musicSel);
+        if (settingsLoaded && mainMenuMusic != null)
+        {
+            mainMenuMusic.SetupMusicSetting(musicOverride.isOn, musicSel);
+        }
     }
 
     public void SetMasterVolume()
