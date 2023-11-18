@@ -41,14 +41,24 @@ public class AudioSettings : MonoBehaviour
         interfaceSlider.value = interfac;
         interfaceText.text = interfac.ToString();
 
-        bool musOverride = PlayerPrefs.GetInt("menuMusicOverride") == 1;
+        bool musOverride;
+        if (Singleton.Instance.completedNight >= 7) {
+            musOverride = PlayerPrefs.GetInt("menuMusicOverride") == 1;
+        }
+        else
+        {
+            musOverride = false;
+            PlayerPrefs.SetInt("menuMusicOverride", 0);
+        }
+
+        //print(musOverride);
         musicOverride.isOn = musOverride;
         musicOverride.interactable = (Singleton.Instance.completedNight >= 7 && mainMenuMusic != null);
 
         musicSel = PlayerPrefs.GetInt("menuMusicSelection");
         musicSelection.value = musicSel;
         musicSelection.RefreshShownValue();
-        musicSelection.interactable = (Singleton.Instance.completedNight >= 7 && mainMenuMusic != null);
+        musicSelection.interactable = (Singleton.Instance.completedNight >= 7 && musOverride && mainMenuMusic != null);
 
         settingsLoaded = true;
     }

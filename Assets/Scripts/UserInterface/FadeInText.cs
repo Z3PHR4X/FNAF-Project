@@ -13,6 +13,7 @@ public class FadeInText : MonoBehaviour
     {
         text = GetComponent<Text>();
         color = text.color;
+        color.a = alpha;
 
         if (checkNight)
         {
@@ -26,13 +27,13 @@ public class FadeInText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        alpha = Mathf.Lerp(alpha, 1, 0.3f*Time.deltaTime);
-        color = new Color(color.r, color.g, color.b, alpha);
-        text.color = color;
+            alpha = Mathf.Lerp(alpha, 1, 0.3f * Time.deltaTime);
+            color = new Color(color.r, color.g, color.b, alpha);
+            text.color = color;
 
-        if(alpha < 0.95f)
-        {
-            gameObject.SetActive(false);
-        }
+            if (alpha < 0.95f)
+            {
+                gameObject.SetActive(false);
+            }
     }
 }

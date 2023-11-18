@@ -6,6 +6,7 @@ public class Door : MonoBehaviour
 {
     public DoorType type;
     public AnimatronicType animatronicType;
+    public bool isEnabled;
     public bool isClosed;
     public bool lightOn;
     public bool enemyAtDoor;
@@ -15,6 +16,7 @@ public class Door : MonoBehaviour
     [SerializeField] private AudioSource doorCloseAudio;
     [SerializeField] private AudioSource doorOpenAudio;
     [SerializeField] private AudioSource doorBangingAudio;
+    [SerializeField] private AudioSource doorDisabledAudio;
     [SerializeField] private AudioSource enemySpottedAudio;
     private PowerManager powerManager;
 
@@ -40,6 +42,7 @@ public class Door : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isEnabled = true;
         OpenDoor(true);
         TurnOffLight();
     }
@@ -51,17 +54,24 @@ public class Door : MonoBehaviour
 
     public void ToggleDoor()
     {
-        isClosed = !isClosed;
-        doorObj.SetActive(isClosed);
-        if (isClosed)
+        if (isEnabled)
         {
-            doorCloseAudio.Play();
-            powerManager.powerConsumers.Add(1);
+            isClosed = !isClosed;
+            doorObj.SetActive(isClosed);
+            if (isClosed)
+            {
+                doorCloseAudio.Play();
+                powerManager.powerConsumers.Add(1);
+            }
+            else
+            {
+                doorOpenAudio.Play();
+                powerManager.powerConsumers.Remove(1);
+            }
         }
         else
         {
-            doorOpenAudio.Play();
-            powerManager.powerConsumers.Remove(1);
+            doorDisabledAudio.Play();
         }
     }
 

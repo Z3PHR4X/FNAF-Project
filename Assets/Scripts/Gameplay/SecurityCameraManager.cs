@@ -69,7 +69,7 @@ namespace Gameplay
 
         public void ToggleSecurityCamera()
         {
-            if (!isPoweredDown)
+            if (!isPoweredDown && !Player.Instance.isBeingAttacked)
             {
                 if (isWatchingCameras)
                 {

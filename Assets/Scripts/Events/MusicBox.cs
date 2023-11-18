@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Events
 {
@@ -8,6 +9,7 @@ namespace Events
     {
         [SerializeField] private GameObject Freddy;
         [SerializeField] private AudioSource musicBox;
+        [SerializeField] private VideoPlayer jumpscareVideo;
 
         private bool _hasMusicBoxPlayed;
         private float _musicBoxTimer;
@@ -32,6 +34,15 @@ namespace Events
             }
         }
 
+        public virtual IEnumerator Jumpscare()
+        {
+            jumpscareVideo.targetCamera = Camera.main;
+            jumpscareVideo.Play();
+            yield return new WaitForSeconds((float)jumpscareVideo.clip.length);
+            Player.Instance.isAlive = false;
+            yield return new WaitForEndOfFrame();
+        }
+
 
         void MusicBoxSequence()
         {
@@ -42,9 +53,9 @@ namespace Events
                 {
                     if (Random.Range(0, 5) == 0)
                     {
-                        Singleton.Instance.SetDeathMessage("You ran out of power! Tom Nook will come for your mortgage when it's dark..");
-                        Player.Instance.isAlive = false;
-                        Time.timeScale = 0f;
+                        Singleton.Instance.SetDeathMessage("You ran out of power! Tom Nook will come claim your mortgage payment when it's dark..");
+                        StartCoroutine(Jumpscare());
+                        //Time.timeScale = 0f;
                     }
                     _musicBoxTimer = Time.time;
                 }

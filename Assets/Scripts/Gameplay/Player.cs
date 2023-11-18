@@ -4,7 +4,7 @@ using Gameplay;
 public class Player : MonoBehaviour
 {
     public static Player Instance;
-    public bool isInCamera, isAlive;
+    public bool isInCamera, isAlive, isBeingAttacked;
     public PowerManager powerManager;
     public SecurityCameraManager securityCameraManager;
     public DoorManager doorManager;

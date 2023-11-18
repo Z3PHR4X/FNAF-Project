@@ -17,8 +17,9 @@ namespace AI
          * I'm not sure if it's intended or not, but since the countdown time is set when any camera is looked at and it's impossible for Foxy to move from Pirate Cove while the countdown time is greater than 0, viewing any camera keeps Foxy from attacking.
          */
 
-        [SerializeField] private float attackDuration = 5f;
+        [SerializeField] private float attackDuration = 3f;
         private bool isAttacking = false;
+        private int attackFailCount;
 
         public override void AttackState()
         {
@@ -44,6 +45,15 @@ namespace AI
             yield return new WaitForSeconds(duration);
             AttackPlayer();
             isAttacking = false;
+        }
+
+        public override void AttackFail()
+        {
+            base.AttackFail();
+            int powerDrain = 10 + (attackFailCount * 50);
+            Player.Instance.powerManager.powerReserve -= powerDrain;
+            attackFailCount++;
+            print($"{name} has drained {powerDrain} from the players Power Reserve!");
         }
 
     }

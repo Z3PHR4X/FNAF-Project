@@ -14,6 +14,7 @@ namespace AI
         public bool isCrawling = false;
         public bool isOccupied = false;
         public bool isAttackingPosition = false;
+        public bool isOfficePosition = false;
 
         public enum WaypointType
         {

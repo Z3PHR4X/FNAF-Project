@@ -30,6 +30,8 @@ namespace AI
         [SerializeField] private bool attacksWhenDistracted = false;
         [SerializeField] private bool hasMovementOffset = true;
         [SerializeField][Range(0, 20)] int lookChance;
+        [SerializeField][Range(0, 20)] int enterOfficeChance;
+        [SerializeField] private bool entersOffice = false;
         [Header("Setup")]
         public DynamicWaypoints homeWaypoint;
         public AudioSource characterAudioSource;
@@ -48,7 +50,7 @@ namespace AI
         private AIValues nightValues = new AIValues();
         private DynamicWaypoints nextWaypoint;
         private Door door;
-        private bool isLookingAtCamera;
+        private bool isLookingAtCamera, isWaitingInOffice;
 
         public enum AnimatronicType
         {
@@ -227,13 +229,24 @@ namespace AI
 
             if (timeSinceLastAction + nightValues.actionInterval < Time.time)
             {
-                if (attacksWhenDistracted && Player.Instance.isInCamera && DiceRollGenerator.hasSuccessfulRoll(activityLevel))
-                {
-                    AttackPlayer();
-                }
-                else if (DiceRollGenerator.hasSuccessfulRoll(activityLevel))
-                {
-                    AttackPlayer();
+                if (DiceRollGenerator.hasSuccessfulRoll(activityLevel)) {
+                    //AI can decide to move inide the office instead of attacking the player
+                    //This will disable the door and prevent it from being closed, this will then resume with the regular AttackState by calling AttackPlayer
+                    if (entersOffice && !isWaitingInOffice && !door.isClosed && DiceRollGenerator.hasSuccessfulRoll(enterOfficeChance)) //Maybe only when the player is in cameras?
+                    {
+                        door.isEnabled = false;
+                        isWaitingInOffice = true;
+                        print($"{characterData.characterName} had entered the office and disabled {door.name}");
+                        Move(SetNextWaypoint(currentWaypoint.connectedWaypoints), false);
+                    }
+                    else if (attacksWhenDistracted || isWaitingInOffice && Player.Instance.isInCamera)
+                    {
+                        AttackPlayer();
+                    }
+                    else
+                    {
+                        AttackPlayer();
+                    }
                 }
                 timeSinceLastAction = Time.time;
             }
@@ -244,28 +257,38 @@ namespace AI
         {
             state = AIState.Attacking;
             //attempt to attack the player
+            //if in the office dont check for any doors, as they made it passed those already
+            if (isWaitingInOffice)
+            {
+                print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from the office");
+                Singleton.Instance.SetDeathMessage(characterData.characterName, "office");
+                Player.Instance.isBeingAttacked = true;
+                if (Player.Instance.isInCamera)
+                {
+                    Player.Instance.securityCameraManager.ExitSecurityCamera();
+                }
+                StartCoroutine(Jumpscare());
+            }
             //if door is closed
-            if (door != null)
+            else if (door != null)
             {
                 if (door.isClosed)
                 {
                     //Play audio and return home
-                    door.BangOnDoor();
-                    print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} failed to attack player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
+                    AttackFail();
                     Move(homeWaypoint, false);
                     //lower power? 
                 }
-                else
+                else if(!Player.Instance.isBeingAttacked) 
                 {
-
-                //TODO: Add state where AI is inside the player's office, player can delay the attack by not using camera. AI will be triggered to attack after a certain random interval
-
-                    //PlayAudio("attack", false);
                     print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
                     Singleton.Instance.SetDeathMessage(characterData.characterName, door.name);
+                    Player.Instance.isBeingAttacked = true;
+                    if (Player.Instance.isInCamera)
+                    {
+                        Player.Instance.securityCameraManager.ExitSecurityCamera();
+                    }
                     StartCoroutine(Jumpscare());
-                    //once finished, player died
-                    //Player.Instance.isAlive = false; //called from jumpscare instead
                 }
             }
             else
@@ -275,6 +298,12 @@ namespace AI
             }
 
             timeSinceLastAction = Time.time;
+        }
+
+        public virtual void AttackFail()
+        {
+            door.BangOnDoor();
+            print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} failed to attack player from {door.name} of type {door.animatronicType} with state {door.isClosed}");
         }
 
         public virtual IEnumerator Jumpscare()
