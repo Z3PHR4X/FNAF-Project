@@ -26,7 +26,8 @@ I cannot give an estimate when this project will be completed, this is all done 
 - [X] Improve AI with modular behavior (Basic)
        - Virtual methods and overrides
 - [X] Improved Security Camera behaviour
-- [ ] Add attack/death animations (Jumpscares)
+- [X] Add attack/death animations (Jumpscares)
+- [X] AI can choose to enter office and disable door
 - [ ] Look into improving waypoints with less manual flowWeight setup (Automated Pathfinding)
 - [ ] Look into modular scripts for AI behavior (Configurable AI through Inspector)
 - [ ] Physical Door and Light buttons, and more general physical in-world interactions (Less UI)
