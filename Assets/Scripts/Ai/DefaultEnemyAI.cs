@@ -239,7 +239,8 @@ namespace AI
                         print($"{characterData.characterName} had entered the office and disabled {door.name}");
                         Move(SetNextWaypoint(currentWaypoint.connectedWaypoints), false);
                     }
-                    else if (attacksWhenDistracted || isWaitingInOffice && Player.Instance.isInCamera)
+                    //TODO: Revisit this logic, will not work as expected now
+                    else if (attacksWhenDistracted && Player.Instance.isInCamera || isWaitingInOffice && Player.Instance.isInCamera)
                     {
                         AttackPlayer();
                     }
@@ -261,7 +262,7 @@ namespace AI
             if (isWaitingInOffice)
             {
                 print($"{characterData.characterName} of type {animatronicType} with level {activityLevel} attacked player from the office");
-                Singleton.Instance.SetDeathMessage(characterData.characterName, "office");
+                Singleton.Instance.SetDeathMessage($"{characterData.characterName} snuck in and attacked you from inside your office.");
                 Player.Instance.isBeingAttacked = true;
                 if (Player.Instance.isInCamera)
                 {

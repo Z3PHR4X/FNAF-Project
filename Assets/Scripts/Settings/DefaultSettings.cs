@@ -25,10 +25,10 @@ namespace Settings
             PlayerPrefs.SetFloat("audioSfxVolume", sfxVolume);
             PlayerPrefs.SetFloat("audioInterfaceVolume", interfaceVolume);
             PlayerPrefs.SetFloat("audioVoiceVolume", voiceVolume);
-            PlayerPrefs.SetInt("graphicsResolutionX", 1280);
-            PlayerPrefs.SetInt("graphicsResolutionY", 720);
-            PlayerPrefs.SetInt("graphicsRefreshrate", 60);
-            PlayerPrefs.SetInt("graphicsFullScreenMode", 0);
+            PlayerPrefs.SetInt("graphicsResolutionX", Screen.currentResolution.width);
+            PlayerPrefs.SetInt("graphicsResolutionY", Screen.currentResolution.height);
+            PlayerPrefs.SetInt("graphicsRefreshrate", Screen.currentResolution.refreshRate);
+            PlayerPrefs.SetInt("graphicsFullScreenMode", 1);
             PlayerPrefs.SetInt("graphicsQuality", 5);
             PlayerPrefs.SetInt("graphicsVsync", 0);
             //PlayerPrefs.SetInt("completedNight", 0);

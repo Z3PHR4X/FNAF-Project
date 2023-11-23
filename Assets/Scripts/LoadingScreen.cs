@@ -75,6 +75,7 @@ public class LoadingScreen : MonoBehaviour
         if (waitForKey)
         {
             asyncOperation.allowSceneActivation = false;
+            print(asyncOperation.allowSceneActivation);
 
             while (!asyncOperation.isDone)
             {
@@ -92,8 +93,12 @@ public class LoadingScreen : MonoBehaviour
                     progressText.text = "100%";
                     //Wait to you press any key to activate the Scene
                     if (Input.anyKey)
+                    {
                         //Activate the Scene
+                        print($"Changing scene to: {_sceneToLoad}");
                         asyncOperation.allowSceneActivation = true;
+                        print(asyncOperation.allowSceneActivation);
+                    }
                 }
 
                 yield return new WaitForEndOfFrame();
@@ -111,6 +116,7 @@ public class LoadingScreen : MonoBehaviour
                 progressBar.fillAmount = asyncOperation.progress;
                 yield return new WaitForEndOfFrame();
             }
+            print($"Changing scene to: {_sceneToLoad}");
         }
     }
 
@@ -150,6 +156,7 @@ public class LoadingScreen : MonoBehaviour
                             fadeAnimator.SetTrigger("FadeOut");
                             yield return new WaitForSeconds(fadeDuration);
                         }
+                    print($"Changing scene to: {_sceneToLoad}");
                     asyncOperation.allowSceneActivation = true;
                 }
 
@@ -169,6 +176,7 @@ public class LoadingScreen : MonoBehaviour
             while (asyncOperation.isDone) {
                 fadeAnimator.SetTrigger("FadeOut");
                 yield return new WaitForSeconds(fadeDuration);
+                print($"Changing scene to: {_sceneToLoad}");
                 asyncOperation.allowSceneActivation = true;
             }
         }

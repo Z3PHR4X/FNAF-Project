@@ -45,11 +45,7 @@ namespace Settings
 
         private void PopulateVsyncSetting()
         {
-            if(vsync > 0)
-            {
-                
-                vsyncToggle.isOn = true;
-            }            
+            vsyncToggle.isOn = (vsync == 1);
         }
 
         private void PopulateRefreshSettings()
@@ -112,7 +108,7 @@ namespace Settings
                         option = filteredResolutions[i].width + "x" + filteredResolutions[i].height;
                     }
                 resOptions.Add(option);
-                if (filteredResolutions[i].width == Screen.currentResolution.width && filteredResolutions[i].height == Screen.currentResolution.height && filteredResolutions[i].refreshRate == Screen.currentResolution.refreshRate)
+                if (filteredResolutions[i].width == Screen.width && filteredResolutions[i].height == Screen.height && filteredResolutions[i].refreshRate == Screen.currentResolution.refreshRate)
                 {
                     curResolutionIndex = i;
                 }
@@ -219,8 +215,8 @@ namespace Settings
         {
             Screen.SetResolution(currentResolution.width, currentResolution.height, currentScreenMode, currentRefresh);
             QualitySettings.SetQualityLevel(curQualityIndex);
-            //QualitySettings.vSyncCount = vsync;
-            //Application.targetFrameRate = currentRefresh;
+            QualitySettings.vSyncCount = vsync;
+            Application.targetFrameRate = currentRefresh;
             print("Applied new graphics settings.");
         }
 
@@ -266,7 +262,7 @@ namespace Settings
 
             Screen.SetResolution(x, y, screenMode, refresh);
             QualitySettings.SetQualityLevel(quality);
-            //QualitySettings.vSyncCount = v;
+            QualitySettings.vSyncCount = v;
             print("Succesfully loaded graphics settings from save");
         }
 

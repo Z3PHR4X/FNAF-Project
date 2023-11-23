@@ -52,7 +52,7 @@ namespace Gameplay
                 }
             }
             else if(GameManagerV2.Instance.hasGameStarted && GameManagerV2.Instance.hasPlayerWon)
-            {
+            { 
                 ExitSecurityCamera();
             }
         }
@@ -103,16 +103,20 @@ namespace Gameplay
 
         public void ExitSecurityCamera()
         {
-            toggleWithCameras.SetActive(true);
-            isWatchingCameras = false;
-            mainCamera.enabled = true;
-            mainAudioListener.enabled = true;
-            securityCameraInterface.gameObject.SetActive(false);
-            currentCamera.ToggleCamera(false);
-            turnOffAudio.Play();
-            Player.Instance.isInCamera = false;
-            Player.Instance.powerManager.powerConsumers.Remove(1);
-            //GameManagerV2.Instance.currentCam = Player.Instance.playerCamera;
+            //Check prevents errors occuring in cases where night is completed/player dies when cam was never used.
+            if (currentCamera != null)
+            {
+                toggleWithCameras.SetActive(true);
+                isWatchingCameras = false;
+                mainCamera.enabled = true;
+                mainAudioListener.enabled = true;
+                securityCameraInterface.gameObject.SetActive(false);
+                currentCamera.ToggleCamera(false);
+                turnOffAudio.Play();
+                Player.Instance.isInCamera = false;
+                Player.Instance.powerManager.powerConsumers.Remove(1);
+                //GameManagerV2.Instance.currentCam = Player.Instance.playerCamera;
+            }
         }
 
         //Called from SecurityCamera button on UI

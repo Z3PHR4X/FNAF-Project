@@ -18,7 +18,7 @@ public class VictoryButton : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        if(Singleton.Instance.selectedNight == 7)
+        if (Singleton.Instance.selectedNight == 7)
         {
             Singleton.Instance.ChangeScene("GameWin");
         }

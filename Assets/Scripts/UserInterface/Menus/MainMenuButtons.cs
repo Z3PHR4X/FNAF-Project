@@ -50,11 +50,12 @@ public class MainMenuButtons : MonoBehaviour
             SetupButton.SetActive(false);
         }
 
-        if (firstTime)
-        {
-            SettingsText.text = "> Settings <";
-            SettingsText.color = Color.green;
-        }
+        //Resolution bug is fixed so no longer needed
+        //if (firstTime)
+        //{
+        //    SettingsText.text = "> Settings <";
+        //    SettingsText.color = Color.green;
+        //}
 
     }
 

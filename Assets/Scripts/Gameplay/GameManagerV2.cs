@@ -9,7 +9,6 @@ public class GameManagerV2 : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private GameObject startNightScreen;
     [SerializeField] private GameObject endNightScreen;
-    [SerializeField] private GameObject gameOverScreen;
     [SerializeField] private Events.MusicBox musicBox;
     [Header("In-game values")]
     public bool hasGameStarted;
