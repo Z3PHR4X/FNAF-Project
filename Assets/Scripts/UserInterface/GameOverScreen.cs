@@ -14,7 +14,11 @@ namespace UserInterface
         void Start()
         {
             continueText.SetActive(false);
-            StartCoroutine("LoadScene", sceneToLoad);
+            if (Singleton.Instance.discord.enabledRichPresence)
+            {
+                Singleton.Instance.discord.UpdateStatus($"{Singleton.Instance.deathReason}", $"Failed to survive the night..", "gameover", "Game Over");
+            }
+            StartCoroutine("LoadScene", sceneToLoad);  
         }
 
         IEnumerator LoadScene(string _sceneToLoad)

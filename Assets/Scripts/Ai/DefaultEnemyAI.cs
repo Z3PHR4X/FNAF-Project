@@ -74,7 +74,8 @@ namespace AI
         private void Awake()
         {
             characterAudioSource = GetComponent<AudioSource>();
-            characterAudioSource.volume = Singleton.Instance.sfxVolume;
+            characterAudioSource.volume = 1;
+            characterRandomAudioSource.volume = 1;
             lookAtCurrentCamera = GetComponentInChildren<LookAtCurrentCamera>();
             dummyWaypoint = GameObject.Find("DummyWaypoint").GetComponent<DynamicWaypoints>();
         }

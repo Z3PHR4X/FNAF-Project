@@ -50,6 +50,8 @@ public class MainMenuButtons : MonoBehaviour
             SetupButton.SetActive(false);
         }
 
+        SetDiscordMessage();
+
         //Resolution bug is fixed so no longer needed
         //if (firstTime)
         //{
@@ -84,5 +86,20 @@ public class MainMenuButtons : MonoBehaviour
         print("Retrying night: " + retryNight);
         Singleton.Instance.selectedNight = retryNight;
         Singleton.Instance.ChangeScene("LoadingScreen");
+    }
+
+    private void SetDiscordMessage()
+    {
+        if (Singleton.Instance.discord.enabledRichPresence)
+        {
+            if (Singleton.Instance.completedNight > 0)
+            {
+                Singleton.Instance.discord.UpdateStatus("Preparing for the nightshift..", $"Main Menu - Completed Night {Singleton.Instance.completedNight}", "mainmenu", "Main Menu");
+            }
+            else
+            {
+                Singleton.Instance.discord.UpdateStatus("Preparing for the nightshift..", "Main Menu - Starting a new game", "mainmenu", "Main Menu");
+            }
+        }
     }
 }

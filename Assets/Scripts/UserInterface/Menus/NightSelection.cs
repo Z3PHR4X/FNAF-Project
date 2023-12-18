@@ -22,7 +22,11 @@ namespace UserInterface.Menus
             completedNight = PlayerPrefs.GetInt("completedNight");
             selectedLevel = Singleton.Instance.selectedMap;
             selectedNight = Singleton.Instance.selectedNight;
-            PopulateNightOptions();
+            if (Singleton.Instance.discord.enabledRichPresence)
+            {
+                Singleton.Instance.discord.UpdateStatus($"Setting up a game..", $"Main Menu - Completed Night {completedNight}", "mainmenu", "Main Menu");
+            }
+                PopulateNightOptions();
         }
 
         // Update is called once per frame

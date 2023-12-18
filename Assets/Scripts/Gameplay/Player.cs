@@ -1,5 +1,6 @@
 using UnityEngine;
 using Gameplay;
+using Discord;
 
 public class Player : MonoBehaviour
 {
@@ -45,6 +46,11 @@ public class Player : MonoBehaviour
         UpdateCamera();
     }
 
+    private void LateUpdate()
+    {
+        UpdateDiscord();
+    }
+
     void UpdateCamera()
     {
         //when not paused
@@ -69,6 +75,25 @@ public class Player : MonoBehaviour
                 cameraRotation.y = Mathf.Clamp(cameraRotation.y, cameraBounds.x, cameraBounds.y);
 
                 playerCamera.transform.localRotation = Quaternion.Euler(cameraRotation.x, cameraRotation.y, cameraRotation.z);
+            }
+        }
+    }
+
+    void UpdateDiscord()
+    {
+        if (Singleton.Instance.discord)
+        {
+            if (Singleton.Instance.discord.enabledRichPresence)
+            {
+                string powerUsageText = "";
+                for (int i = 0; i < powerManager.powerUsage; i++)
+                {
+                    powerUsageText += "/";
+                }
+                float powerReserveText = (powerManager.powerReserve * 10) / 100;
+                int timeText = GameManagerV2.Instance.hour;
+                if (timeText == 0) timeText = 12;
+                Singleton.Instance.discord.UpdateStatus($"Power reserve: {powerReserveText}% - Usage: [{powerUsageText}]", $"Surviving Night {Singleton.Instance.selectedNight} - {timeText}AM", "devbears", Singleton.Instance.selectedMap.levelName);
             }
         }
     }

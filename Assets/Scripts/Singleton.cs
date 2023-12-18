@@ -15,6 +15,8 @@ public class Singleton : MonoBehaviour
     public Level selectedMap;
     public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
     private Animator transitionAnimator;
+    [Space]
+    public DiscordRichPresence discord;
 
     private void Awake()
     {

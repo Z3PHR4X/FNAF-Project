@@ -33,7 +33,11 @@ public class LoadingScreen : MonoBehaviour
             _sceneToLoad = Singleton.Instance.selectedMap.levelScene.Name;
             mapText.text = $"{Singleton.Instance.selectedMap.levelName} - Night {Singleton.Instance.selectedNight}";
             mapDescriptionText.text = Singleton.Instance.selectedMap.levelDescription;
-            
+            if (Singleton.Instance.discord.enabledRichPresence)
+            {
+                Singleton.Instance.discord.UpdateStatus($"Preparing Night {Singleton.Instance.selectedNight}", $"Loading the next nightshift..", "mainmenu", "Loading..");
+            }
+
             //ControlScheme
             if (Singleton.Instance.selectedMap.controlScheme != null)
             {
@@ -97,7 +101,7 @@ public class LoadingScreen : MonoBehaviour
                         //Activate the Scene
                         print($"Changing scene to: {_sceneToLoad}");
                         asyncOperation.allowSceneActivation = true;
-                        print(asyncOperation.allowSceneActivation);
+                        //print(asyncOperation.allowSceneActivation);
                     }
                 }
 
