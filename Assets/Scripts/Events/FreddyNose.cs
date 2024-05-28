@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
     public class FreddyNose : MonoBehaviour
     {

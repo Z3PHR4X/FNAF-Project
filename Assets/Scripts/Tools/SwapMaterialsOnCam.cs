@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace Tools
+namespace Zephrax.FNAFGame.Tools
 {
     public class SwapMaterialsOnCam : MonoBehaviour
     {

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tools;
+using Zephrax.FNAFGame.Tools;
 using UnityEngine.Video;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace AI
+namespace Zephrax.FNAFGame.AI
 {
     public class DefaultEnemyAI : MonoBehaviour
     {

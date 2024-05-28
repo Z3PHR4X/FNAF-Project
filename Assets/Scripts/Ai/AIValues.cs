@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+namespace Zephrax.FNAFGame.AI
 {
     [System.Serializable]
     public class AIValues

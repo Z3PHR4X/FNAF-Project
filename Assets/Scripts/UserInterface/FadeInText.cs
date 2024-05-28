@@ -1,32 +1,34 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeInText : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface
 {
-    private Text text;
-    private float  alpha = 0f;
-    private Color color;
-
-    [SerializeField] private bool checkNight;
-
-    private void Start()
+    public class FadeInText : MonoBehaviour
     {
-        text = GetComponent<Text>();
-        color = text.color;
-        color.a = alpha;
+        private Text text;
+        private float alpha = 0f;
+        private Color color;
 
-        if (checkNight)
+        [SerializeField] private bool checkNight;
+
+        private void Start()
         {
-            if(Singleton.Instance.selectedNight > 5)
+            text = GetComponent<Text>();
+            color = text.color;
+            color.a = alpha;
+
+            if (checkNight)
             {
-                gameObject.SetActive(false);
+                if (Singleton.Instance.selectedNight > 5)
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        // Update is called once per frame
+        void Update()
+        {
             alpha = Mathf.Lerp(alpha, 1, 0.3f * Time.deltaTime);
             color = new Color(color.r, color.g, color.b, alpha);
             text.color = color;
@@ -35,5 +37,6 @@ public class FadeInText : MonoBehaviour
             {
                 gameObject.SetActive(false);
             }
+        }
     }
 }

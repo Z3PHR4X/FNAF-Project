@@ -1,153 +1,134 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AudioSettings : MonoBehaviour
+namespace Zephrax.FNAFGame.Settings
 {
-    [SerializeField] private TMP_Dropdown musicSelection;
-    [SerializeField] private Toggle musicOverride;
-    [SerializeField] private MainMenuMusic mainMenuMusic;
-    [SerializeField] private Slider masterSlider, musicSlider, voiceSlider, sfxSlider, interfaceSlider;
-    [SerializeField] private Text masterText, musicText, voiceText, sfxText, interfaceText;
-    private float master, music, voice, sfx, interfac;
-    private int musicSel;
-    private bool settingsLoaded;
-
-    // Start is called before the first frame update
-    void Start()
+    public class AudioSettings : MonoBehaviour
     {
-        settingsLoaded = false;
-        mainMenuMusic = FindFirstObjectByType<MainMenuMusic>();
-        LoadSettings();   
-    }
+        [SerializeField] private Slider masterSlider, musicSlider, sfxSlider, interfaceSlider;
+        [SerializeField] private TMP_Text masterText, musicText, sfxText, interfaceText;
+        [SerializeField] private bool hasInterface;
+        private float master, music, sfx, interfac;
+        private bool settingsLoaded;
 
-    public void LoadSettings()
-    {
-        master = PlayerPrefs.GetFloat("audioMasterVolume");
-        masterSlider.value = master;
-        masterText.text = master.ToString();
-        music = PlayerPrefs.GetFloat("audioMusicVolume");
-        musicSlider.value = music;
-        musicText.text = music.ToString();
-        voice = PlayerPrefs.GetFloat("audioVoiceVolume");
-        voiceSlider.value = voice;
-        voiceText.text = voice.ToString();
-        sfx = PlayerPrefs.GetFloat("audioSfxVolume");
-        sfxSlider.value = sfx;
-        sfxText.text = sfx.ToString();
-        interfac = PlayerPrefs.GetFloat("audioInterfaceVolume");
-        interfaceSlider.value = interfac;
-        interfaceText.text = interfac.ToString();
-
-        bool musOverride;
-        if (Singleton.Instance.completedNight >= 7) {
-            musOverride = PlayerPrefs.GetInt("menuMusicOverride") == 1;
-        }
-        else
+        // Start is called before the first frame update
+        void Start()
         {
-            musOverride = false;
-            PlayerPrefs.SetInt("menuMusicOverride", 0);
+            settingsLoaded = false;
+
+            LoadAudioSettings();
         }
 
-        //print(musOverride);
-        musicOverride.isOn = musOverride;
-        musicOverride.interactable = (Singleton.Instance.completedNight >= 7 && mainMenuMusic != null);
-
-        musicSel = PlayerPrefs.GetInt("menuMusicSelection");
-        musicSelection.value = musicSel;
-        musicSelection.RefreshShownValue();
-        musicSelection.interactable = (Singleton.Instance.completedNight >= 7 && musOverride && mainMenuMusic != null);
-
-        settingsLoaded = true;
-    }
-
-    public void SetMusicOverride()
-    {
-        if (musicOverride.isOn)
+        public void LoadAudioSettings()
         {
-            PlayerPrefs.SetInt("menuMusicOverride", 1);
-            if (musicOverride.interactable)
+            master = PlayerPrefs.GetFloat("audioMasterVolume");
+
+            music = PlayerPrefs.GetFloat("audioMusicVolume");
+
+            sfx = PlayerPrefs.GetFloat("audioSfxVolume");
+
+            interfac = PlayerPrefs.GetFloat("audioInterfaceVolume");
+
+            if (hasInterface)
             {
-                musicSelection.interactable = true;
-            }
-        }
-        else { PlayerPrefs.SetInt("menuMusicOverride", 0);
-            if (musicOverride.interactable)
-            {
-                musicSelection.interactable = false;
+                UpdateInterfaceValues();
             }
 
+            settingsLoaded = true;
         }
-        if (settingsLoaded && mainMenuMusic != null)
+
+        public void UpdateInterfaceValues()
         {
-            mainMenuMusic.SetupMusicSetting(musicOverride.isOn, musicSel);
-        }
-    }
+            masterSlider.value = master;
+            masterText.text = master.ToString();
 
-    public void SetMusicSelection()
-    {
-        musicSel = musicSelection.value;
-        PlayerPrefs.SetInt("menuMusicSelection", musicSel);
-        if (settingsLoaded && mainMenuMusic != null)
+            musicSlider.value = music;
+            musicText.text = music.ToString();
+
+            sfxSlider.value = sfx;
+            sfxText.text = sfx.ToString();
+
+            interfaceSlider.value = sfx;
+            interfaceText.text = sfx.ToString();
+        }
+
+        public void SetMasterVolume()
         {
-            mainMenuMusic.SetupMusicSetting(musicOverride.isOn, musicSel);
+            if (settingsLoaded)
+            {
+                master = Mathf.Round(masterSlider.value * 100.0f) * 0.01f;
+                masterText.text = master.ToString();
+                Singleton.Instance.masterVolume = master;
+            }
         }
-    }
+        public void SetMusicVolume()
+        {
+            if (settingsLoaded)
+            {
+                music = Mathf.Round(musicSlider.value * 100.0f) * 0.01f;
+                musicText.text = music.ToString();
+                Singleton.Instance.musicVolume = music;
+            }
+        }
 
-    public void SetMasterVolume()
-    {
-        master = Mathf.Round(masterSlider.value * 100.0f) * 0.01f;
-        masterText.text = master.ToString();
-        Singleton.Instance.masterVolume = master;
-    }
-    public void SetMusicVolume()
-    {
-        music = Mathf.Round(musicSlider.value * 100.0f) * 0.01f;
-        musicText.text = music.ToString();
-        Singleton.Instance.musicVolume = music;
-    }
-    public void SetVoiceVolume()
-    {
-        voice = Mathf.Round(voiceSlider.value * 100.0f) * 0.01f;
-        voiceText.text = voice.ToString();
-        Singleton.Instance.voiceVolume = voice;
-    }
-    public void SetSfxVolume()
-    {
-        sfx = Mathf.Round(sfxSlider.value * 100.0f) * 0.01f;
-        sfxText.text = sfx.ToString();
-        Singleton.Instance.sfxVolume = sfx;
-    }
-    public void SetInterfaceVolume()
-    {
-        interfac = Mathf.Round(interfaceSlider.value * 100.0f) * 0.01f;
-        interfaceText.text = interfac.ToString();
-        Singleton.Instance.interfaceVolume = interfac;
-    }
+        public void SetSfxVolume()
+        {
+            if (settingsLoaded)
+            {
+                sfx = Mathf.Round(sfxSlider.value * 100.0f) * 0.01f;
+                sfxText.text = sfx.ToString();
+                Singleton.Instance.sfxVolume = sfx;
+            }
+        }
+        public void SetInterfaceVolume()
+        {
+            if (settingsLoaded)
+            {
+                interfac = Mathf.Round(interfaceSlider.value * 100.0f) * 0.01f;
+                interfaceText.text = interfac.ToString();
+                Singleton.Instance.interfaceVolume = interfac;
+            }
+        }
 
-    public void SaveSettings()
-    {
-        PlayerPrefs.SetFloat("audioMasterVolume", master);
-        PlayerPrefs.SetFloat("audioMusicVolume", music);
-        PlayerPrefs.SetFloat("audioVoiceVolume", voice);
-        PlayerPrefs.SetFloat("audioSfxVolume",sfx);
-        PlayerPrefs.SetFloat("audioInterfaceVolume", interfac);
-        PlayerPrefs.Save();
-    }
+        public void SaveAudioSettings()
+        {
+            PlayerPrefs.SetFloat("audioMasterVolume", master);
+            PlayerPrefs.SetFloat("audioMusicVolume", music);
+            PlayerPrefs.SetFloat("audioSfxVolume", sfx);
+            PlayerPrefs.SetFloat("audioInterfaceVolume", interfac);
+            PlayerPrefs.Save();
+            print("Saved audio settings to save.");
+        }
 
-    public void Cancel()
-    {
-        master = PlayerPrefs.GetFloat("audioMasterVolume");
-        Singleton.Instance.masterVolume = master;
-        music = PlayerPrefs.GetFloat("audioMusicVolume");
-        Singleton.Instance.musicVolume = music;
-        voice = PlayerPrefs.GetFloat("audioVoiceVolume");
-        Singleton.Instance.voiceVolume = voice;
-        sfx = PlayerPrefs.GetFloat("audioSfxVolume");
-        Singleton.Instance.sfxVolume = sfx;
-        interfac = PlayerPrefs.GetFloat("audioInterfaceVolume");
-        Singleton.Instance.interfaceVolume = interfac;
+        public void Cancel()
+        {
+            master = PlayerPrefs.GetFloat("audioMasterVolume");
+            Singleton.Instance.masterVolume = master;
+            music = PlayerPrefs.GetFloat("audioMusicVolume");
+            Singleton.Instance.musicVolume = music;
+            sfx = PlayerPrefs.GetFloat("audioSfxVolume");
+            Singleton.Instance.sfxVolume = sfx;
+            interfac = PlayerPrefs.GetFloat("audioInterfaceVolume");
+            Singleton.Instance.interfaceVolume = interfac;
+        }
+
+        public void ToggleMenu(bool setActive)
+        {
+            if (setActive)
+            {
+                CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+                canvasGroup.alpha = 1;
+                canvasGroup.blocksRaycasts = true;
+                canvasGroup.interactable = true;
+            }
+            else
+            {
+                CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+                canvasGroup.alpha = 0;
+                canvasGroup.blocksRaycasts = false;
+                canvasGroup.interactable = false;
+            }
+        }
     }
 }

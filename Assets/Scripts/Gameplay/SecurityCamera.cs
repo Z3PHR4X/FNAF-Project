@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Gameplay
+namespace Zephrax.FNAFGame.Gameplay
 {
     public class SecurityCamera : MonoBehaviour
     {

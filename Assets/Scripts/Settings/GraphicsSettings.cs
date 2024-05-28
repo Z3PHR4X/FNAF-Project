@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Settings
+namespace Zephrax.FNAFGame.Settings
 {
     public class GraphicsSettings : MonoBehaviour
     {
-        [SerializeField] private Dropdown resolutionDropdown, refreshDropdown, screenModeDropdown, qualityDropdown;
+        [SerializeField] private TMP_Dropdown resolutionDropdown, refreshDropdown, screenModeDropdown, qualityDropdown;
         [SerializeField] private Toggle vsyncToggle;
         [SerializeField] private GameObject revertScreen;
-        [SerializeField] private bool hasUI, applyFromSave;
+        [SerializeField] private bool hasInterface, applyFromSave;
         private Resolution[] resolutions;
         private List<Resolution> filteredResolutions;
         private FullScreenMode[] screenModes;
@@ -29,7 +30,7 @@ namespace Settings
             currentScreenMode = Screen.fullScreenMode;
             vsync = QualitySettings.vSyncCount;
 
-            if (hasUI)
+            if (hasInterface)
             {
                 PopulateRefreshSettings();
                 PopulateResolutionSettings(currentRefresh);
@@ -64,7 +65,7 @@ namespace Settings
             List<string> refOptions = new List<string>();
             for (int i = 0; i < refreshRates.Count; i++)
             {
-                refOptions.Add(refreshRates[i].ToString()+"Hz");
+                refOptions.Add(refreshRates[i].ToString() + "Hz");
                 if (refreshRates[i] == Screen.currentResolution.refreshRate)
                 {
                     curRefreshIndex = i;
@@ -98,15 +99,15 @@ namespace Settings
 
             List<string> resOptions = new List<string>();
             for (int i = 0; i < filteredResolutions.Count; i++)
-                {
+            {
                 string option;
-                    if (targetRefresh == 0) {
-                        option = filteredResolutions[i].width + "x" + filteredResolutions[i].height + " @" + filteredResolutions[i].refreshRate + "Hz";
-                    }
-                    else
-                    {
-                        option = filteredResolutions[i].width + "x" + filteredResolutions[i].height;
-                    }
+                if (targetRefresh == 0) {
+                    option = filteredResolutions[i].width + "x" + filteredResolutions[i].height + " @" + filteredResolutions[i].refreshRate + "Hz";
+                }
+                else
+                {
+                    option = filteredResolutions[i].width + "x" + filteredResolutions[i].height;
+                }
                 resOptions.Add(option);
                 if (filteredResolutions[i].width == Screen.width && filteredResolutions[i].height == Screen.height && filteredResolutions[i].refreshRate == Screen.currentResolution.refreshRate)
                 {
@@ -125,7 +126,7 @@ namespace Settings
 
             if (SystemInfo.operatingSystemFamily == OperatingSystemFamily.Windows)
             {
-                screenModes = new FullScreenMode[] { FullScreenMode.Windowed, FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow};
+                screenModes = new FullScreenMode[] { FullScreenMode.Windowed, FullScreenMode.ExclusiveFullScreen, FullScreenMode.FullScreenWindow };
             }
             else if ((SystemInfo.operatingSystemFamily == OperatingSystemFamily.MacOSX))
             {
@@ -150,7 +151,6 @@ namespace Settings
             screenModeDropdown.value = curScreenModeIndex;
             screenModeDropdown.RefreshShownValue();
         }
-
         private void PopulateQualitySettings()
         {
             qualityOptions = new List<string>();
@@ -264,6 +264,24 @@ namespace Settings
             QualitySettings.SetQualityLevel(quality);
             QualitySettings.vSyncCount = v;
             print("Succesfully loaded graphics settings from save");
+        }
+
+        public void ToggleMenu(bool setActive)
+        {
+            if(setActive)
+            {
+                CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+                canvasGroup.alpha = 1;
+                canvasGroup.blocksRaycasts = true;
+                canvasGroup.interactable = true;
+            }
+            else
+            {
+                CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+                canvasGroup.alpha = 0;
+                canvasGroup.blocksRaycasts = false;
+                canvasGroup.interactable = false;
+            }
         }
 
         public void RevertSettingsDialog(int length)

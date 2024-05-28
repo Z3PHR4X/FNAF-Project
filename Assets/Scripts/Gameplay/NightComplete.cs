@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Gameplay
+namespace Zephrax.FNAFGame.Gameplay
 {
     public class NightComplete : MonoBehaviour
     {

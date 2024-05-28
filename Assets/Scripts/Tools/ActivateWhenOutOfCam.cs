@@ -1,6 +1,7 @@
 using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace Tools { 
+namespace Zephrax.FNAFGame.Tools { 
     public class ActivateWhenOutOfCam : MonoBehaviour
     {
         [SerializeField] private GameObject activateObject;

@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
     public class WinSceneController : MonoBehaviour
     {

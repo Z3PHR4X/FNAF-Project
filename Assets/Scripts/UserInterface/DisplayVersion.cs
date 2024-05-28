@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface
+namespace Zephrax.FNAFGame.UserInterface
 {
     public class DisplayVersion : MonoBehaviour
     {

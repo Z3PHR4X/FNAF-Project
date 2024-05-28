@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace AI
+namespace Zephrax.FNAFGame.AI
 {
     public class WaypointsManager : MonoBehaviour
     {

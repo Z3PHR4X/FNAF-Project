@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
     public class MusicBox : MonoBehaviour
     {

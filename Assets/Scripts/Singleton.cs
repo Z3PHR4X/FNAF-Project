@@ -2,122 +2,127 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zephrax.FNAFGame.Integrations;
 
-public class Singleton : MonoBehaviour
+namespace Zephrax.FNAFGame
 {
-    public static Singleton Instance;
-
-    public string sceneToLoad = "";
-    public int selectedNight, completedNight;
-    public bool overrideCompletedNight, canRetryNight, debugMode;
-    public string deathReason;
-    public List<Level> availableLevels = new List<Level>();
-    public Level selectedMap;
-    public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
-    private Animator transitionAnimator;
-    [Space]
-    public DiscordRichPresence discord;
-
-    private void Awake()
+    public class Singleton : MonoBehaviour
     {
-        if (Instance != null)
+        public static Singleton Instance;
+
+        public string sceneToLoad = "";
+        public int selectedNight, completedNight;
+        public bool overrideCompletedNight, canRetryNight, debugMode;
+        public string deathReason;
+        public List<Level> availableLevels = new List<Level>();
+        public Level selectedMap;
+        public float masterVolume, musicVolume, sfxVolume, voiceVolume, interfaceVolume, mouseSensitivity;
+        private Animator transitionAnimator;
+        [Space]
+        public DiscordRichPresence discord;
+
+        private void Awake()
         {
-            Destroy(gameObject);
-            return;
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            if (selectedMap == null)
+            {
+                selectedMap = availableLevels[0];
+            }
+            transitionAnimator = GetComponent<Animator>();
+            print("Singleton successfully initialized!");
+
+            if (overrideCompletedNight)
+            {
+                PlayerPrefs.SetInt("completedNight", completedNight);
+                PlayerPrefs.Save();
+            }
+            debugMode = false;
+            completedNight = PlayerPrefs.GetInt("completedNight");
+            //Audio
+            masterVolume = PlayerPrefs.GetFloat("audioMasterVolume");
+            musicVolume = PlayerPrefs.GetFloat("audioMusicVolume");
+            sfxVolume = PlayerPrefs.GetFloat("audioSfxVolume");
+            voiceVolume = PlayerPrefs.GetFloat("audioVoiceVolume");
+            interfaceVolume = PlayerPrefs.GetFloat("audioInterfaceVolume");
+            //Controls
+            mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
+
+            print("Settings loaded from save to Singleton instance");
         }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-        if (selectedMap == null)
+        public void SetDeathMessage(string characterName, string doorName)
         {
-            selectedMap = availableLevels[0];
+            string door;
+            switch (doorName)
+            {
+                case "LeftDoor":
+                    door = "left door";
+                    break;
+                case "VentDoor":
+                    door = "vent";
+                    break;
+                case "RightDoor":
+                    door = "right door";
+                    break;
+                default:
+                    door = "unknown";
+                    break;
+            }
+            deathReason = $"{characterName} attacked you from the {door}..";
         }
-        transitionAnimator = GetComponent<Animator>();
-        print("Singleton successfully initialized!");
 
-        if (overrideCompletedNight)
+        public void SetDeathMessage(string message)
         {
-            PlayerPrefs.SetInt("completedNight", completedNight);
-            PlayerPrefs.Save();
+            deathReason = message;
         }
-        debugMode = false;
-        completedNight = PlayerPrefs.GetInt("completedNight");
-        //Audio
-        masterVolume = PlayerPrefs.GetFloat("audioMasterVolume");
-        musicVolume = PlayerPrefs.GetFloat("audioMusicVolume");
-        sfxVolume = PlayerPrefs.GetFloat("audioSfxVolume");
-        voiceVolume = PlayerPrefs.GetFloat("audioVoiceVolume");
-        interfaceVolume = PlayerPrefs.GetFloat("audioInterfaceVolume");
-        //Controls
-        mouseSensitivity = PlayerPrefs.GetFloat("mouseSensitivity");
 
-        print("Settings loaded from save to Singleton instance");
-    }
-
-    public void SetDeathMessage(string characterName, string doorName)
-    {
-        string door;
-        switch(doorName){
-            case "LeftDoor":
-                door = "left door";
-                break;
-            case "VentDoor":
-                door = "vent";
-                break;
-            case "RightDoor":
-                door = "right door";
-                break;
-            default:
-                door = "unknown";
-                break;
+        //Simple function to change scenes, no loading screens
+        public void ChangeScene(string sceneName)
+        {
+            print("Changing scene to: " + sceneName);
+            Time.timeScale = 1.0f;
+            SceneManager.LoadScene(sceneName);
         }
-        deathReason = $"{characterName} attacked you from the {door}..";
-    }
 
-    public void SetDeathMessage(string message)
-    {
-        deathReason = message;
-    }
+        public void ChangeScene(string sceneName, bool fade)
+        {
+            transitionAnimator = GameObject.FindWithTag("SceneTransition").GetComponent<Animator>();
+            float transitionTime = 1f;
+            print($"Changing scene to: {sceneName} with fade of {transitionTime}s");
+            Time.timeScale = 1.0f;
+            StartCoroutine(LoadSceneFade(sceneName, transitionTime));
+        }
 
-    //Simple function to change scenes, no loading screens
-    public void ChangeScene(string sceneName)
-    {
-        print("Changing scene to: " + sceneName);
-        Time.timeScale = 1.0f;
-        SceneManager.LoadScene(sceneName);        
-    }
+        //Exits the application.. 
+        public void ExitApplication()
+        {
+            print("Exitting application..");
+            Application.Quit();
+            //StartCoroutine(ExitSequence(1f));
+        }
 
-    public void ChangeScene(string sceneName, bool fade)
-    {
-        transitionAnimator = GameObject.FindWithTag("SceneTransition").GetComponent<Animator>();
-        float transitionTime = 1f;
-        print($"Changing scene to: {sceneName} with fade of {transitionTime}s");
-        Time.timeScale = 1.0f;
-        StartCoroutine(LoadSceneFade(sceneName, transitionTime));
-    }
+        IEnumerator LoadSceneFade(string sceneName, float transitionTime)
+        {
+            transitionAnimator.SetTrigger("FadeOut");
+            yield return new WaitForSeconds(transitionTime);
 
-    //Exits the application.. 
-    public void ExitApplication()
-    {
-        print("Exitting application..");
-        Application.Quit();
-        //StartCoroutine(ExitSequence(1f));
-    }
+            AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            yield return new WaitForEndOfFrame();
 
-    IEnumerator LoadSceneFade(string sceneName, float transitionTime)
-    {
-        transitionAnimator.SetTrigger("FadeOut");
-        yield return new WaitForSeconds(transitionTime);
+        }
 
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        yield return new WaitForEndOfFrame();
-
-    }
-
-    IEnumerator ExitSequence(float transitionTime)
-    {
-        transitionAnimator.SetTrigger("FadeOut");
-        yield return new WaitForSeconds(transitionTime);
-        Application.Quit();
+        IEnumerator ExitSequence(float transitionTime)
+        {
+            transitionAnimator.SetTrigger("FadeOut");
+            yield return new WaitForSeconds(transitionTime);
+            Application.Quit();
+        }
     }
 }

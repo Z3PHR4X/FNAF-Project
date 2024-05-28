@@ -2,29 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VictoryButton : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface.Menus
 {
-    // Start is called before the first frame update
-    void Start()
+    public class VictoryButton : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void ReturnToMenu()
-    {
-        if (Singleton.Instance.selectedNight == 7)
+        // Start is called before the first frame update
+        void Start()
         {
-            Singleton.Instance.ChangeScene("GameWin");
+
         }
-        else
+
+        // Update is called once per frame
+        void Update()
         {
-            Singleton.Instance.ChangeScene("MainMenu");
+
+        }
+
+        public void ReturnToMenu()
+        {
+            if (Singleton.Instance.selectedNight == 7)
+            {
+                Singleton.Instance.ChangeScene("GameWin");
+            }
+            else
+            {
+                Singleton.Instance.ChangeScene("MainMenu");
+            }
         }
     }
 }

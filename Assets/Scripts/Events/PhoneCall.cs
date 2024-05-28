@@ -2,31 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhoneCall : MonoBehaviour
+namespace Zephrax.FNAFGame.Events
 {
-    private float voiceVolume;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip[] phoneClips;
-
-    // Start is called before the first frame update
-    void Start()
+    public class PhoneCall : MonoBehaviour
     {
-        voiceVolume = (Singleton.Instance.voiceVolume * Singleton.Instance.masterVolume);
-        int night = Singleton.Instance.selectedNight;
+        private float voiceVolume;
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip[] phoneClips;
 
-        if (night < 6)
+        // Start is called before the first frame update
+        void Start()
         {
-            audioSource.clip = phoneClips[night - 1];
-            audioSource.volume = voiceVolume;
-            audioSource.Play();
+            voiceVolume = (Singleton.Instance.voiceVolume * Singleton.Instance.masterVolume);
+            int night = Singleton.Instance.selectedNight;
+
+            if (night < 6)
+            {
+                audioSource.clip = phoneClips[night - 1];
+                audioSource.volume = voiceVolume;
+                audioSource.Play();
+            }
         }
-    }
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Backspace))
+        private void Update()
         {
-            audioSource.Stop();
+            if (Input.GetKey(KeyCode.Backspace))
+            {
+                audioSource.Stop();
+            }
         }
     }
 }

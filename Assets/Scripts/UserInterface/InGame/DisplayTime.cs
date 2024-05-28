@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace UserInterface.InGame
+namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayTime : MonoBehaviour
     {

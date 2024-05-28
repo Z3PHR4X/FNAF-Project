@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-using AI;
+using Zephrax.FNAFGame.AI;
 
-namespace DebugCustom
+namespace Zephrax.FNAFGame.DebugCustom
 {
     public class DebugAIPanel : MonoBehaviour
     {

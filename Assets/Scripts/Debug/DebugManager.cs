@@ -1,8 +1,9 @@
-using AI;
+using Zephrax.FNAFGame.AI;
 using System.Collections.Generic;
 using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace DebugCustom
+namespace Zephrax.FNAFGame.DebugCustom
 {
     public class DebugManager : MonoBehaviour
     {

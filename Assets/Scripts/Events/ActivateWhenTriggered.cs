@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
     public class ActivateWhenTriggered : MonoBehaviour
     {

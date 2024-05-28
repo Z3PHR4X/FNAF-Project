@@ -1,16 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
-using AI;
+using Zephrax.FNAFGame.AI;
 
-public class Character : MonoBehaviour
+namespace Zephrax.FNAFGame
 {
-    public GameObject ingamePrefab;
-    public Sprite thumbnail;
-    public string characterName;
-    [TextAreaAttribute] 
-    public string description;
-    public List<AIValues> aggressionProgression;
-    public float actionInterval;
-    public AudioClip soundEffect;
-    [RangeAttribute(-3,3)]public float soundEffectPitch = 1;
+    public class Character : MonoBehaviour
+    {
+        public GameObject ingamePrefab;
+        public Sprite thumbnail;
+        public string characterName;
+        [TextAreaAttribute]
+        public string description;
+        public List<AIValues> aggressionProgression;
+        public float actionInterval;
+        public AudioClip soundEffect;
+        [RangeAttribute(-3, 3)] public float soundEffectPitch = 1;
+    }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay
+namespace Zephrax.FNAFGame.Gameplay
 {
     public class PowerManager : MonoBehaviour
     {

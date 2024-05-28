@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Audio
+namespace Zephrax.FNAFGame.Audio
 {
     public class MenuSoundPlayer : MonoBehaviour
     {

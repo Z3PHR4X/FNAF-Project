@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using DebugCustom;
+using Zephrax.FNAFGame.DebugCustom;
 
-namespace AI
+namespace Zephrax.FNAFGame.AI
 {
     public class EnemyManager : MonoBehaviour
     {

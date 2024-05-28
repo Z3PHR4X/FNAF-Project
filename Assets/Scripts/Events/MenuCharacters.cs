@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
 
     public class MenuCharacters : MonoBehaviour

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Events
+namespace Zephrax.FNAFGame.Events
 {
     public class MenuSoundEvent : MonoBehaviour
     {

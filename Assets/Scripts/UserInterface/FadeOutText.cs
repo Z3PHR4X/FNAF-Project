@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using Zephrax.FNAFGame;
 public class FadeOutText : MonoBehaviour
 {
     private Text text;

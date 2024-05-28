@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Zephrax.FNAFGame.Gameplay;
 
-namespace UserInterface.Menus
+namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class PauseMenuScript : MonoBehaviour
     {

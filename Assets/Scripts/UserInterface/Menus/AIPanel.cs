@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+namespace Zephrax.FNAFGame.UserInterface.Menus { 
 public class AIPanel : MonoBehaviour
 {
     public Character character;
@@ -53,7 +54,7 @@ public class AIPanel : MonoBehaviour
                 charName.text = character.characterName;
                 description.text = character.description;
                 characterAudio.clip = character.soundEffect;
-                characterAudio.pitch = character.soundEffectPitch; 
+                characterAudio.pitch = character.soundEffectPitch;
                 //characterAudio.volume = Singleton.Instance.voiceVolume;
                 aggressionLevel.text = aggro.ToString();
                 aggressionSlider.value = aggro;
@@ -92,4 +93,5 @@ public class AIPanel : MonoBehaviour
             }
         }
     }
+}
 }

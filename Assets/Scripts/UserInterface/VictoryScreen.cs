@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UserInterface
+namespace Zephrax.FNAFGame.UserInterface
 {
     public class VictoryScreen : MonoBehaviour
     {

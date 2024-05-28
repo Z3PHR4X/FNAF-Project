@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace Gameplay
+namespace Zephrax.FNAFGame.Gameplay
 {
     public class SecurityCameraManager : MonoBehaviour
     {
+        public PlayerInputActions playerInputActions;
+
         public bool isWatchingCameras;
         public List<SecurityCamera> securityCameras = new List<SecurityCamera>();
         public Canvas securityCameraInterface;
@@ -42,11 +45,7 @@ namespace Gameplay
         {
             if (GameManagerV2.Instance.hasGameStarted && !GameManagerV2.Instance.hasPlayerWon)
             {
-                if (Player.Instance.powerManager.hasPower)
-                {
-                    HandleInput();
-                }
-                else if (!isPoweredDown)
+                if (!Player.Instance.powerManager.hasPower&& !isPoweredDown)
                 {
                     PowerDown();
                 }
@@ -129,11 +128,11 @@ namespace Gameplay
             switchAudio.Play();
         }
 
-        private void HandleInput()
+        public void OnToggleInterface(InputValue context)
         {
-            //Add Shift? key to swap to vent cams
-            if(Input.GetKeyDown(KeyCode.Space)) {
-            ToggleSecurityCamera();
+            if (Player.Instance.powerManager.hasPower && GameManagerV2.Instance.isGameplayActive(false))
+            {
+                ToggleSecurityCamera();
             }
         }
 

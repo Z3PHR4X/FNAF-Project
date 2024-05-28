@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Settings
+namespace Zephrax.FNAFGame.Settings
 {
     public class InitializeFirstSetup : MonoBehaviour
     {

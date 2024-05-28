@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Tools
+namespace Zephrax.FNAFGame.Tools
 {
     public class ReturnToMenuButton : MonoBehaviour
     {

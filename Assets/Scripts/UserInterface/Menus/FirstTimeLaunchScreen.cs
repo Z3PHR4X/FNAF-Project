@@ -1,21 +1,24 @@
 using UnityEngine;
 
-public class FirstTimeLaunchScreen : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface.Menus
 {
-
-    private bool returningPlayer;
-
-    // Start is called before the first frame update
-    void Start()
+    public class FirstTimeLaunchScreen : MonoBehaviour
     {
-        returningPlayer = (PlayerPrefs.GetString("returningPlayer") == "true");
-        gameObject.SetActive(!returningPlayer);
-    }
 
-    public void Acknowledge()
-    {
-        PlayerPrefs.SetString("returningPlayer", "true");
-        gameObject.SetActive(false);
-        PlayerPrefs.Save();
+        private bool returningPlayer;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            returningPlayer = (PlayerPrefs.GetString("returningPlayer") == "true");
+            gameObject.SetActive(!returningPlayer);
+        }
+
+        public void Acknowledge()
+        {
+            PlayerPrefs.SetString("returningPlayer", "true");
+            gameObject.SetActive(false);
+            PlayerPrefs.Save();
+        }
     }
 }

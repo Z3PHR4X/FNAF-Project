@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface.Menus
+namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class AiDifficultySelection : MonoBehaviour
     {

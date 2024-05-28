@@ -1,52 +1,55 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeInCanvas : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface
 {
-    [Range(0,1)][SerializeField] private float targetAlpha;
-    [SerializeField] private float speed = 0.3f;
-    private CanvasGroup canvas;
-    private float alpha;
-
-    [SerializeField] private bool FadeIn;
-
-
-    private void Awake()
+    public class FadeInCanvas : MonoBehaviour
     {
-        canvas = GetComponent<CanvasGroup>();
-    }
-    private void Start()
-    {
-        if(FadeIn)
+        [Range(0, 1)][SerializeField] private float targetAlpha;
+        [SerializeField] private float speed = 0.3f;
+        private CanvasGroup canvas;
+        private float alpha;
+
+        [SerializeField] private bool FadeIn;
+
+
+        private void Awake()
         {
-            alpha = 0f;
+            canvas = GetComponent<CanvasGroup>();
         }
-        else
+        private void Start()
         {
-            alpha = canvas.alpha;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (FadeIn)
-        {
-            if (alpha < targetAlpha)
+            if (FadeIn)
             {
-                alpha = Mathf.Lerp(alpha, 1, speed * Time.deltaTime);
+                alpha = 0f;
+            }
+            else
+            {
+                alpha = canvas.alpha;
+            }
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (FadeIn)
+            {
+                if (alpha < targetAlpha)
+                {
+                    alpha = Mathf.Lerp(alpha, 1, speed * Time.deltaTime);
+                    canvas.alpha = alpha;
+                }
+            }
+            else
+            {
+                alpha = Mathf.Lerp(alpha, 0, speed * Time.deltaTime);
                 canvas.alpha = alpha;
+                if (alpha < targetAlpha)
+                {
+                    gameObject.SetActive(false);
+                }
             }
+
         }
-        else
-        {
-            alpha = Mathf.Lerp(alpha, 0, speed * Time.deltaTime);
-            canvas.alpha = alpha;
-            if (alpha < targetAlpha)
-            {
-                gameObject.SetActive(false);
-            }
-        }
-        
     }
 }

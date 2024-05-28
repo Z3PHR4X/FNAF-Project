@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI
+namespace Zephrax.FNAFGame.AI
 {
     public class DynamicWaypoints : MonoBehaviour
     {

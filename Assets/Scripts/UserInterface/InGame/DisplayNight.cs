@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface.InGame
+namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayNight : MonoBehaviour
     {

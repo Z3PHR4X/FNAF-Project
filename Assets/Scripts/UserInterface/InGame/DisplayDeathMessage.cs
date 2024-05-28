@@ -2,21 +2,24 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayDeathMessage : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface.InGame
 {
-    public TMP_Text deathText;
-    public string deathMessage;
-
-    private void Awake()
+    public class DisplayDeathMessage : MonoBehaviour
     {
-        deathText = GetComponent<TMP_Text>();
-    }
+        public TMP_Text deathText;
+        public string deathMessage;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        deathMessage = Singleton.Instance.deathReason;
-        deathText.text = deathMessage;
-    }
+        private void Awake()
+        {
+            deathText = GetComponent<TMP_Text>();
+        }
 
+        // Start is called before the first frame update
+        void Start()
+        {
+            deathMessage = Singleton.Instance.deathReason;
+            deathText.text = deathMessage;
+        }
+
+    }
 }

@@ -1,124 +1,128 @@
-using Gameplay;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoorManager : MonoBehaviour
+namespace Zephrax.FNAFGame.Gameplay
 {
-    public Door leftDoor;
-    public Door centerDoor;
-    public Door rightDoor;
-
-    private List<Door> doors;
-    private PowerManager powerManager;
-    private bool isPoweredDown = false;
-
-    private void Awake()
+    public class DoorManager : MonoBehaviour
     {
-        powerManager = GetComponent<PowerManager>();
-    }
+        public Door leftDoor;
+        public Door centerDoor;
+        public Door rightDoor;
 
-    private void Start()
-    {
-        doors = new List<Door>
+        private List<Door> doors;
+        private PowerManager powerManager;
+        private bool isPoweredDown = false;
+
+        private void Awake()
+        {
+            powerManager = GetComponent<PowerManager>();
+        }
+
+        private void Start()
+        {
+            doors = new List<Door>
         {
             leftDoor,
             centerDoor,
             rightDoor
         };
-    }
-
-    private void Update()
-    {
-        if (GameManagerV2.Instance.hasGameStarted && !GameManagerV2.Instance.hasPlayerWon)
-        {
-            if (powerManager.hasPower)
-            {
-                HandleInput();
-            }
-            else if (!isPoweredDown)
-            {
-                PowerDown();
-            }
         }
-    }
 
-    void PowerDown()
-    {
-        foreach (Door door in doors)
+        private void Update()
         {
-            door.TurnOffLight();
-            door.OpenDoor();
-        }
-        isPoweredDown=true;
-    }
-
-    public void ToggleDoor(string door)
-    {
-        if (!isPoweredDown)
-        {
-            switch (door)
+            if (GameManagerV2.Instance.hasGameStarted && !GameManagerV2.Instance.hasPlayerWon)
             {
-                case "left":
-                    leftDoor.ToggleDoor();
-                    break;
-
-                case "center":
-                    centerDoor.ToggleDoor();
-                    break;
-
-                case "right":
-                    rightDoor.ToggleDoor();
-                    break;
+                if (powerManager.hasPower)
+                {
+                    HandleInput();
+                }
+                else if (!isPoweredDown)
+                {
+                    PowerDown();
+                }
             }
         }
-    }
 
-    public void TurnOnLight(string light)
-    {
-        if (!isPoweredDown)
+        void PowerDown()
         {
-            switch (light)
+            foreach (Door door in doors)
             {
-                case "left":
-                    leftDoor.TurnOnLight();
-                    break;
+                door.TurnOffLight();
+                door.OpenDoor();
+            }
+            isPoweredDown = true;
+        }
 
-                case "center":
-                    centerDoor.TurnOnLight();
-                    break;
+        public void ToggleDoor(string door)
+        {
+            door = door.ToLower();
+            if (!isPoweredDown)
+            {
+                switch (door)
+                {
+                    case "left":
+                        leftDoor.ToggleDoor();
+                        break;
 
-                case "right":
-                    rightDoor.TurnOnLight();
-                    break;
+                    case "center":
+                        centerDoor.ToggleDoor();
+                        break;
+
+                    case "right":
+                        rightDoor.ToggleDoor();
+                        break;
+                }
             }
         }
-    }
 
-    void HandleInput()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
+        public void TurnOnLight(string light)
         {
-            leftDoor.ToggleDoor();
+            light = light.ToLower();
+            if (!isPoweredDown)
+            {
+                switch (light)
+                {
+                    case "left":
+                        leftDoor.TurnOnLight();
+                        break;
+
+                    case "center":
+                        centerDoor.TurnOnLight();
+                        break;
+
+                    case "right":
+                        rightDoor.TurnOnLight();
+                        break;
+                }
+            }
         }
-        if(Input.GetKeyDown(KeyCode.S))
-        { 
-            centerDoor.ToggleDoor();
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        { 
-            rightDoor.ToggleDoor(); 
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
+
+        void HandleInput()
         {
-            leftDoor.TurnOnLight();
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            centerDoor.TurnOnLight();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            rightDoor.TurnOnLight();
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                leftDoor.ToggleDoor();
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                centerDoor.ToggleDoor();
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                rightDoor.ToggleDoor();
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                leftDoor.TurnOnLight();
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                centerDoor.TurnOnLight();
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                rightDoor.TurnOnLight();
+            }
         }
     }
 }

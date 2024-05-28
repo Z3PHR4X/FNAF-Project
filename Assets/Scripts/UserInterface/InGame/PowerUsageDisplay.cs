@@ -2,31 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Zephrax.FNAFGame.Gameplay;
 
-public class PowerUsageDisplay : MonoBehaviour
+namespace Zephrax.FNAFGame.UserInterface.InGame
 {
-    [SerializeField] private Image powerUsageDisplay;
-    private int powerUsage;
 
-    // Start is called before the first frame update
-    void Start()
+    public class PowerUsageDisplay : MonoBehaviour
     {
-        powerUsage = 1;
-        UpdatePowerUsageDisplay(powerUsage);
-    }
+        [SerializeField] private Image powerUsageDisplay;
+        private int powerUsage;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(powerUsage != Player.Instance.powerManager.powerUsage)
+        // Start is called before the first frame update
+        void Start()
         {
-            powerUsage = Player.Instance.powerManager.powerUsage;
+            powerUsage = 1;
             UpdatePowerUsageDisplay(powerUsage);
         }
-    }
 
-    void UpdatePowerUsageDisplay(int powerUsage)
-    {
-        powerUsageDisplay.fillAmount = 0.2f * powerUsage;
+        // Update is called once per frame
+        void Update()
+        {
+            if (powerUsage != Player.Instance.powerManager.powerUsage)
+            {
+                powerUsage = Player.Instance.powerManager.powerUsage;
+                UpdatePowerUsageDisplay(powerUsage);
+            }
+        }
+
+        void UpdatePowerUsageDisplay(int powerUsage)
+        {
+            powerUsageDisplay.fillAmount = 0.2f * powerUsage;
+        }
     }
 }

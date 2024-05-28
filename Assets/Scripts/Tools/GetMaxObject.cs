@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Tools
+namespace Zephrax.FNAFGame.Tools
 {
     static class EnumerableExtensions
     {

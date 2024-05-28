@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Tools
+namespace Zephrax.FNAFGame.Tools
 {
     public class PlayButtonSound : MonoBehaviour
     {

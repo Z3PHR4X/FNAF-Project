@@ -1,17 +1,20 @@
 using UnityEngine;
 
-public class TesterAward : MonoBehaviour
+namespace Zephrax.FNAFGame.Menus.Rewards
 {
-    // Start is called before the first frame update
-    void Start()
+    public class TesterAward : MonoBehaviour
     {
-        if (PlayerPrefs.GetInt("TesterAwardUnlocked") == 1)
+        // Start is called before the first frame update
+        void Start()
         {
-            gameObject.SetActive(true);
+            if (PlayerPrefs.GetInt("TesterAwardUnlocked") == 1)
+            {
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            };
         }
-        else
-        {
-            gameObject.SetActive(false);
-        };
     }
 }

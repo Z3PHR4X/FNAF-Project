@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UserInterface.InGame
+namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayCamera : MonoBehaviour
     {

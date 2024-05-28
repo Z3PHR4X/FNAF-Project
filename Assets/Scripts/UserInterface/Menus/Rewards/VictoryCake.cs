@@ -1,17 +1,20 @@
 using UnityEngine;
 
-public class VictoryCake : MonoBehaviour
+namespace Zephrax.FNAFGame.Menus.Rewards
 {
-    // Start is called before the first frame update
-    void Start()
+    public class VictoryCake : MonoBehaviour
     {
-        if (Singleton.Instance.completedNight >= 7)
+        // Start is called before the first frame update
+        void Start()
         {
-            gameObject.SetActive(true);
+            if (Singleton.Instance.completedNight >= 7)
+            {
+                gameObject.SetActive(true);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            };
         }
-        else
-        {
-            gameObject.SetActive(false);
-        };
     }
 }

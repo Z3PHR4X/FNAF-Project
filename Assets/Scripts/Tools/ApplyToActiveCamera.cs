@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-namespace Tools
+namespace Zephrax.FNAFGame.Tools
 {
     public class ApplyToActiveCamera : MonoBehaviour
     {

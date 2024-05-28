@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AI {
+namespace Zephrax.FNAFGame.AI {
     public class CrawlerEnemyAI : DefaultEnemyAI
     {
         public AudioClip crawlAudio;

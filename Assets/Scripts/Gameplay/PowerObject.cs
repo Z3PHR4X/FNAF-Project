@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Gameplay
+namespace Zephrax.FNAFGame.Gameplay
 {
     public class Power : MonoBehaviour
     {
