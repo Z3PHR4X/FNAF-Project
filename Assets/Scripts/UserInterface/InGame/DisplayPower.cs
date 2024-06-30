@@ -1,12 +1,12 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zephrax.FNAFGame.Gameplay;
 
 namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayPower : MonoBehaviour
     {
-        [SerializeField] private Text powerText;
+        [SerializeField] private TMP_Text powerText;
         int powerReserve;
 
         // Start is called before the first frame update

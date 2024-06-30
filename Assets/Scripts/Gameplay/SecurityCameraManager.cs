@@ -52,7 +52,7 @@ namespace Zephrax.FNAFGame.Gameplay
             }
             else if(GameManagerV2.Instance.hasGameStarted && GameManagerV2.Instance.hasPlayerWon)
             { 
-                ExitSecurityCamera();
+                ExitSecurityCamera(true);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Zephrax.FNAFGame.Gameplay
         {
             if(Player.Instance.isInCamera)
             {
-                ExitSecurityCamera();
+                ExitSecurityCamera(false);
             }
             
             isPoweredDown=true;
@@ -72,7 +72,7 @@ namespace Zephrax.FNAFGame.Gameplay
             {
                 if (isWatchingCameras)
                 {
-                    ExitSecurityCamera();
+                    ExitSecurityCamera(false);
                 }
                 else
                 {
@@ -100,7 +100,7 @@ namespace Zephrax.FNAFGame.Gameplay
             Player.Instance.powerManager.powerConsumers.Add(1);
         }
 
-        public void ExitSecurityCamera()
+        public void ExitSecurityCamera(bool quietly)
         {
             //Check prevents errors occuring in cases where night is completed/player dies when cam was never used.
             if (currentCamera != null)
@@ -111,7 +111,10 @@ namespace Zephrax.FNAFGame.Gameplay
                 mainAudioListener.enabled = true;
                 securityCameraInterface.gameObject.SetActive(false);
                 currentCamera.ToggleCamera(false);
-                turnOffAudio.Play();
+                if (!quietly)
+                {
+                    turnOffAudio.Play();
+                }
                 Player.Instance.isInCamera = false;
                 Player.Instance.powerManager.powerConsumers.Remove(1);
                 //GameManagerV2.Instance.currentCam = Player.Instance.playerCamera;

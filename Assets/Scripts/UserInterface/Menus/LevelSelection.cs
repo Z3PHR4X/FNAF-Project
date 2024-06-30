@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class LevelSelection : MonoBehaviour
     {
         private Level selectedMap;
-        [SerializeField] private Dropdown selectionDropdown;
+        [SerializeField] private TMP_Dropdown selectionDropdown;
         private List<Level> availableLevels;
 
-        [SerializeField] private Text levelDescriptionText;
+        [SerializeField] private TMP_Text levelDescriptionText;
         [SerializeField] private Image levelThumbnailImage;
         [SerializeField] private AudioSource audioSource;
         private NightSelection nightSelection;
@@ -22,7 +23,7 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
 
             if (selectionDropdown == null)
             {
-                selectionDropdown = GetComponent<Dropdown>();
+                selectionDropdown = GetComponent<TMP_Dropdown>();
             }
 
             nightSelection = FindObjectOfType<NightSelection>();
@@ -48,12 +49,6 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
             selectionDropdown.value = index;
             selectionDropdown.RefreshShownValue();
             UpdateInterface();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public void SetSelectedMap()

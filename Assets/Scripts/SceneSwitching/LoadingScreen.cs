@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,7 +12,7 @@ namespace Zephrax.FNAFGame.SceneSwitching
         [SerializeField] private bool isLoadingScreen = true;
         [SerializeField] private bool waitForKeypress = true;
         [SerializeField] private Image backgroundImage, controlSchemeImage, controlSchemeBackground, progressBar;
-        [SerializeField] private Text loadingText, progressText, mapText, mapDescriptionText;
+        [SerializeField] private TMP_Text loadingText, progressText, mapText, mapDescriptionText;
         [SerializeField] private AudioSource loadingMusic;
 
         private float fadeDuration = 1f;
@@ -81,7 +82,7 @@ namespace Zephrax.FNAFGame.SceneSwitching
             if (waitForKey)
             {
                 asyncOperation.allowSceneActivation = false;
-                print(asyncOperation.allowSceneActivation);
+                //print(asyncOperation.allowSceneActivation);
 
                 while (!asyncOperation.isDone)
                 {

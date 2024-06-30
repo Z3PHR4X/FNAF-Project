@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class NightSelection : MonoBehaviour
     {
         private int selectedNight, completedNight;
-        private Dropdown selectionDropdown;
+        private TMP_Dropdown selectionDropdown;
         private Level selectedLevel;
 
         private void Awake()
         {
-            selectionDropdown = GetComponent<Dropdown>();
+            selectionDropdown = GetComponent<TMP_Dropdown>();
         }
 
         // Start is called before the first frame update      
@@ -22,11 +22,7 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
             completedNight = PlayerPrefs.GetInt("completedNight");
             selectedLevel = Singleton.Instance.selectedMap;
             selectedNight = Singleton.Instance.selectedNight;
-            if (Singleton.Instance.discord.enabledRichPresence)
-            {
-                Singleton.Instance.discord.UpdateStatus($"Setting up a game..", $"Main Menu - Completed Night {completedNight}", "mainmenu", "Main Menu");
-            }
-                PopulateNightOptions();
+            PopulateNightOptions();
         }
 
         // Update is called once per frame

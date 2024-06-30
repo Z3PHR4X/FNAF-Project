@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Zephrax.FNAFGame.UserInterface.Menus
 {
@@ -9,7 +6,6 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
     {
         public AudioSource menuMusicSource;
         [SerializeField] private AudioClip defaultMusic, variance1Music, variance2Music, completedMusic;
-        [SerializeField] private Toggle enableCompletedMusic;
         public bool overrideActive;
         public int musicSelection;
         private float originalVolume;
@@ -18,14 +14,6 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
         void Start()
         {
             originalVolume = 0.25f;
-            if (PlayerPrefs.GetInt("enableSpecialMusic") == 1)
-            {
-                enableCompletedMusic.isOn = true;
-            }
-            else
-            {
-                enableCompletedMusic.isOn = false;
-            }
             overrideActive = PlayerPrefs.GetInt("menuMusicOverride") == 1;
             musicSelection = PlayerPrefs.GetInt("menuMusicSelection");
 
@@ -67,17 +55,17 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
             }
             else
             {
-                if (Singleton.Instance.completedNight >= 7 && enableCompletedMusic.isOn)
+                if (Singleton.Instance.completedNight >= 7 && !overrideActive)
                 {
                     menuMusicSource.clip = completedMusic;
                     menuMusicSource.Play();
                 }
-                else if (Singleton.Instance.completedNight >= 5 && enableCompletedMusic.isOn)
+                else if (Singleton.Instance.completedNight >= 5 && !overrideActive)
                 {
                     menuMusicSource.clip = variance2Music;
                     menuMusicSource.Play();
                 }
-                else if (Singleton.Instance.completedNight >= 3 && enableCompletedMusic.isOn)
+                else if (Singleton.Instance.completedNight >= 3 && !overrideActive)
                 {
                     menuMusicSource.clip = variance1Music;
                     menuMusicSource.Play();
@@ -86,14 +74,6 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
                 {
                     menuMusicSource.clip = defaultMusic;
                     menuMusicSource.Play();
-                }
-                if (enableCompletedMusic.isOn)
-                {
-                    PlayerPrefs.SetInt("enableSpecialMusic", 1);
-                }
-                else
-                {
-                    PlayerPrefs.SetInt("enableSpecialMusic", 0);
                 }
             }
 

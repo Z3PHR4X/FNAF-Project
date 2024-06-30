@@ -1,35 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Zephrax.FNAFGame.Events
 {
     public class PhoneCall : MonoBehaviour
     {
-        private float voiceVolume;
-        [SerializeField] private AudioSource audioSource;
+        private float voiceVolume, sfxVolume;
+        [SerializeField] private AudioSource phoneAudioSource, startAudioSource, hangupAudioSource;
         [SerializeField] private AudioClip[] phoneClips;
+        [SerializeField] private AudioClip startAudioClip, hangupAudioClip;
+        [SerializeField] private GameObject phoneUI;
+        private bool audioEnded;
 
         // Start is called before the first frame update
         void Start()
         {
             voiceVolume = (Singleton.Instance.voiceVolume * Singleton.Instance.masterVolume);
+            sfxVolume = (Singleton.Instance.sfxVolume * Singleton.Instance.masterVolume);
+            phoneAudioSource.volume = voiceVolume;
+            startAudioSource.volume = sfxVolume;
+            hangupAudioSource.volume = sfxVolume;
+            startAudioSource.clip = startAudioClip;
+            hangupAudioSource.clip = hangupAudioClip;
+            
             int night = Singleton.Instance.selectedNight;
 
-            if (night < 6)
+            if (night <= phoneClips.Length)
             {
-                audioSource.clip = phoneClips[night - 1];
-                audioSource.volume = voiceVolume;
-                audioSource.Play();
+                startAudioSource.Play();
+                phoneAudioSource.clip = phoneClips[night - 1];
+                phoneAudioSource.Play();
+                audioEnded = false;
+                Debug.Log($"playing phone audio: {phoneAudioSource.clip.name}");
+                phoneUI.SetActive(Singleton.Instance.canRetryNight);
+            }
+            else
+            {
+                phoneUI.SetActive(false);
+                audioEnded = true;
             }
         }
 
         private void Update()
         {
-            if (Input.GetKey(KeyCode.Backspace))
+            if (!audioEnded)
             {
-                audioSource.Stop();
+                if (Application.isEditor && Input.GetKey(KeyCode.Backspace))
+                {
+                    HangUpPhone();
+                }
+
+                if (!phoneAudioSource.isPlaying)
+                {
+                    HangUpPhone();
+                }
             }
         }
+        public void HangUpPhone()
+        {
+            phoneAudioSource.Stop();
+            hangupAudioSource.Play();
+            phoneUI.SetActive(false);
+            audioEnded = true;
+        }
     }
+
+
 }

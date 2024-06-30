@@ -1,12 +1,12 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zephrax.FNAFGame.Gameplay;
 
 namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayTime : MonoBehaviour
     {
-        [SerializeField] private Text hourText;
+        [SerializeField] private TMP_Text hourText;
         private int hour,displayHour;
 
         // Start is called before the first frame update

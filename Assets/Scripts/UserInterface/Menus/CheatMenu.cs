@@ -1,15 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class CheatMenu : MonoBehaviour
     {
         [SerializeField] private GameObject cheatIndicator;
-        [SerializeField] private Text cheatStatus;
+        [SerializeField] private TMP_Text cheatStatus;
         public bool cheatsAvailable = true;
         public bool cheatsEnabled;
-        // Update is called once per frame
 
         private void Start()
         {

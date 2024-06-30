@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 namespace Zephrax.FNAFGame.Tools
 {
     public class PopulateFromTextFile : MonoBehaviour
     {
-        public Text text;
+        public TMP_Text text;
         public TextAsset textFile;
 
         // Start is called before the first frame update

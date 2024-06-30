@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zephrax.FNAFGame.Tools;
 using UnityEngine.Video;
+using Zephrax.FNAFGame.Tools;
 using Zephrax.FNAFGame.Gameplay;
 
 namespace Zephrax.FNAFGame.AI
@@ -25,6 +25,7 @@ namespace Zephrax.FNAFGame.AI
         public AIState state;
         [SerializeField] private Character characterData;
         public List<AIValues> aiValues;
+        private int activityLevel;
         [Range(0,20)] [SerializeField] private int randomAudioChance;
         [SerializeField] private float randomAudioInterval;
         public bool isBeingWatched;
@@ -40,10 +41,11 @@ namespace Zephrax.FNAFGame.AI
         public AudioClip defaultAudio, movementAudio, attackAudio, attackFailAudio;
         private LookAtCurrentCamera lookAtCurrentCamera;
         [SerializeField] private VideoPlayer jumpscareVideo;
+        [SerializeField] private SkinnedMeshRenderer eyeRenderer;
+        [SerializeField] private Material defaultEyeMaterial, possessedEyeMaterial;
 
         private DynamicWaypoints dummyWaypoint;
         public DynamicWaypoints currentWaypoint;
-        private int activityLevel;
         private float activityInterval; //keep track of how easily the AI can make a move
         private int activityPhase; //keeps track of which phase of the night the AI is in
         private double timeSinceLastAction, timeSinceLastSeen, timeSinceLastRandomAudio;
@@ -51,7 +53,7 @@ namespace Zephrax.FNAFGame.AI
         private AIValues nightValues = new AIValues();
         private DynamicWaypoints nextWaypoint;
         private Door door;
-        private bool isLookingAtCamera, isWaitingInOffice;
+        private bool isLookingAtCamera, isWaitingInOffice, possesed;
 
         public enum AnimatronicType
         {
@@ -79,6 +81,12 @@ namespace Zephrax.FNAFGame.AI
             characterRandomAudioSource.volume = 1;
             lookAtCurrentCamera = GetComponentInChildren<LookAtCurrentCamera>();
             dummyWaypoint = GameObject.Find("DummyWaypoint").GetComponent<DynamicWaypoints>();
+            AwakeExt();
+        }
+
+        public virtual void AwakeExt()
+        {
+
         }
 
         // Start is called before the first frame update
@@ -95,6 +103,14 @@ namespace Zephrax.FNAFGame.AI
             timeSinceLastAction = Time.time;
             timeSinceLastSeen = Time.time;
             timeSinceLastRandomAudio = Time.time;
+
+            SetCharacterState(false);
+            StartExt();
+        }
+
+        public virtual void StartExt()
+        {
+
         }
 
         // Update is called once per frame
@@ -113,6 +129,8 @@ namespace Zephrax.FNAFGame.AI
             //Main AI loop
             if (currentWaypoint.isAttackingPosition)
             {
+                SetCharacterState(false);
+
                 AttackState();
             }
             //every x seconds
@@ -121,6 +139,11 @@ namespace Zephrax.FNAFGame.AI
                 //if roll succeeds
                 if (DiceRollGenerator.hasSuccessfulRoll(activityLevel) && !isBeingWatched)
                 {
+                    if (!possesed)
+                    {
+                        SetCharacterState(true);
+                    }
+
                     //PlayAudio("default");
                     //decide where to move next
                     nextWaypoint = SetNextWaypoint(currentWaypoint.connectedWaypoints);
@@ -236,7 +259,7 @@ namespace Zephrax.FNAFGame.AI
                     //This will disable the door and prevent it from being closed, this will then resume with the regular AttackState by calling AttackPlayer
                     if (entersOffice && !isWaitingInOffice && !door.isClosed && DiceRollGenerator.hasSuccessfulRoll(enterOfficeChance)) //Maybe only when the player is in cameras?
                     {
-                        door.isEnabled = false;
+                        door.DisableDoor();
                         isWaitingInOffice = true;
                         print($"{characterData.characterName} had entered the office and disabled {door.name}");
                         Move(SetNextWaypoint(currentWaypoint.connectedWaypoints), false);
@@ -268,7 +291,7 @@ namespace Zephrax.FNAFGame.AI
                 Player.Instance.isBeingAttacked = true;
                 if (Player.Instance.isInCamera)
                 {
-                    Player.Instance.securityCameraManager.ExitSecurityCamera();
+                    Player.Instance.securityCameraManager.ExitSecurityCamera(false);
                 }
                 StartCoroutine(Jumpscare());
             }
@@ -289,7 +312,7 @@ namespace Zephrax.FNAFGame.AI
                     Player.Instance.isBeingAttacked = true;
                     if (Player.Instance.isInCamera)
                     {
-                        Player.Instance.securityCameraManager.ExitSecurityCamera();
+                        Player.Instance.securityCameraManager.ExitSecurityCamera(false);
                     }
                     StartCoroutine(Jumpscare());
                 }
@@ -328,6 +351,28 @@ namespace Zephrax.FNAFGame.AI
              * AI will move towards the player (how does it move? -> one size fits all animation?)
              * 
              */
+        }
+
+        public virtual void SetCharacterState(bool isPossesed)
+        {
+            if (eyeRenderer != null && possessedEyeMaterial != null && defaultEyeMaterial != null)
+            {
+                if (isPossesed)
+                {
+                    UpdateMaterial(eyeRenderer, possessedEyeMaterial);
+                    possesed = true;
+                }
+                else
+                {
+                    UpdateMaterial(eyeRenderer, defaultEyeMaterial);
+                    possesed = false;
+                }
+            }
+        }
+
+        private void UpdateMaterial(SkinnedMeshRenderer mRenderer, Material mat)
+        {
+            mRenderer.material = mat;
         }
 
         public virtual void PlayAudio(string audioType, bool isRandom)
@@ -429,6 +474,18 @@ namespace Zephrax.FNAFGame.AI
                     door = null;
                 }
             }
+        }
+
+        public int GetActivityValue()
+        {
+            int outputVal = nightValues.activityValues[activityPhase];
+            return outputVal;
+        }
+
+        public int GetActivityLevel()
+        {
+            int outputVal = activityLevel;
+            return outputVal;
         }
 
         public string[] GetDebugValues()

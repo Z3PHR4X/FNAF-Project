@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Zephrax.FNAFGame.AI {
+    //Crawling AI Variant, can move through vents to attack the player.
     public class CrawlerEnemyAI : DefaultEnemyAI
     {
         public AudioClip crawlAudio;

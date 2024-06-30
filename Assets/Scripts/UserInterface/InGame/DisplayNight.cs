@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using TMPro;
+using UnityEngine;
 
 namespace Zephrax.FNAFGame.UserInterface.InGame
 {
     public class DisplayNight : MonoBehaviour
     {
-        [SerializeField] private Text nightUi;
+        [SerializeField] private TMP_Text nightUi;
         [SerializeField] private bool isStartNightScreen = false;
 
         // Start is called before the first frame update

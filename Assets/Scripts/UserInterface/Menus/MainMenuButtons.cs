@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Zephrax.FNAFGame.UserInterface.Menus
 {
     public class MainMenuButtons : MonoBehaviour
     {
-        [SerializeField] private Text ContinueText, RetryText, SettingsText;
+        [SerializeField] private TMP_Text ContinueText, RetryText, SettingsText;
         [SerializeField] private GameObject ContinueButton, RetryButton, SetupButton;
         [SerializeField] private int SetupButtonNightUnlock = 5;
 
@@ -70,6 +68,7 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
             completedNight = 0;
             PlayerPrefs.SetInt("completedNight", 0);
             PlayerPrefs.Save();
+            Singleton.Instance.canRetryNight = false;
             Singleton.Instance.selectedNight = 1;
             Singleton.Instance.completedNight = 0;
             Singleton.Instance.selectedMap = Singleton.Instance.availableLevels[0];
@@ -80,6 +79,7 @@ namespace Zephrax.FNAFGame.UserInterface.Menus
         {
             Singleton.Instance.selectedNight = Mathf.Clamp(completedNight + 1, 1, 7);
             Singleton.Instance.selectedMap = Singleton.Instance.availableLevels[0];
+            Singleton.Instance.canRetryNight = false;
             print("Continuing game on night " + Singleton.Instance.selectedNight); ;
             Singleton.Instance.ChangeScene("LoadingScreen");
         }

@@ -34,7 +34,7 @@ namespace Zephrax.FNAFGame.Gameplay
             {
                 if (powerManager.hasPower)
                 {
-                    HandleInput();
+                    //HandleInput();
                 }
                 else if (!isPoweredDown)
                 {
@@ -49,6 +49,7 @@ namespace Zephrax.FNAFGame.Gameplay
             {
                 door.TurnOffLight();
                 door.OpenDoor();
+                door.DisableDoor();
             }
             isPoweredDown = true;
         }

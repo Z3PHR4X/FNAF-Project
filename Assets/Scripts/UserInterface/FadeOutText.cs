@@ -1,9 +1,9 @@
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Zephrax.FNAFGame;
 public class FadeOutText : MonoBehaviour
 {
-    private Text text;
+    private TMP_Text text;
     private float  alpha = 1f;
     private Color color;
 
@@ -11,7 +11,7 @@ public class FadeOutText : MonoBehaviour
 
     private void Start()
     {
-        text = GetComponent<Text>();
+        text = GetComponent<TMP_Text>();
         color = text.color;
 
         if (checkNight)

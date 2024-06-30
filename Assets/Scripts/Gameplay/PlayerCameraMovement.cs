@@ -12,10 +12,12 @@ namespace Zephrax.FNAFGame.Gameplay
         [Tooltip("Only provide equal number of speeds as offsets.")]
         [SerializeField] private List<float> cameraZoneSpeed;
         private Player player;
+        private Singleton singleton;
 
 
         private void Start()
         {
+            singleton = Singleton.Instance;
             movementZoneOffsets.Sort();
             cameraZoneSpeed.Sort();
             cameraZoneSpeed.Reverse();
@@ -31,12 +33,12 @@ namespace Zephrax.FNAFGame.Gameplay
                 float movementZoneSize = movementZoneOffsets[i] * Screen.width;
                 if (mousePos.x < movementZoneSize)
                 {
-                    player.cameraSpeed = cameraZoneSpeed[i];
+                    player.cameraSpeed = (cameraZoneSpeed[i]) * singleton.mouseSensitivity;
                     break;
                 }
                 else if (mousePos.x > Screen.width - movementZoneSize)
                 {
-                    player.cameraSpeed = cameraZoneSpeed[i] * -1;
+                    player.cameraSpeed = (cameraZoneSpeed[i] * -1) * singleton.mouseSensitivity;
                     break;
                 }
                 else

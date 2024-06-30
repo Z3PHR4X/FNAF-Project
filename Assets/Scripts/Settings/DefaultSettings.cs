@@ -4,22 +4,32 @@ namespace Zephrax.FNAFGame.Settings
 {
     public class DefaultSettings : MonoBehaviour
     {
-        public float mouseSensitivity = 1f, masterVolume = 1f, musicVolume = 0.7f, sfxVolume = 0.9f, interfaceVolume = 0.9f, voiceVolume = 0.95f;
-        public string settingsVersion = "Version1";
-        public bool addApplicationVersion = false;
+        [Header("Control settings")]
+        public float mouseSensitivity = 1f;
+        public bool lockCursor = false;
+        [Header("Audio settings")]
+        public bool musicOverride = false;
+        [Range(0,1)] public float masterVolume = 1f, musicVolume = 0.7f, sfxVolume = 0.9f, interfaceVolume = 0.9f, voiceVolume = 0.95f;
+        [Header("Discord settings")]
         public bool enableDiscordRichPresence = true;
+        [Header("Rewards")]
         public bool unlockTesterAward = false;
-
-        private void Awake()
-        {
-            if (addApplicationVersion) {
-                settingsVersion = Application.version + settingsVersion;
-            }
-        }
+        [Header("Game version")]
+        public string settingsVersion = "Version1";
+        [SerializeField] private string baseSettingsVersion;
+        public bool addApplicationVersion = false;
+        public bool addBuildDate = false;
 
         public void SetDefaultSettings()
-        {
-            PlayerPrefs.SetInt("lockMouseToWindow", 1);
+        { 
+            if (lockCursor)
+            {
+                PlayerPrefs.SetInt("lockMouseToWindow", 1);
+            }
+            else {
+                PlayerPrefs.SetInt("lockMouseToWindow", 0);
+            }
+
             PlayerPrefs.SetFloat("mouseSensitivity", mouseSensitivity);
             PlayerPrefs.SetFloat("audioMasterVolume", masterVolume);
             PlayerPrefs.SetFloat("audioMusicVolume", musicVolume);
@@ -38,7 +48,6 @@ namespace Zephrax.FNAFGame.Settings
             PlayerPrefs.SetInt("menuMusicSelection", 0);
             PlayerPrefs.SetString("returningPlayer", "false");
             PlayerPrefs.SetInt("discordRichPresence", 0);
-            PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
 
             if(enableDiscordRichPresence)
             {
@@ -49,8 +58,37 @@ namespace Zephrax.FNAFGame.Settings
             {
                 PlayerPrefs.SetInt("TesterAwardUnlocked", 1);
             }
+
+            settingsVersion = baseSettingsVersion;
+            if (addApplicationVersion)
+            {
+                settingsVersion += $"A{Application.version.ToString()}";
+            }
+            if (addBuildDate)
+            {
+                settingsVersion += $"B{BuildInfo.BUILD_TIME}";
+            }
+            PlayerPrefs.SetString("gameSettingsVersion", settingsVersion);
+
             PlayerPrefs.Save();
-            print("Default settings set!");
+            print($"Default settings set! New settings-version: {settingsVersion}");
+
+        }
+
+        public string GetLatestSettingsVersion()
+        {
+            string lSettingsVersion = baseSettingsVersion;
+            if (addApplicationVersion)
+            {
+                lSettingsVersion += $"A{Application.version.ToString()}";
+            }
+            if (addBuildDate)
+            {
+                lSettingsVersion += $"B{BuildInfo.BUILD_TIME}";
+            }
+            settingsVersion = lSettingsVersion;
+
+            return lSettingsVersion;
         }
     }
 }

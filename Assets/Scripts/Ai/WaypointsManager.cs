@@ -6,7 +6,10 @@ namespace Zephrax.FNAFGame.AI
 {
     public class WaypointsManager : MonoBehaviour
     {
+        [Header("Regular AI movement")]
         public List<DynamicWaypoints> waypoints;
+        [Header("Jump AI movement")]
+        public List<DynamicWaypoints> jumpPoints;
         private int currentTime, currentNight;
 
         private void Awake()

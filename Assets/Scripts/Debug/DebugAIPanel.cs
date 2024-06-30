@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Zephrax.FNAFGame.AI;
@@ -8,7 +9,7 @@ namespace Zephrax.FNAFGame.DebugCustom
     {
         public DefaultEnemyAI enemyAI;
         [SerializeField] private Image iconImage;
-        [SerializeField] private Text nameText, activityText, lastActionText, stateText, waypointText, flowWeightText, doorText;
+        [SerializeField] private TMP_Text nameText, activityText, lastActionText, stateText, waypointText, flowWeightText, doorText;
         private Sprite charSprite;
         private bool isReady = false;
 

@@ -10,7 +10,7 @@ namespace Zephrax.FNAFGame.Settings
     {
         [SerializeField] private TMP_Dropdown resolutionDropdown, refreshDropdown, screenModeDropdown, qualityDropdown;
         [SerializeField] private Toggle vsyncToggle;
-        [SerializeField] private GameObject revertScreen;
+        [SerializeField] private RevertScreen revertScreen;
         [SerializeField] private bool hasInterface, applyFromSave;
         private Resolution[] resolutions;
         private List<Resolution> filteredResolutions;
@@ -21,9 +21,11 @@ namespace Zephrax.FNAFGame.Settings
         private FullScreenMode currentScreenMode;
         private int curResolutionIndex, curRefreshIndex, curScreenModeIndex, curQualityIndex, currentRefresh, targetFps;
         private int vsync;
+        private bool settingsLoaded;
 
         private void Start()
         {
+            settingsLoaded = false;
             resolutions = Screen.resolutions;
             currentResolution = Screen.currentResolution;
             currentRefresh = Screen.currentResolution.refreshRate;
@@ -42,6 +44,7 @@ namespace Zephrax.FNAFGame.Settings
             {
                 LoadGraphicsSettingsFromSave();
             }
+            settingsLoaded = true;
         }
 
         private void PopulateVsyncSetting()
@@ -101,7 +104,8 @@ namespace Zephrax.FNAFGame.Settings
             for (int i = 0; i < filteredResolutions.Count; i++)
             {
                 string option;
-                if (targetRefresh == 0) {
+                if (targetRefresh == 0)
+                {
                     option = filteredResolutions[i].width + "x" + filteredResolutions[i].height + " @" + filteredResolutions[i].refreshRate + "Hz";
                 }
                 else
@@ -187,28 +191,40 @@ namespace Zephrax.FNAFGame.Settings
 
         public void UpdateScreenResolution()
         {
-            currentResolution = filteredResolutions[resolutionDropdown.value];
-            print("Selected " + currentResolution);
+            if (settingsLoaded)
+            {
+                currentResolution = filteredResolutions[resolutionDropdown.value];
+                print("Selected " + currentResolution);
+            }
         }
 
         public void UpdateRefreshRate()
         {
-            currentRefresh = refreshRates[refreshDropdown.value];
-            print("Selected " + currentRefresh);
-            PopulateResolutionSettings(currentRefresh);
+            if (settingsLoaded)
+            {
+                currentRefresh = refreshRates[refreshDropdown.value];
+                print("Selected " + currentRefresh);
+                PopulateResolutionSettings(currentRefresh);
+            }
         }
 
         public void UpdateScreenMode()
         {
-            curScreenModeIndex = screenModeDropdown.value;
-            currentScreenMode = screenModes[curScreenModeIndex];
-            print("Selected " + currentScreenMode);
+            if (settingsLoaded)
+            {
+                curScreenModeIndex = screenModeDropdown.value;
+                currentScreenMode = screenModes[curScreenModeIndex];
+                print("Selected " + currentScreenMode);
+            }
         }
 
         public void UpdateQuality()
         {
-            curQualityIndex = qualityDropdown.value;
-            print("Selected " + curQualityIndex);
+            if (settingsLoaded)
+            {
+                curQualityIndex = qualityDropdown.value;
+                print("Selected " + curQualityIndex);
+            }
         }
 
         public void ApplyGraphicsSettings()
@@ -268,7 +284,7 @@ namespace Zephrax.FNAFGame.Settings
 
         public void ToggleMenu(bool setActive)
         {
-            if(setActive)
+            if (setActive)
             {
                 CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
                 canvasGroup.alpha = 1;
@@ -286,19 +302,24 @@ namespace Zephrax.FNAFGame.Settings
 
         public void RevertSettingsDialog(int length)
         {
-            StartCoroutine(WaitToRevert(length));            
+            StartCoroutine(WaitToRevert(length));
         }
 
-        public void StopRevertSettingsDialog(int length)
+        public void StopRevertSettingsDialog()
         {
             StopAllCoroutines();
         }
 
         IEnumerator WaitToRevert(int duration)
         {
-            yield return new WaitForSeconds(duration);
+            revertScreen.waitTime = duration;
+            for (int i = 0; i < duration; i++)
+            {
+                yield return new WaitForSeconds(1);
+                revertScreen.waitTime--;
+            }
             LoadGraphicsSettingsFromSave();
-            revertScreen.SetActive(false);
+            revertScreen.gameObject.SetActive(false);
         }
     }
 }

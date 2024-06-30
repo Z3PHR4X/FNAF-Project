@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class AIPanel : MonoBehaviour
 {
     public Character character;
     public Image thumbnail;
-    public Text charName, description, aggressionLevel;
+    public TMP_Text charName, description, aggressionLevel;
     public Slider aggressionSlider;
     public Toggle characterToggle;
     public GameObject disabledOverlay;
