@@ -30,8 +30,8 @@ I cannot give an estimate when this project will be completed, this is all done 
 - [X] AI can choose to enter office and disable door
 - [ ] Look into improving waypoints with less manual flowWeight setup (Automated Pathfinding)
 - [ ] Look into modular scripts for AI behavior (Configurable AI through Inspector)
-- [ ] Physical Door and Light buttons, and more general physical in-world interactions (Less UI)
-- [ ] Unity InputSystem integration
+- [X] Physical Door and Light buttons, and more general physical in-world interactions (Less UI)
+- [X] Unity InputSystem integration
 - [ ] Add keybind change support in Settings Menu
 - [ ] Implement audio balancing (so audio settings will actually be used)
 - [ ] Legacy code cleanup
